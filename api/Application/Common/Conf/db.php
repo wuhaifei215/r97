@@ -2,10 +2,10 @@
 // 数据库配置
 return array(
     'DB_TYPE'   => 'mysql',       // 数据库类型
-    'DB_HOST'   => '172.31.10.198,172.31.19.78',       // 服务器地址
-    'DB_NAME'   => 'yunmarsdb',       // 数据库名
-    'DB_USER'   => 'yunmarsdb',       // 用户名
-    'DB_PWD'    => 'BMZ6fPKp8wsfDBfM',        // 密码
+    'DB_HOST'   => '172.31.26.68,172.31.26.11',       // 服务器地址
+    'DB_NAME'   => 'r97marsdb',       // 数据库名
+    'DB_USER'   => 'r97marsdb',       // 用户名
+    'DB_PWD'    => 'm4rjmCWdCJY6SA7e',        // 密码
     'DB_PORT'   => '20951',       // 端口
     'DB_PREFIX' => 'pay_',     // 数据库表前缀
     
@@ -15,9 +15,9 @@ return array(
     'DB_SLAVE_NO'           =>  1, // 指定从服务器序号
 
     
-    'REDIS_HOST'   => '172.31.19.78',       // 服务器地址
+    'REDIS_HOST'   => '172.31.24.116',       // 服务器地址
     'REDIS_PORT'   => '52940',       // 端口
-    'REDIS_PWD'   => 'Yun!x@y#z99pay',       //密码
+    'REDIS_PWD'   => 'R97!x@y#z99pay',       //密码
     'REDIS_SELECT' => '0',
 );
 
