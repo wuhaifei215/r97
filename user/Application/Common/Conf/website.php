@@ -1,6 +1,6 @@
 <?php 
 	return array(
-		'WEB_TITLE' => 'YUN国际支付',
+		'WEB_TITLE' => 'R97国际支付',
 		'DOMAIN' => 'user.r97pay.com',
 		'MODULE_ALLOW_LIST'   => array('Home','User','Agent','Payment'),
 		'URL_MODULE_MAP'  => array( 'agent'=>'user', 'user'=>'user'),

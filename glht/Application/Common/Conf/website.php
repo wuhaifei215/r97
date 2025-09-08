@@ -1,6 +1,6 @@
 <?php 
 	return array(
-		'WEB_TITLE' => 'YUN国际支付',
+		'WEB_TITLE' => 'R97国际支付',
 		'DOMAIN' => 'glht.r97pay.com',
 		'MODULE_ALLOW_LIST'   => array('Home','User','sysadmin','Install', 'Weixin','Pay','Cashier','Agent','Payment','Cli'),
 		'URL_MODULE_MAP'  => array('sysadmin'=>'admin', 'agent'=>'user', 'user'=>'user'),
