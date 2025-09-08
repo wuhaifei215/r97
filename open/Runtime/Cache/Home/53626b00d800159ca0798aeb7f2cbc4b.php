@@ -1,1 +1,0 @@
-<?php if (!defined('THINK_PATH')) exit();?>请使用正确的接口地址！
