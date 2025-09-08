@@ -1,0 +1,19 @@
+【2025-08-21 06:32:22】
+重复操作,程序错误：Think\Exception: 1062:Duplicate entry 'P2025082104080260082377158' for key 'orderid'
+ [ SQL语句 ] : INSERT INTO `pay_telegram_api_dforder_autodf` (`orderid`,`callback`,`status`,`create_time`) VALUES ('P2025082104080260082377158','1','0','1755768742') in /www/wwwroot/open/Runtime/common~runtime.php:1
+Stack trace:
+#0 /www/wwwroot/open/core/Library/Think/Db/Driver.class.php(394): E('1062:Duplicate ...')
+#1 /www/wwwroot/open/core/Library/Think/Db/Driver.class.php(262): Think\Db\Driver->error()
+#2 /www/wwwroot/open/core/Library/Think/Db/Driver.class.php(933): Think\Db\Driver->execute('INSERT INTO `pa...', false)
+#3 /www/wwwroot/open/core/Library/Think/Model.class.php(322): Think\Db\Driver->insert(Array, Array, false)
+#4 /www/wwwroot/open/Application/Telegram/Controller/ApiController.class.php(248): Think\Model->add(Array)
+#5 /www/wwwroot/open/Application/Telegram/Controller/ApiController.class.php(93): Telegram\Controller\ApiController->to_do(Array)
+#6 [internal function]: Telegram\Controller\ApiController->receive()
+#7 /www/wwwroot/open/Runtime/common~runtime.php(1): ReflectionMethod->invoke(Object(Telegram\Controller\ApiController))
+#8 /www/wwwroot/open/Runtime/common~runtime.php(1): Think\App::invokeAction(Object(Telegram\Controller\ApiController), 'receive')
+#9 /www/wwwroot/open/Runtime/common~runtime.php(1): Think\App::exec()
+#10 /www/wwwroot/open/core/Library/Think/Think.class.php(136): Think\App::run()
+#11 /www/wwwroot/open/core/ThinkPHP.php(97): Think\Think::start()
+#12 /www/wwwroot/open/index.php(27): require('/www/wwwroot/op...')
+#13 {main}
+

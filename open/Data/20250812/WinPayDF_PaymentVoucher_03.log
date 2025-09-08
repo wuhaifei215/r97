@@ -1,0 +1,22 @@
+【2025-08-12 03:47:35】
+P2025081202413277292791021----提交：{"custId":"24120300001308","appId":"8241201350","order":"P2025081202413277292791021","sign":"6B3B29FA6BCD9ABC9791C0E49289AC78"}
+
+【2025-08-12 03:47:35】
+P2025081202413277292791021----返回：{"code":"000000","msg":"P2025081202413277292791021","data":{"date":"2025-08-12 02:41:35","eid":"E37205447202508120541327350e06c0","amount":11,"name":"Carlos Ricardo Silva Dias","cpf":"55533760253","bankname":"ORBION GAMING LTDA","payBank":"","payCpf":"","pixkey":"55533760253","account":"10573521","status":"done","order":"A20250812024132275251Ts9LLgraa"},"sign":"28D5936193A94995D02827D60DBE9999"}
+
+【2025-08-12 03:47:43】
+P2025081200212968889079021----提交：{"custId":"24120300001308","appId":"8241201350","order":"P2025081200212968889079021","sign":"6042295ADB2ACA62D42468E41D5CED70"}
+
+【2025-08-12 03:47:43】
+P2025081200212968889079021----返回：
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Error</title>
+</head>
+<body>
+	This URL not found.
+</body>
+</html>
+
+

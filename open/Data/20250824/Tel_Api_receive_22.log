@@ -1,0 +1,381 @@
+【2025-08-24 22:00:20】
+回调信息：{"update_id":448769467,"message":{"message_id":532,"from":{"id":7141760816,"is_bot":false,"first_name":"小玉 xiao yu","username":"br_zzxiaoyu"},"chat":{"id":-1002632035882,"title":"巴西-YUNPAY-10422-aa888","type":"supergroup"},"date":1756083620,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:00:27】
+回调信息：{"update_id":448769468,"message":{"message_id":1225,"from":{"id":8158377729,"is_bot":false,"first_name":"YunPay","last_name":"发财","username":"yunpay007","is_premium":true},"chat":{"id":-1002759044780,"title":"巴西-YunPay-10414-777SH-0.4%","type":"supergroup"},"date":1756083626,"text":"\/df tx_30105_20250825004414OhWRz","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:00:37】
+回调信息：{"update_id":448769469,"message":{"message_id":1227,"from":{"id":8158377729,"is_bot":false,"first_name":"YunPay","last_name":"发财","username":"yunpay007","is_premium":true},"chat":{"id":-1002759044780,"title":"巴西-YunPay-10414-777SH-0.4%","type":"supergroup"},"date":1756083636,"message_thread_id":1225,"reply_to_message":{"message_id":1226,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002759044780,"title":"巴西-YunPay-10414-777SH-0.4%","type":"supergroup"},"date":1756083628,"message_thread_id":1225,"text":"最新代付订单详情\n---------------------------------------------\n系统订单号：P2025082421521283132589273\n外部订单号：tx_30105_20250825004414OhWRz\n订单金额：15404.0000\n申请时间：2025-08-24 21:52:12\n处理时间：2025-08-24 21:57:11\n订单状态：失败已回调\n备注 ：1 - 2025-08-24 21:57:11;状态不改变！ - The amount must not be greater than 10000.002025-08-24 21:53:03\n\n通知次数 ：1\n最后通知时间：2025-08-24 21:57:11\n\n=========银行信息=========\n银行名称：\n开户名 ：Carolina Ventura\n账号 ：10556506952"},"text":"重新提交一下"}}
+
+【2025-08-24 22:00:44】
+回调信息：{"update_id":448769470,"message":{"message_id":1228,"from":{"id":7889346571,"is_bot":false,"first_name":"SUFA - A668BLR-TT0943","username":"sufa1234","language_code":"en"},"chat":{"id":-1002759044780,"title":"巴西-YunPay-10414-777SH-0.4%","type":"supergroup"},"date":1756083643,"message_thread_id":1225,"reply_to_message":{"message_id":1227,"from":{"id":8158377729,"is_bot":false,"first_name":"YunPay","last_name":"发财","username":"yunpay007","is_premium":true},"chat":{"id":-1002759044780,"title":"巴西-YunPay-10414-777SH-0.4%","type":"supergroup"},"date":1756083636,"message_thread_id":1225,"text":"重新提交一下"},"text":"好的"}}
+
+【2025-08-24 22:00:58】
+回调信息：{"update_id":448769471,"message":{"message_id":514,"from":{"id":7694783255,"is_bot":false,"first_name":"小凯","username":"BR_ZZxKai","is_premium":true},"chat":{"id":-1002709369410,"title":"巴西-YUNPAY-10423-a188","type":"supergroup"},"date":1756083658,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:02:28】
+回调信息：{"update_id":448769472,"callback_query":{"id":"4959903307888595330","from":{"id":7597268423,"is_bot":false,"first_name":"Aoliao","username":"aoliao555","language_code":"zh-hans","is_premium":true},"message":{"message_id":1494,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002411160679,"title":"TQT-巴西-yunpay-10034","type":"supergroup"},"date":1756083174,"text":"代付风控提示\n\n系统订单号：P2025082421525383173893325\n外部订单号：01310720120620001391239\n订单金额：6000.00\n开户名 ：Leandro Ernesto Guimarães Teixeira\n账号 ：21466719710\n申请时间：2025-08-24 21:52:53","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":23,"type":"code"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082421525383173893325"},{"text":"通过(pass)","callback_data":"pass P2025082421525383173893325"}]]}},"chat_instance":"-7211973227138725447","data":"pass P2025082421525383173893325"}}
+
+【2025-08-24 22:04:16】
+回调信息：{"update_id":448769473,"message":{"message_id":280,"from":{"id":6487555975,"is_bot":false,"first_name":"yunpay_","last_name":"柠檬","username":"yuanpay_03","is_premium":true},"chat":{"id":-1002833107990,"title":"55LL-YunPay-10446 845","type":"supergroup"},"date":1756083855,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:04:57】
+回调信息：{"update_id":448769474,"message":{"message_id":4208,"from":{"id":6487555975,"is_bot":false,"first_name":"yunpay_","last_name":"柠檬","username":"yuanpay_03","is_premium":true},"chat":{"id":-1002726204447,"title":"巴西-YUNPAY-10385-top88-0.4%+0","type":"supergroup"},"date":1756083897,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:05:06】
+回调信息：{"update_id":448769475,"message":{"message_id":13708,"from":{"id":7175416985,"is_bot":false,"first_name":"SBET|XNK' XIAOLAN","username":"SBET_XNK022"},"chat":{"id":-1002499994426,"title":"YunPay-10048-SBET【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756083906,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:06:09】
+回调信息：{"update_id":448769476,"message":{"message_id":16117,"from":{"id":7193392044,"is_bot":false,"first_name":"B55 | XNK - VISAL","username":"B55XNK01"},"chat":{"id":-1002457501685,"title":"YunPay-10049-B55【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756083969,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:08:35】
+回调信息：{"update_id":448769477,"message":{"message_id":22739,"from":{"id":7948609852,"is_bot":false,"first_name":"qqpay 全球支付 啊杰","username":"qqpay369","language_code":"zh-hans"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756084099,"text":"\/df 2000_20007_800363412520584043","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:08:36】
+回调信息：{"update_id":448769478,"message":{"message_id":22740,"from":{"id":7948609852,"is_bot":false,"first_name":"qqpay 全球支付 啊杰","username":"qqpay369","language_code":"zh-hans"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756084114,"text":"\/df 2000_20007_800363412520584043","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:10:16】
+回调信息：{"update_id":448769479,"message":{"message_id":778,"from":{"id":7375451757,"is_bot":false,"first_name":"二狼 ~小新","username":"SmosLusKsai2","language_code":"en"},"chat":{"id":-1002761100220,"title":"巴西-YunPay-10432-0697-04%","type":"supergroup"},"date":1756084215,"text":"\/df TX17560838606633925308","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:12:49】
+回调信息：{"update_id":448769480,"callback_query":{"id":"6814297131305828102","from":{"id":8029028131,"is_bot":false,"first_name":"小雨","last_name":"Xiǎoyǔ 💦","username":"rain777888999","language_code":"en","is_premium":true},"message":{"message_id":1244,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002725118527,"title":"巴西-YunPay-10464-tdt777","type":"supergroup"},"date":1756084180,"text":"代付风控提示\n\n系统订单号：P2025082422093984179486694\n外部订单号：266161992955570501\n订单金额：130.00\n开户名 ：maria eduarda da cruz\n账号 ：57481535809\n申请时间：2025-08-24 22:09:39","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":18,"type":"code"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422093984179486694"},{"text":"通过(pass)","callback_data":"pass P2025082422093984179486694"}]]}},"chat_instance":"-937294967243510104","data":"pass P2025082422093984179486694"}}
+
+【2025-08-24 22:14:21】
+回调信息：{"update_id":448769481,"message":{"message_id":780,"from":{"id":7277235945,"is_bot":false,"first_name":"小龙","last_name":"Š","username":"hihihehe666888"},"chat":{"id":-1002761100220,"title":"巴西-YunPay-10432-0697-04%","type":"supergroup"},"date":1756084460,"text":"\/df TX1756084317247483981","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:18:07】
+回调信息：{"update_id":448769482,"message":{"message_id":4984,"from":{"id":7367945501,"is_bot":false,"first_name":"法阿蔡","username":"NgorlRikReay","is_premium":true},"chat":{"id":-1002681708501,"title":"巴西-yunpay-9zkkcom-10252-0.4%","type":"supergroup"},"date":1756084686,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:18:32】
+回调信息：{"update_id":448769483,"message":{"message_id":3248,"from":{"id":8049996425,"is_bot":false,"first_name":"老挝-巴西出款 花~欣","username":"Laowobxck04","language_code":"zh-hans","is_premium":true},"chat":{"id":-1002609953078,"title":"WG 巴西-YunPay-10328-pgslots6868-0.4%","type":"supergroup"},"date":1756084711,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:18:34】
+回调信息：{"update_id":448769484,"message":{"message_id":14623,"from":{"id":6929685012,"is_bot":false,"first_name":"VIP|XNK - PAUL","username":"VIPGAME_XNK06"},"chat":{"id":-1002363693068,"title":"YunPay-10052-vip888【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756084712,"text":"\/df TX17560846604113721349","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:21:20】
+回调信息：{"update_id":448769485,"callback_query":{"id":"7261505811831170112","from":{"id":8133152016,"is_bot":false,"first_name":"BRL XNK - 藍莓 LANMEI","username":"Brllanmei","language_code":"en","is_premium":true},"message":{"message_id":6463,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002423328228,"title":"YunPay-10058-258【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756084322,"text":"代付风控提示\n\n系统订单号：P2025082422120184321284929\n外部订单号：tx_1089_20250825003939z5FYG\n订单金额：6809.00\n开户名 ：Ivo aparecido Alves dos Santos\n账号 ：13727988894\n申请时间：2025-08-24 22:12:01","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":27,"type":"code"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422120184321284929"},{"text":"通过(pass)","callback_data":"pass P2025082422120184321284929"}]]}},"chat_instance":"2074817536785290400","data":"pass P2025082422120184321284929"}}
+
+【2025-08-24 22:21:27】
+回调信息：{"update_id":448769486,"callback_query":{"id":"7059232588624759918","from":{"id":8086056611,"is_bot":false,"first_name":"太阳 - SUN","username":"Sunne1109","language_code":"vi","is_premium":true},"message":{"message_id":6463,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002423328228,"title":"YunPay-10058-258【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756084322,"text":"代付风控提示\n\n系统订单号：P2025082422120184321284929\n外部订单号：tx_1089_20250825003939z5FYG\n订单金额：6809.00\n开户名 ：Ivo aparecido Alves dos Santos\n账号 ：13727988894\n申请时间：2025-08-24 22:12:01","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":27,"type":"code"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422120184321284929"},{"text":"通过(pass)","callback_data":"pass P2025082422120184321284929"}]]}},"chat_instance":"2074817536785290400","data":"pass P2025082422120184321284929"}}
+
+【2025-08-24 22:22:19】
+回调信息：{"update_id":448769487,"message":{"message_id":6146,"from":{"id":7367945501,"is_bot":false,"first_name":"法阿蔡","username":"NgorlRikReay","is_premium":true},"chat":{"id":-1002416848710,"title":"巴西-YunPay-10210-5555yun（0.4%）","type":"supergroup"},"date":1756084938,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:23:28】
+回调信息：{"update_id":448769488,"message":{"message_id":3621,"from":{"id":7137877030,"is_bot":false,"first_name":"丽金","username":"lijinhenhao","is_premium":true},"chat":{"id":-1002349977665,"title":"巴西-YunPay-10205-78BR","type":"supergroup"},"date":1756085007,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:23:50】
+回调信息：{"update_id":448769489,"message":{"message_id":3298,"from":{"id":7137877030,"is_bot":false,"first_name":"丽金","username":"lijinhenhao","is_premium":true},"chat":{"id":-1002633020432,"title":"巴西-yunpay-CEO-10242","type":"supergroup"},"date":1756085029,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:23:59】
+回调信息：{"update_id":448769490,"message":{"message_id":535,"from":{"id":8126199835,"is_bot":false,"first_name":"马雯","username":"br_zzmawen","language_code":"id","is_premium":true},"chat":{"id":-1002703499998,"title":"巴西-YUNPAY-10421-Aa123","type":"supergroup"},"date":1756085039,"text":"\/df tx_30002_20250825005809npMG1","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:25:05】
+回调信息：{"update_id":448769491,"message":{"message_id":22751,"from":{"id":8158377729,"is_bot":false,"first_name":"YunPay","last_name":"发财","username":"yunpay007","is_premium":true},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756085104,"text":"\/ds 2025082422133510253123012","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:25:44】
+回调信息：{"update_id":448769492,"message":{"message_id":1114,"from":{"id":7428901260,"is_bot":false,"first_name":"阿鱼","username":"wm633","language_code":"ms"},"chat":{"id":-1002988535158,"title":"巴西-YunPay-10442 mariojogo- 0.4%","type":"supergroup"},"date":1756085144,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:25:45】
+回调信息：{"update_id":448769493,"message":{"message_id":20631,"from":{"id":8134385109,"is_bot":false,"first_name":"Mario","username":"ALI_Atian_2k"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756085144,"text":"\/df 01310917820620013877732","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:27:28】
+回调信息：{"update_id":448769494,"message":{"message_id":22757,"from":{"id":6524474367,"is_bot":false,"first_name":"QQpay 客服小帅","username":"qqpay66664"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756085248,"text":"\/df 2000_20007_800368318409221429","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:27:35】
+回调信息：{"update_id":448769495,"message":{"message_id":6467,"from":{"id":7497313637,"is_bot":false,"first_name":"RS&258&28R|CS&XNK|山治-SANJE","username":"XNK06_258"},"chat":{"id":-1002423328228,"title":"YunPay-10058-258【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756085255,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:28:38】
+回调信息：{"update_id":448769496,"message":{"message_id":20633,"from":{"id":8044836872,"is_bot":false,"first_name":"Kaka 🩷","username":"kakaaaa135"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756085317,"text":"\/df 01310911320620004460137","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:29:17】
+回调信息：{"update_id":448769497,"message":{"message_id":20635,"from":{"id":8044836872,"is_bot":false,"first_name":"Kaka 🩷","username":"kakaaaa135"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756085357,"text":"\/df 01310826020620000732706","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:30:17】
+回调信息：{"update_id":448769498,"callback_query":{"id":"6814297131490992543","from":{"id":8029028131,"is_bot":false,"first_name":"小雨","last_name":"Xiǎoyǔ 💦","username":"rain777888999","language_code":"en","is_premium":true},"message":{"message_id":1246,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002725118527,"title":"巴西-YunPay-10464-tdt777","type":"supergroup"},"date":1756085411,"text":"代付风控提示\n\n系统订单号：P2025082422301085410041487\n外部订单号：266188968821135983\n订单金额：300.00\n开户名 ：Matheus\n账号 ：araujoblogslots@gmail.com\n申请时间：2025-08-24 22:30:10","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":18,"type":"code"},{"offset":94,"length":26,"type":"url"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422301085410041487"},{"text":"通过(pass)","callback_data":"pass P2025082422301085410041487"}]]}},"chat_instance":"-937294967243510104","data":"pass P2025082422301085410041487"}}
+
+【2025-08-24 22:30:50】
+回调信息：{"update_id":448769499,"callback_query":{"id":"6814297132067518361","from":{"id":8029028131,"is_bot":false,"first_name":"小雨","last_name":"Xiǎoyǔ 💦","username":"rain777888999","language_code":"en","is_premium":true},"message":{"message_id":1248,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002725118527,"title":"巴西-YunPay-10464-tdt777","type":"supergroup"},"date":1756085424,"text":"代付风控提示\n\n系统订单号：P2025082422302385423677557\n外部订单号：266207717197950612\n订单金额：100.00\n开户名 ：Mara\n账号 ：nnathaliabls@icloud.com\n申请时间：2025-08-24 22:30:23","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":18,"type":"code"},{"offset":91,"length":24,"type":"url"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422302385423677557"},{"text":"通过(pass)","callback_data":"pass P2025082422302385423677557"}]]}},"chat_instance":"-937294967243510104","data":"pass P2025082422302385423677557"}}
+
+【2025-08-24 22:31:06】
+回调信息：{"update_id":448769500,"message":{"message_id":782,"from":{"id":7277235945,"is_bot":false,"first_name":"小龙","last_name":"Š","username":"hihihehe666888"},"chat":{"id":-1002761100220,"title":"巴西-YunPay-10432-0697-04%","type":"supergroup"},"date":1756085466,"text":"\/df TX17560852161593289740","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:31:14】
+回调信息：{"update_id":448769501,"message":{"message_id":22759,"from":{"id":6524474367,"is_bot":false,"first_name":"QQpay 客服小帅","username":"qqpay66664"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756085474,"text":"\/df 2000_20007_800366806152922403","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:31:40】
+回调信息：{"update_id":448769502,"message":{"message_id":14625,"from":{"id":6929685012,"is_bot":false,"first_name":"VIP|XNK - PAUL","username":"VIPGAME_XNK06"},"chat":{"id":-1002363693068,"title":"YunPay-10052-vip888【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756085500,"text":"\/df TX17560854492612788756","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:31:41】
+回调信息：{"update_id":448769503,"message":{"message_id":20638,"from":{"id":8134385109,"is_bot":false,"first_name":"Mario","username":"ALI_Atian_2k"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756085500,"text":"\/df 01310917820620013953245","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:31:45】
+回调信息：{"update_id":448769504,"message":{"message_id":784,"from":{"id":7277235945,"is_bot":false,"first_name":"小龙","last_name":"Š","username":"hihihehe666888"},"chat":{"id":-1002761100220,"title":"巴西-YunPay-10432-0697-04%","type":"supergroup"},"date":1756085505,"text":"\/df TX17560852564123741865","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:31:54】
+回调信息：{"update_id":448769505,"message":{"message_id":20641,"from":{"id":8134385109,"is_bot":false,"first_name":"Mario","username":"ALI_Atian_2k"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756085513,"text":"\/df 01310917820620013937294","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:32:01】
+回调信息：{"update_id":448769506,"message":{"message_id":1227,"from":{"id":6529049801,"is_bot":false,"first_name":"Lykz_ (10-4)","username":"Lykz71"},"chat":{"id":-1002331869658,"title":"NUN-巴西-YunPay-10072","type":"supergroup"},"date":1756085521,"text":"\/df 01310739320620000909464","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:32:13】
+回调信息：{"update_id":448769507,"message":{"message_id":786,"from":{"id":7277235945,"is_bot":false,"first_name":"小龙","last_name":"Š","username":"hihihehe666888"},"chat":{"id":-1002761100220,"title":"巴西-YunPay-10432-0697-04%","type":"supergroup"},"date":1756085532,"text":"\/df TX17560852566759296975","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:32:35】
+回调信息：{"update_id":448769508,"message":{"message_id":20643,"from":{"id":8134385109,"is_bot":false,"first_name":"Mario","username":"ALI_Atian_2k"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756085555,"text":"\/df 01310899620620001259736","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:32:49】
+回调信息：{"update_id":448769509,"message":{"message_id":20645,"from":{"id":1622566751,"is_bot":false,"first_name":"ʟᴇxx"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756085569,"text":"\/df 01310856120620000567320","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:33:11】
+回调信息：{"update_id":448769510,"message":{"message_id":20647,"from":{"id":1622566751,"is_bot":false,"first_name":"ʟᴇxx"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756085591,"text":"\/df 01310917820620013909086","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:34:26】
+回调信息：{"update_id":448769511,"message":{"message_id":2052,"from":{"id":6923286365,"is_bot":false,"first_name":"✨Mic🍀🌤","username":"qwertygdxf"},"chat":{"id":-1002270592435,"title":"SNK-巴西-yunpay-10036","type":"supergroup"},"date":1756085664,"text":"\/df 01310727520620002088312","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:34:46】
+回调信息：{"update_id":448769512,"message":{"message_id":282,"from":{"id":6881934021,"is_bot":false,"first_name":"巴西出款- [[-明兴-]] -[宛如] 001[HH]💸💸","username":"bx_ck001"},"chat":{"id":-1002833107990,"title":"55LL-YunPay-10446 845","type":"supergroup"},"date":1756085685,"text":"\/df TX17560854974193630672","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:35:06】
+回调信息：{"update_id":448769513,"message":{"message_id":1263,"from":{"id":6923286365,"is_bot":false,"first_name":"✨Mic🍀🌤","username":"qwertygdxf"},"chat":{"id":-1002402139557,"title":"THT-巴西-yunpay-10035","type":"supergroup"},"date":1756085705,"text":"\/df 01310723320620001420245","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:35:25】
+回调信息：{"update_id":448769514,"message":{"message_id":4853,"from":{"id":6487555975,"is_bot":false,"first_name":"yunpay_","last_name":"柠檬","username":"yuanpay_03","is_premium":true},"chat":{"id":-4679698621,"title":"YunPay群发信息","type":"group","all_members_are_administrators":true,"accepted_gift_types":{"unlimited_gifts":false,"limited_gifts":false,"unique_gifts":false,"premium_subscription":false}},"date":1756085725,"text":"\/qunfa 尊敬的 YUNPAY 用户:\n\n现在巴西夜间限额 代收 5-50000  ✅ \n代付最大金额调整为    10-10000  ✅ \n\n如未及时回复，请@我们，我们会尽快为您处理。\n\n祝 老板生意兴隆，财源广进","entities":[{"offset":0,"length":6,"type":"bot_command"}]}}
+
+【2025-08-24 22:35:36】
+回调信息：{"update_id":448769515,"message":{"message_id":13567,"from":{"id":7309333694,"is_bot":false,"first_name":"OK8 - XNK - KARL","username":"OK8XNK07"},"chat":{"id":-1002361427375,"title":"YunPay-10051-OK8【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756085730,"text":"\/df TX17560854655707321278","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:35:55】
+回调信息：{"update_id":448769516,"message":{"message_id":1512,"from":{"id":7532304940,"is_bot":false,"first_name":"🩸💸*CHHENG*70🚬🧿","username":"TuRo570"},"chat":{"id":-1002292923454,"title":"TRT-巴西-yunpay-10033","type":"supergroup"},"date":1756085754,"text":"\/df 01310702120620001757650","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:36:00】
+回调信息：{"update_id":448769517,"callback_query":{"id":"6814297131318788650","from":{"id":8029028131,"is_bot":false,"first_name":"小雨","last_name":"Xiǎoyǔ 💦","username":"rain777888999","language_code":"en","is_premium":true},"message":{"message_id":1250,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002725118527,"title":"巴西-YunPay-10464-tdt777","type":"supergroup"},"date":1756085751,"text":"代付风控提示\n\n系统订单号：P2025082422355085750442579\n外部订单号：266214170097263807\n订单金额：292.00\n开户名 ：Keila\n账号 ：+5582998092261\n申请时间：2025-08-24 22:35:50","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":18,"type":"code"},{"offset":93,"length":14,"type":"phone_number"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422355085750442579"},{"text":"通过(pass)","callback_data":"pass P2025082422355085750442579"}]]}},"chat_instance":"-937294967243510104","data":"pass P2025082422355085750442579"}}
+
+【2025-08-24 22:36:32】
+回调信息：{"update_id":448769518,"message":{"message_id":13711,"from":{"id":7193392044,"is_bot":false,"first_name":"B55 | XNK - VISAL","username":"B55XNK01"},"chat":{"id":-1002499994426,"title":"YunPay-10048-SBET【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756085791,"text":"\/df 01310018620620011084409","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:37:25】
+回调信息：{"update_id":448769519,"message":{"message_id":14628,"from":{"id":6929685012,"is_bot":false,"first_name":"VIP|XNK - PAUL","username":"VIPGAME_XNK06"},"chat":{"id":-1002363693068,"title":"YunPay-10052-vip888【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756085845,"text":"\/df TX17560857031287119801","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:37:37】
+回调信息：{"update_id":448769520,"message":{"message_id":2549,"from":{"id":6321123925,"is_bot":false,"first_name":"🀄️𝔼ℝ𝕀🀄️","username":"becon123123"},"chat":{"id":-1002636037233,"title":"巴西-YunPay-10246-PG30 0.4","type":"supergroup"},"date":1756085857,"text":"\/df tx_30023_20250825013040sBPuC","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:37:45】
+回调信息：{"update_id":448769521,"message":{"message_id":2551,"from":{"id":6321123925,"is_bot":false,"first_name":"🀄️𝔼ℝ𝕀🀄️","username":"becon123123"},"chat":{"id":-1002636037233,"title":"巴西-YunPay-10246-PG30 0.4","type":"supergroup"},"date":1756085865,"text":"tx_30023_20250825013040sBPuC\n帮我们处理这个订单"}}
+
+【2025-08-24 22:38:08】
+回调信息：{"update_id":448769522,"message":{"message_id":2552,"from":{"id":6487555975,"is_bot":false,"first_name":"yunpay_","last_name":"柠檬","username":"yuanpay_03","is_premium":true},"chat":{"id":-1002636037233,"title":"巴西-YunPay-10246-PG30 0.4","type":"supergroup"},"date":1756085888,"message_thread_id":2551,"reply_to_message":{"message_id":2551,"from":{"id":6321123925,"is_bot":false,"first_name":"🀄️𝔼ℝ𝕀🀄️","username":"becon123123"},"chat":{"id":-1002636037233,"title":"巴西-YunPay-10246-PG30 0.4","type":"supergroup"},"date":1756085865,"text":"tx_30023_20250825013040sBPuC\n帮我们处理这个订单"},"text":"请您稍等"}}
+
+【2025-08-24 22:38:21】
+回调信息：{"update_id":448769523,"message":{"message_id":14632,"from":{"id":6487555975,"is_bot":false,"first_name":"yunpay_","last_name":"柠檬","username":"yuanpay_03","is_premium":true},"chat":{"id":-1002363693068,"title":"YunPay-10052-vip888【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756085900,"text":"\/df TX17560854339115174144","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:38:29】
+回调信息：{"update_id":448769524,"message":{"message_id":1232,"from":{"id":8423313803,"is_bot":false,"first_name":"JING FU ~ 客服","username":"jingfu8899"},"chat":{"id":-1002859914962,"title":"巴西-YunPay-10462-AS888","type":"supergroup"},"date":1756085908,"text":"\/df tx_40116_20250825013545KNIeP","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:38:49】
+回调信息：{"update_id":448769525,"message":{"message_id":22765,"from":{"id":7868043648,"is_bot":false,"first_name":"QQpay全球支付（锐翊）","username":"qqpay006"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756085928,"text":"\/df 2000_20410_800369364036635433","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:38:57】
+回调信息：{"update_id":448769526,"message":{"message_id":22767,"from":{"id":7868043648,"is_bot":false,"first_name":"QQpay全球支付（锐翊）","username":"qqpay006"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756085937,"message_thread_id":22765,"reply_to_message":{"message_id":22766,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756085929,"message_thread_id":22765,"text":"最新代付订单详情\n---------------------------------------------\n系统订单号：P2025082422301485414669185\n外部订单号：2000_20410_800369364036635433\n订单金额：100.0000\n申请时间：2025-08-24 22:30:14\n处理时间：2025-08-24 22:30:16\n订单状态：失败已回调\n备注 ：代付失败-Saldo insuficiente para realizar transação.\n通知次数 ：1\n最后通知时间：2025-08-24 22:30:17\n\n=========银行信息=========\n银行名称：\n开户名 ：Edmilson Paulino\n账号 ：12412052484"},"text":"失败原因"}}
+
+【2025-08-24 22:38:58】
+回调信息：{"update_id":448769527,"callback_query":{"id":"4959903305564101171","from":{"id":7597268423,"is_bot":false,"first_name":"Aoliao","username":"aoliao555","language_code":"zh-hans","is_premium":true},"message":{"message_id":2123,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002471836911,"title":"AFA-巴西-YunPay-10121","type":"supergroup"},"date":1756085934,"text":"代付风控提示\n\n系统订单号：P2025082422385385933122721\n外部订单号：01310753520620001575119\n订单金额：30000.00\n开户名 ：Amanda maria da silva castanha\n账号 ：06077926477\n申请时间：2025-08-24 22:38:53","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":23,"type":"code"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422385385933122721"},{"text":"通过(pass)","callback_data":"pass P2025082422385385933122721"}]]}},"chat_instance":"8014309751479283220","data":"pass P2025082422385385933122721"}}
+
+【2025-08-24 22:40:37】
+回调信息：{"update_id":448769528,"message":{"message_id":22770,"from":{"id":7868043648,"is_bot":false,"first_name":"QQpay全球支付（锐翊）","username":"qqpay006"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086036,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:40:38】
+回调信息：{"update_id":448769529,"message":{"message_id":13572,"from":{"id":7309333694,"is_bot":false,"first_name":"OK8 - XNK - KARL","username":"OK8XNK07"},"chat":{"id":-1002361427375,"title":"YunPay-10051-OK8【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086038,"text":"\/df TX17560854655707321278","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:40:39】
+回调信息：{"update_id":448769530,"message":{"message_id":20650,"from":{"id":8134385109,"is_bot":false,"first_name":"Mario","username":"ALI_Atian_2k"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086038,"text":"\/df 01310065820620010613356","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:40:48】
+回调信息：{"update_id":448769531,"message":{"message_id":20652,"from":{"id":8044836872,"is_bot":false,"first_name":"Kaka 🩷","username":"kakaaaa135"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086048,"text":"\/df 01310917820620013960075","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:40:55】
+回调信息：{"update_id":448769532,"message":{"message_id":22772,"from":{"id":7868043648,"is_bot":false,"first_name":"QQpay全球支付（锐翊）","username":"qqpay006"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086055,"message_thread_id":22765,"reply_to_message":{"message_id":22767,"from":{"id":7868043648,"is_bot":false,"first_name":"QQpay全球支付（锐翊）","username":"qqpay006"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756085937,"message_thread_id":22765,"text":"失败原因"},"text":"@yunpay007","entities":[{"offset":0,"length":10,"type":"mention"}]}}
+
+【2025-08-24 22:41:16】
+回调信息：{"update_id":448769533,"message":{"message_id":6470,"from":{"id":7178124661,"is_bot":false,"first_name":"RS | 258 CS\/XNK ' PLUM","username":"CS01_258"},"chat":{"id":-1002423328228,"title":"YunPay-10058-258【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086076,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:41:36】
+回调信息：{"update_id":448769534,"message":{"message_id":20654,"from":{"id":1622566751,"is_bot":false,"first_name":"ʟᴇxx"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086096,"text":"\/df 01310917820620013971247","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:41:36】
+回调信息：{"update_id":448769535,"message":{"message_id":13574,"from":{"id":7309333694,"is_bot":false,"first_name":"OK8 - XNK - KARL","username":"OK8XNK07"},"chat":{"id":-1002361427375,"title":"YunPay-10051-OK8【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086096,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:41:56】
+回调信息：{"update_id":448769536,"message":{"message_id":20656,"from":{"id":1622566751,"is_bot":false,"first_name":"ʟᴇxx"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086115,"text":"\/df 01310863120620000801143","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:42:24】
+回调信息：{"update_id":448769537,"message":{"message_id":20658,"from":{"id":1622566751,"is_bot":false,"first_name":"ʟᴇxx"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086144,"text":"\/df 01310911320620004470811","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:42:47】
+回调信息：{"update_id":448769538,"message":{"message_id":20660,"from":{"id":1622566751,"is_bot":false,"first_name":"ʟᴇxx"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086166,"text":"\/df 01310892320620001099260","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:42:53】
+回调信息：{"update_id":448769539,"message":{"message_id":13715,"from":{"id":7175416985,"is_bot":false,"first_name":"SBET|XNK' XIAOLAN","username":"SBET_XNK022"},"chat":{"id":-1002499994426,"title":"YunPay-10048-SBET【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086172,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:43:00】
+回调信息：{"update_id":448769540,"message":{"message_id":20662,"from":{"id":8044836872,"is_bot":false,"first_name":"Kaka 🩷","username":"kakaaaa135"},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086180,"text":"\/df 01310892320620001086798","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:43:02】
+回调信息：{"update_id":448769541,"message":{"message_id":3270,"from":{"id":5350943779,"is_bot":false,"first_name":"小至 22-10 NBAGAME04","username":"xiaoozhii"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086181,"text":"\/df TX17560850554143769351","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:43:05】
+回调信息：{"update_id":448769542,"message":{"message_id":2055,"from":{"id":6923286365,"is_bot":false,"first_name":"✨Mic🍀🌤","username":"qwertygdxf"},"chat":{"id":-1002270592435,"title":"SNK-巴西-yunpay-10036","type":"supergroup"},"date":1756086185,"text":"\/df 01310727520620002097247","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:43:14】
+回调信息：{"update_id":448769543,"message":{"message_id":3272,"from":{"id":5350943779,"is_bot":false,"first_name":"小至 22-10 NBAGAME04","username":"xiaoozhii"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086194,"message_thread_id":3270,"reply_to_message":{"message_id":3271,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086183,"message_thread_id":3270,"text":"最新代付订单详情\n---------------------------------------------\n系统订单号：P2025082422281885298656474\n外部订单号：TX17560850554143769351\n订单金额：20.0000\n申请时间：2025-08-24 22:28:18\n处理时间：2025-08-24 22:28:21\n订单状态：失败已回调\n备注 ：代付失败-Saldo insuficiente para realizar transação.\n通知次数 ：1\n最后通知时间：2025-08-24 22:28:22\n\n=========银行信息=========\n银行名称：\n开户名 ：Alberto\n账号 ：93981261955"},"text":"能手动取消吗"}}
+
+【2025-08-24 22:43:46】
+回调信息：{"update_id":448769544,"message":{"message_id":3273,"from":{"id":8158377729,"is_bot":false,"first_name":"YunPay","last_name":"发财","username":"yunpay007","is_premium":true},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086226,"message_thread_id":3270,"reply_to_message":{"message_id":3272,"from":{"id":5350943779,"is_bot":false,"first_name":"小至 22-10 NBAGAME04","username":"xiaoozhii"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086194,"message_thread_id":3270,"text":"能手动取消吗"},"text":"可以的"}}
+
+【2025-08-24 22:44:04】
+回调信息：{"update_id":448769545,"message":{"message_id":3059,"from":{"id":7096906507,"is_bot":false,"first_name":"小黑🐉","username":"hoang_gianghomom_mafia_internet","is_premium":true},"chat":{"id":-1002858048739,"title":"巴西-yunpay-NEW88-10294-（0.4%）","type":"supergroup"},"date":1756086244,"text":"\/cxdf tx_1138_20250825014237CSq9y","entities":[{"offset":0,"length":5,"type":"bot_command"}]}}
+
+【2025-08-24 22:44:06】
+回调信息：{"update_id":448769546,"message":{"message_id":3060,"from":{"id":7096906507,"is_bot":false,"first_name":"小黑🐉","username":"hoang_gianghomom_mafia_internet","is_premium":true},"chat":{"id":-1002858048739,"title":"巴西-yunpay-NEW88-10294-（0.4%）","type":"supergroup"},"date":1756086246,"text":"\/cxdf tx_1138_20250825014237CSq9y","entities":[{"offset":0,"length":5,"type":"bot_command"}]}}
+
+【2025-08-24 22:44:10】
+回调信息：{"update_id":448769547,"message":{"message_id":3061,"from":{"id":7096906507,"is_bot":false,"first_name":"小黑🐉","username":"hoang_gianghomom_mafia_internet","is_premium":true},"chat":{"id":-1002858048739,"title":"巴西-yunpay-NEW88-10294-（0.4%）","type":"supergroup"},"date":1756086249,"text":"\/cxdf tx_1138_20250825014237CSq9y","entities":[{"offset":0,"length":5,"type":"bot_command"}]}}
+
+【2025-08-24 22:45:11】
+回调信息：{"update_id":448769548,"message":{"message_id":2340,"from":{"id":6635319357,"is_bot":false,"first_name":"CW 绵羊-雪碧❄️","username":"panda8827","language_code":"zh-hans"},"chat":{"id":-1002528940452,"title":"巴西-YunPay-10398-1010","type":"supergroup"},"date":1756086309,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:45:14】
+回调信息：{"update_id":448769549,"message":{"message_id":20664,"from":{"id":6793501138,"is_bot":false,"first_name":"Xiù","username":"roxiee01","is_premium":true},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086312,"text":"\/df 01310909220620002887958","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:45:24】
+回调信息：{"update_id":448769550,"callback_query":{"id":"6814297134908592754","from":{"id":8029028131,"is_bot":false,"first_name":"小雨","last_name":"Xiǎoyǔ 💦","username":"rain777888999","language_code":"en","is_premium":true},"message":{"message_id":1253,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002725118527,"title":"巴西-YunPay-10464-tdt777","type":"supergroup"},"date":1756086308,"text":"代付风控提示\n\n系统订单号：P2025082422450686306309979\n外部订单号：266217287048090592\n订单金额：300.00\n开户名 ：Matheus\n账号 ：+5568999245005\n申请时间：2025-08-24 22:45:06","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":18,"type":"code"},{"offset":95,"length":14,"type":"phone_number"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422450686306309979"},{"text":"通过(pass)","callback_data":"pass P2025082422450686306309979"}]]}},"chat_instance":"-937294967243510104","data":"pass P2025082422450686306309979"}}
+
+【2025-08-24 22:46:00】
+回调信息：{"update_id":448769551,"message":{"message_id":2554,"from":{"id":6321123925,"is_bot":false,"first_name":"🀄️𝔼ℝ𝕀🀄️","username":"becon123123"},"chat":{"id":-1002636037233,"title":"巴西-YunPay-10246-PG30 0.4","type":"supergroup"},"date":1756086357,"text":"\/df tx_30023_20250825013040sBPuC","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:46:02】
+回调信息：{"update_id":448769552,"message":{"message_id":20666,"from":{"id":6793501138,"is_bot":false,"first_name":"Xiù","username":"roxiee01","is_premium":true},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086360,"text":"\/df 01310917820620013915350","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:46:14】
+回调信息：{"update_id":448769553,"message":{"message_id":5253,"from":{"id":8070014001,"is_bot":false,"first_name":"28R|XNK |SENG","username":"XNK28R_06"},"chat":{"id":-1002258163963,"title":"YunPay-10059-28R【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086374,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:46:48】
+回调信息：{"update_id":448769554,"message":{"message_id":22776,"from":{"id":7948609852,"is_bot":false,"first_name":"qqpay 全球支付 啊杰","username":"qqpay369","language_code":"zh-hans"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086408,"text":"\/df 2000_20445_800369584090786361","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:46:59】
+回调信息：{"update_id":448769555,"message":{"message_id":795,"from":{"id":6988910630,"is_bot":false,"first_name":"GG","username":"hk0926"},"chat":{"id":-1002798951083,"title":"巴西-YunPay-10441 UY555-0.4%","type":"supergroup"},"date":1756086418,"message_thread_id":794,"reply_to_message":{"message_id":794,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002798951083,"title":"巴西-YunPay-10441 UY555-0.4%","type":"supergroup"},"date":1756086227,"text":"尊敬的 YUNPAY 用户:\n\n现在巴西夜间限额 代收 5-50000  ✅ \n代付最大金额调整为    10-10000  ✅ \n\n如未及时回复，请@我们，我们会尽快为您处理。\n\n祝 老板生意兴隆，财源广进"},"text":"代收没问题吧？"}}
+
+【2025-08-24 22:47:23】
+回调信息：{"update_id":448769556,"message":{"message_id":22778,"from":{"id":7539719873,"is_bot":false,"first_name":"QQpay全球支付-客服 婷婷","username":"QQpay99008"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086443,"message_thread_id":22776,"reply_to_message":{"message_id":22777,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086409,"message_thread_id":22776,"text":"最新代付订单详情\n---------------------------------------------\n系统订单号：P2025082422310785467769088\n外部订单号：2000_20445_800369584090786361\n订单金额：15.0000\n申请时间：2025-08-24 22:31:07\n处理时间：2025-08-24 22:40:33\n订单状态：失败已回调\n备注 ：代付失败-Saldo insuficiente para realizar transação.\n通知次数 ：1\n最后通知时间：2025-08-24 22:40:34\n\n=========银行信息=========\n银行名称：\n开户名 ：Anderson Matheus da Silva\n账号 ：37973771859"},"text":"失败原因"}}
+
+【2025-08-24 22:47:26】
+回调信息：{"update_id":448769557,"message":{"message_id":22779,"from":{"id":7948609852,"is_bot":false,"first_name":"qqpay 全球支付 啊杰","username":"qqpay369","language_code":"zh-hans"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086446,"message_thread_id":22776,"reply_to_message":{"message_id":22777,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086409,"message_thread_id":22776,"text":"最新代付订单详情\n---------------------------------------------\n系统订单号：P2025082422310785467769088\n外部订单号：2000_20445_800369584090786361\n订单金额：15.0000\n申请时间：2025-08-24 22:31:07\n处理时间：2025-08-24 22:40:33\n订单状态：失败已回调\n备注 ：代付失败-Saldo insuficiente para realizar transação.\n通知次数 ：1\n最后通知时间：2025-08-24 22:40:34\n\n=========银行信息=========\n银行名称：\n开户名 ：Anderson Matheus da Silva\n账号 ：37973771859"},"text":"什么情况"}}
+
+【2025-08-24 22:47:46】
+回调信息：{"update_id":448769558,"callback_query":{"id":"6814297130831982234","from":{"id":8029028131,"is_bot":false,"first_name":"小雨","last_name":"Xiǎoyǔ 💦","username":"rain777888999","language_code":"en","is_premium":true},"message":{"message_id":1255,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002725118527,"title":"巴西-YunPay-10464-tdt777","type":"supergroup"},"date":1756086452,"text":"代付风控提示\n\n系统订单号：P2025082422473186451566362\n外部订单号：266236782617012605\n订单金额：200.00\n开户名 ：Fabrício\n账号 ：+5582996251553\n申请时间：2025-08-24 22:47:31","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":18,"type":"code"},{"offset":96,"length":14,"type":"phone_number"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422473186451566362"},{"text":"通过(pass)","callback_data":"pass P2025082422473186451566362"}]]}},"chat_instance":"-937294967243510104","data":"pass P2025082422473186451566362"}}
+
+【2025-08-24 22:47:52】
+回调信息：{"update_id":448769559,"message":{"message_id":517,"from":{"id":7044200337,"is_bot":false,"first_name":"温龙","username":"wl717","is_premium":true},"chat":{"id":-1002709369410,"title":"巴西-YUNPAY-10423-a188","type":"supergroup"},"date":1756086471,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:47:53】
+回调信息：{"update_id":448769560,"message":{"message_id":20668,"from":{"id":6793501138,"is_bot":false,"first_name":"Xiù","username":"roxiee01","is_premium":true},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086472,"text":"\/df 01310917820620013945211","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:48:05】
+回调信息：{"update_id":448769561,"message":{"message_id":2556,"from":{"id":6321123925,"is_bot":false,"first_name":"🀄️𝔼ℝ𝕀🀄️","username":"becon123123"},"chat":{"id":-1002636037233,"title":"巴西-YunPay-10246-PG30 0.4","type":"supergroup"},"date":1756086485,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:48:13】
+回调信息：{"update_id":448769562,"message":{"message_id":13576,"from":{"id":6447466537,"is_bot":false,"first_name":"OK8 - XNK - 珍妮 JENNIE","username":"OK8_XNK04"},"chat":{"id":-1002361427375,"title":"YunPay-10051-OK8【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086493,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:48:35】
+回调信息：{"update_id":448769563,"message":{"message_id":22784,"from":{"id":7153732838,"is_bot":false,"first_name":"qqpay全球支付 （客服5） 白郎- 辉夜","username":"qqpay003","language_code":"zh-hans","is_premium":true},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086515,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:48:37】
+回调信息：{"update_id":448769564,"message":{"message_id":3275,"from":{"id":8462521157,"is_bot":false,"first_name":"阿河","username":"Ahee222"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086516,"text":"\/df TX17560851722791680334","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:48:43】
+回调信息：{"update_id":448769565,"message":{"message_id":3277,"from":{"id":8462521157,"is_bot":false,"first_name":"阿河","username":"Ahee222"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086523,"text":"\/df TX17560852411658985095","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:48:46】
+回调信息：{"update_id":448769566,"message":{"message_id":20670,"from":{"id":6793501138,"is_bot":false,"first_name":"Xiù","username":"roxiee01","is_premium":true},"chat":{"id":-1002250167267,"title":"M9-巴西-yunpay-10031","type":"supergroup"},"date":1756086525,"text":"\/df 01310917820620013985453","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:48:47】
+回调信息：{"update_id":448769567,"message":{"message_id":3279,"from":{"id":8462521157,"is_bot":false,"first_name":"阿河","username":"Ahee222"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086526,"text":"\/df TX17560851777925049092","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:48:51】
+回调信息：{"update_id":448769568,"message":{"message_id":3281,"from":{"id":8462521157,"is_bot":false,"first_name":"阿河","username":"Ahee222"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086530,"text":"\/df TX17560852315422087376","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:48:56】
+回调信息：{"update_id":448769569,"message":{"message_id":3283,"from":{"id":8462521157,"is_bot":false,"first_name":"阿河","username":"Ahee222"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086536,"text":"\/df TX17560852248954831123","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:49:00】
+回调信息：{"update_id":448769570,"message":{"message_id":3285,"from":{"id":8462521157,"is_bot":false,"first_name":"阿河","username":"Ahee222"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086540,"text":"\/df TX17560852116158645782","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:49:02】
+回调信息：{"update_id":448769571,"message":{"message_id":3286,"from":{"id":7293472273,"is_bot":false,"first_name":"红德_阿河","username":"hongde99"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086541,"text":"\/df TX17560849486064209908","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:49:08】
+回调信息：{"update_id":448769572,"message":{"message_id":3289,"from":{"id":8462521157,"is_bot":false,"first_name":"阿河","username":"Ahee222"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086547,"text":"\/df TX17560851548176422966","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:49:09】
+回调信息：{"update_id":448769573,"message":{"message_id":538,"from":{"id":7044200337,"is_bot":false,"first_name":"温龙","username":"wl717","is_premium":true},"chat":{"id":-1002703499998,"title":"巴西-YUNPAY-10421-Aa123","type":"supergroup"},"date":1756086549,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:49:13】
+回调信息：{"update_id":448769574,"message":{"message_id":22786,"from":{"id":7153732838,"is_bot":false,"first_name":"qqpay全球支付 （客服5） 白郎- 辉夜","username":"qqpay003","language_code":"zh-hans","is_premium":true},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086553,"message_thread_id":22776,"reply_to_message":{"message_id":22777,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086409,"message_thread_id":22776,"text":"最新代付订单详情\n---------------------------------------------\n系统订单号：P2025082422310785467769088\n外部订单号：2000_20445_800369584090786361\n订单金额：15.0000\n申请时间：2025-08-24 22:31:07\n处理时间：2025-08-24 22:40:33\n订单状态：失败已回调\n备注 ：代付失败-Saldo insuficiente para realizar transação.\n通知次数 ：1\n最后通知时间：2025-08-24 22:40:34\n\n=========银行信息=========\n银行名称：\n开户名 ：Anderson Matheus da Silva\n账号 ：37973771859"},"photo":[{"file_id":"AgACAgUAAyEFAASQBB-EAAJZAmirwRmVRYkCoGA9MryhHifd65BZAAKlxTEbxl9hVcd-oq_a4g0WAQADAgADcwADNgQ","file_unique_id":"AQADpcUxG8ZfYVV4","file_size":456,"width":90,"height":14},{"file_id":"AgACAgUAAyEFAASQBB-EAAJZAmirwRmVRYkCoGA9MryhHifd65BZAAKlxTEbxl9hVcd-oq_a4g0WAQADAgADbQADNgQ","file_unique_id":"AQADpcUxG8ZfYVVy","file_size":3406,"width":320,"height":50},{"file_id":"AgACAgUAAyEFAASQBB-EAAJZAmirwRmVRYkCoGA9MryhHifd65BZAAKlxTEbxl9hVcd-oq_a4g0WAQADAgADeAADNgQ","file_unique_id":"AQADpcUxG8ZfYVV9","file_size":14136,"width":800,"height":124},{"file_id":"AgACAgUAAyEFAASQBB-EAAJZAmirwRmVRYkCoGA9MryhHifd65BZAAKlxTEbxl9hVcd-oq_a4g0WAQADAgADeQADNgQ","file_unique_id":"AQADpcUxG8ZfYVV-","file_size":17925,"width":1280,"height":198}]}}
+
+【2025-08-24 22:49:33】
+回调信息：{"update_id":448769575,"message":{"message_id":13578,"from":{"id":7309333694,"is_bot":false,"first_name":"OK8 - XNK - KARL","username":"OK8XNK07"},"chat":{"id":-1002361427375,"title":"YunPay-10051-OK8【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086572,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:49:43】
+回调信息：{"update_id":448769576,"message":{"message_id":22787,"from":{"id":8158377729,"is_bot":false,"first_name":"YunPay","last_name":"发财","username":"yunpay007","is_premium":true},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086583,"message_thread_id":22776,"reply_to_message":{"message_id":22786,"from":{"id":7153732838,"is_bot":false,"first_name":"qqpay全球支付 （客服5） 白郎- 辉夜","username":"qqpay003","language_code":"zh-hans","is_premium":true},"chat":{"id":-1002416189316,"title":"巴西-YunPay-10024-qqpay 0.4%","type":"supergroup"},"date":1756086553,"message_thread_id":22776,"photo":[{"file_id":"AgACAgUAAyEFAASQBB-EAAJZAmirwRmVRYkCoGA9MryhHifd65BZAAKlxTEbxl9hVcd-oq_a4g0WAQADAgADcwADNgQ","file_unique_id":"AQADpcUxG8ZfYVV4","file_size":456,"width":90,"height":14},{"file_id":"AgACAgUAAyEFAASQBB-EAAJZAmirwRmVRYkCoGA9MryhHifd65BZAAKlxTEbxl9hVcd-oq_a4g0WAQADAgADbQADNgQ","file_unique_id":"AQADpcUxG8ZfYVVy","file_size":3406,"width":320,"height":50},{"file_id":"AgACAgUAAyEFAASQBB-EAAJZAmirwRmVRYkCoGA9MryhHifd65BZAAKlxTEbxl9hVcd-oq_a4g0WAQADAgADeAADNgQ","file_unique_id":"AQADpcUxG8ZfYVV9","file_size":14136,"width":800,"height":124},{"file_id":"AgACAgUAAyEFAASQBB-EAAJZAmirwRmVRYkCoGA9MryhHifd65BZAAKlxTEbxl9hVcd-oq_a4g0WAQADAgADeQADNgQ","file_unique_id":"AQADpcUxG8ZfYVV-","file_size":17925,"width":1280,"height":198}]},"text":"现在巴西是夜晚银行在限额的"}}
+
+【2025-08-24 22:50:18】
+回调信息：{"update_id":448769577,"message":{"message_id":535,"from":{"id":7044200337,"is_bot":false,"first_name":"温龙","username":"wl717","is_premium":true},"chat":{"id":-1002632035882,"title":"巴西-YUNPAY-10422-aa888","type":"supergroup"},"date":1756086618,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:50:20】
+回调信息：{"update_id":448769578,"message":{"message_id":3291,"from":{"id":5350943779,"is_bot":false,"first_name":"小至 22-10 NBAGAME04","username":"xiaoozhii"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086620,"text":"\/df TX17560850704517610996","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:50:36】
+回调信息：{"update_id":448769579,"message":{"message_id":3293,"from":{"id":5350943779,"is_bot":false,"first_name":"小至 22-10 NBAGAME04","username":"xiaoozhii"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086635,"message_thread_id":3291,"reply_to_message":{"message_id":3292,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086622,"message_thread_id":3291,"text":"最新代付订单详情\n---------------------------------------------\n系统订单号：P2025082422281885298787183\n外部订单号：TX17560850704517610996\n订单金额：30.0000\n申请时间：2025-08-24 22:28:18\n处理时间：2025-08-24 22:28:21\n订单状态：失败已回调\n备注 ：代付失败-Saldo insuficiente para realizar transação.\n通知次数 ：1\n最后通知时间：2025-08-24 22:28:22\n\n=========银行信息=========\n银行名称：\n开户名 ：Maria\n账号 ：44984461362"},"text":"能手动取消吗"}}
+
+【2025-08-24 22:50:49】
+回调信息：{"update_id":448769580,"message":{"message_id":3294,"from":{"id":8158377729,"is_bot":false,"first_name":"YunPay","last_name":"发财","username":"yunpay007","is_premium":true},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086649,"message_thread_id":3291,"reply_to_message":{"message_id":3293,"from":{"id":5350943779,"is_bot":false,"first_name":"小至 22-10 NBAGAME04","username":"xiaoozhii"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086635,"message_thread_id":3291,"text":"能手动取消吗"},"text":"可以的"}}
+
+【2025-08-24 22:51:01】
+回调信息：{"update_id":448769581,"message":{"message_id":3295,"from":{"id":7293472273,"is_bot":false,"first_name":"红德_阿河","username":"hongde99"},"chat":{"id":-1002550317918,"title":"巴西-YunPay-10460-GTV-（0.4%）","type":"supergroup"},"date":1756086661,"text":"\/df TX17560850539795886909","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:51:29】
+回调信息：{"update_id":448769582,"message":{"message_id":12236,"from":{"id":6995864125,"is_bot":false,"first_name":"组长 出款_Grant","username":"Payment_Grant"},"chat":{"id":-1002256433700,"title":"巴西-YunPay-10128-222hot-0.4%","type":"supergroup"},"date":1756086688,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:52:32】
+回调信息：{"update_id":448769583,"message":{"message_id":16120,"from":{"id":7193392044,"is_bot":false,"first_name":"B55 | XNK - VISAL","username":"B55XNK01"},"chat":{"id":-1002457501685,"title":"YunPay-10049-B55【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086751,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:52:38】
+回调信息：{"update_id":448769584,"message":{"message_id":1618,"from":{"id":6610791907,"is_bot":false,"first_name":"ch♡nnyy ˇ ˇ","username":"wh4theduckkkkk"},"chat":{"id":-1002391658817,"title":"TPT-巴西-yunpay-10032","type":"supergroup"},"date":1756086757,"text":"\/df 01310687920620001385576","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:52:45】
+回调信息：{"update_id":448769585,"message":{"message_id":5376,"from":{"id":7497313637,"is_bot":false,"first_name":"RS&258&28R|CS&XNK|山治-SANJE","username":"XNK06_258"},"chat":{"id":-1002323450770,"title":"YunPay-10057-RS【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086765,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:52:56】
+回调信息：{"update_id":448769586,"message":{"message_id":1235,"from":{"id":7612100321,"is_bot":false,"first_name":"Seav Ei 客服","username":"Tranpuility88"},"chat":{"id":-1002859914962,"title":"巴西-YunPay-10462-AS888","type":"supergroup"},"date":1756086775,"text":"\/df tx_40116_20250825013215cPjjD","entities":[{"offset":0,"length":3,"type":"bot_command"}]}}
+
+【2025-08-24 22:53:39】
+回调信息：{"update_id":448769587,"message":{"message_id":1237,"from":{"id":8423313803,"is_bot":false,"first_name":"JING FU ~ 客服","username":"jingfu8899"},"chat":{"id":-1002859914962,"title":"巴西-YunPay-10462-AS888","type":"supergroup"},"date":1756086819,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:55:15】
+回调信息：{"update_id":448769588,"message":{"message_id":13717,"from":{"id":7175416985,"is_bot":false,"first_name":"SBET|XNK' XIAOLAN","username":"SBET_XNK022"},"chat":{"id":-1002499994426,"title":"YunPay-10048-SBET【0.4%+0】巴西《本群不会申请资金下发》","type":"supergroup"},"date":1756086914,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:55:23】
+回调信息：{"update_id":448769589,"callback_query":{"id":"6814297132716846680","from":{"id":8029028131,"is_bot":false,"first_name":"小雨","last_name":"Xiǎoyǔ 💦","username":"rain777888999","language_code":"en","is_premium":true},"message":{"message_id":1257,"from":{"id":7762675448,"is_bot":true,"first_name":"YunPay","username":"YunPay3_bot"},"chat":{"id":-1002725118527,"title":"巴西-YunPay-10464-tdt777","type":"supergroup"},"date":1756086915,"text":"代付风控提示\n\n系统订单号：P2025082422551586915802087\n外部订单号：266249716496983814\n订单金额：150.00\n开户名 ：Antônio\n账号 ：+5586999661404\n申请时间：2025-08-24 22:55:15","entities":[{"offset":14,"length":26,"type":"code"},{"offset":47,"length":18,"type":"code"},{"offset":95,"length":14,"type":"phone_number"}],"reply_markup":{"inline_keyboard":[[{"text":"驳回(reject)","callback_data":"reject P2025082422551586915802087"},{"text":"通过(pass)","callback_data":"pass P2025082422551586915802087"}]]}},"chat_instance":"-937294967243510104","data":"pass P2025082422551586915802087"}}
+
+【2025-08-24 22:56:53】
+回调信息：{"update_id":448769590,"message":{"message_id":61,"from":{"id":7694293857,"is_bot":false,"first_name":"BEIFANG","username":"lovebeifang","language_code":"zh-hans","is_premium":true},"chat":{"id":-1002951224046,"title":"YunPay（0.4%）巴西-10471-br878","type":"supergroup"},"date":1756087012,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:57:21】
+回调信息：{"update_id":448769591,"message":{"message_id":63,"from":{"id":7694293857,"is_bot":false,"first_name":"BEIFANG","username":"lovebeifang","language_code":"zh-hans","is_premium":true},"chat":{"id":-1002951224046,"title":"YunPay（0.4%）巴西-10471-br878","type":"supergroup"},"date":1756087040,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:57:50】
+回调信息：{"update_id":448769592,"message":{"message_id":4863,"from":{"id":6487555975,"is_bot":false,"first_name":"yunpay_","last_name":"柠檬","username":"yuanpay_03","is_premium":true},"chat":{"id":-4936523831,"title":"yunpay-10457-7boa二类4.5%+2%","type":"group","all_members_are_administrators":true,"accepted_gift_types":{"unlimited_gifts":false,"limited_gifts":false,"unique_gifts":false,"premium_subscription":false}},"date":1756087070,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
+【2025-08-24 22:59:33】
+回调信息：{"update_id":448769593,"message":{"message_id":540,"from":{"id":8126199835,"is_bot":false,"first_name":"马雯","username":"br_zzmawen","language_code":"id","is_premium":true},"chat":{"id":-1002703499998,"title":"巴西-YUNPAY-10421-Aa123","type":"supergroup"},"date":1756087173,"text":"\/balance@YunPay3_bot","entities":[{"offset":0,"length":20,"type":"bot_command"}]}}
+
