@@ -23,3 +23,9 @@
 /open/Runtime/
 /open/Uploads/
 /open/Application/Common/Conf/db.php
+/log/.well-known
+/log/.user.ini
+/log/Data/
+/log/Runtime/
+/log/Uploads/
+/log/Application/Common/Conf/db.php
