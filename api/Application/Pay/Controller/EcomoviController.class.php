@@ -115,7 +115,7 @@ class EcomoviController extends PayController
         ];
 
         log_place_order($this->code, "OAuth----提交", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
-        $ans = $this->request('https://finance.ecomovi.com.br/oauth/token', $params, $header);
+        $ans = $this->request('https://pix.onz.finance/oauth/token', $params, $header);
         log_place_order($this->code, "OAuth----返回", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
         return $ans;
     }
