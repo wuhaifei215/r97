@@ -1739,11 +1739,162 @@ class WithdrawalController extends BaseController
 
 
     /**
-     *  代付申请
+     * 提现记录
+     */
+    public function dfapplylist()
+    {
+        //通道
+        $banklist = M("Product")->field('id,name,code')->select();
+        $this->assign("banklist", $banklist);
+
+        $where    = array();
+        $currency = I("request.currency", '', 'string,strip_tags,htmlspecialchars');
+        if($currency ==='PHP'){
+            $where['paytype'] = ['between', [1,3]];
+        }
+        if($currency ==='INR'){
+            $where['paytype'] = ['eq', 4];
+        }
+        $this->assign('currency', $currency);
+
+        $type = I("request.type",  0, 'intval');
+        if($type === 2){
+            $where['df_type'] = ['eq', 2];
+        }else{
+            $where['df_type'] = ['neq', 2];
+        }
+        $this->assign('type', $type);
+        $money = I("request.money", '', 'string,strip_tags,htmlspecialchars');
+        if ($money) {
+            $where['money'] = array('eq', $money);
+        }
+        $this->assign("money", $money);
+        $memo = I("request.memo", '', 'string,strip_tags,htmlspecialchars');
+        if ($memo) {
+            $where['memo'] = ['like', "%" . $memo . "%"];
+        }
+        $this->assign("memo", $memo);
+
+        $memberid = I("get.memberid", 0, 'intval');
+        if ((intval($memberid) - 10000) > 0) {
+            $where['userid'] = array('eq', $memberid - 10000);
+        }
+        $this->assign("memberid", $memberid);
+        $orderid = I("request.orderid", '', 'string,strip_tags,htmlspecialchars');
+        if ($orderid) {
+            $where['orderid'] = array('eq', $orderid);
+        }
+        $this->assign("orderid", $orderid);
+        $out_trade_no = I("request.outtradeno", '', 'string,strip_tags,htmlspecialchars');
+        if ($out_trade_no) {
+            $where['out_trade_no'] = array('eq', $out_trade_no);
+        }
+        $this->assign("out_trade_no", $out_trade_no);
+        $bankfullname = I("request.bankfullname", '', 'string,strip_tags,htmlspecialchars');
+        if ($bankfullname) {
+            $where['bankfullname'] = array('eq', $bankfullname);
+        }
+        $this->assign("bankfullname", $bankfullname);
+        $tongdao = I("request.tongdao", '', 'string,strip_tags,htmlspecialchars');
+        if ($tongdao) {
+            $where['payapiid'] = array('eq', $tongdao);
+        }
+        $this->assign("tongdao", $tongdao);
+        // $T = I("request.T", '', 'string,strip_tags,htmlspecialchars');
+        // if ($T != "") {
+        //     $where['t'] = array('eq', $T);
+        // }
+        // $this->assign("T", $T);
+
+        $status = I("request.status", '', 'trim,string,strip_tags,htmlspecialchars');
+        if ($status != "") {
+            if ($status == '2or3') {
+                $where['status'] = array('between', array('2', '3'));
+            } elseif ($status == '4or5') {
+                $where['status'] = array('between', array('4', '5'));
+            } else  {
+                $where['status'] = array('eq', $status);
+            }
+        }
+        $this->assign('status', $status);
+
+        $bankcode = I("request.bankcode");
+        if ($bankcode) {
+            $where['bankcode'] = array('eq', $bankcode);
+        }
+        $this->assign("bankcode", $bankcode);
+
+        $dfid = I("get.dfid", '', 'string,strip_tags,htmlspecialchars');
+        if ($dfid != '') {
+            $where['df_id'] = array('eq', $dfid);
+        }
+        $this->assign("dfid", $dfid);
+        $createtime = urldecode(I("request.createtime", '', 'string,strip_tags,htmlspecialchars'));
+        if ($createtime) {
+            list($cstime, $cetime) = explode('|', $createtime);
+            $where['sqdatetime']   = ['between', [$cstime, $cetime ? $cetime : date('Y-m-d')]];
+        }
+        $this->assign("createtime", $createtime);
+        $successtime = urldecode(I("request.successtime", '', 'string,strip_tags,htmlspecialchars'));
+        if ($successtime) {
+            list($sstime, $setime) = explode('|', $successtime);
+            $where['cldatetime']   = ['between', [$sstime, $setime ? $setime : date('Y-m-d')]];
+        }
+        $this->assign("successtime", $successtime);
+        //没有搜索条件，默认显示当前
+        if (!$createtime && !$successtime && !$out_trade_no && !$orderid) {
+            $todayBegin = date('Y-m-d') . ' 00:00:00';
+            $todyEnd = date('Y-m-d') . ' 23:59:59';
+            if (!$createtime && !$successtime) {
+                $where['sqdatetime'] = ['between', [$todayBegin, $todyEnd]];
+            }
+            $createtime = $todayBegin . ' | ' . $todyEnd;
+        }
+        $this->assign("createtime", $createtime);
+
+        $size  = 50;
+        $rows  = I('get.rows', $size, 'intval');
+        if (!$rows) {
+            $rows = $size;
+        }
+
+        $field = '*';
+        $Wttklist = D('WttklistApply');
+        $count = $Wttklist->getCount($where);
+        $page = new Page($count, $rows);
+        $list = $Wttklist->getOrderByDateRange($field, $where, $page->firstRow . ',' . $page->listRows, 'id desc');
+        // echo $Wttklist->getLastSql();
+        foreach ($list as $k => $v){
+            foreach ($banklist as $kk => $vv){
+                if($v['bankcode'] === $vv['id']){
+                    $list[$k]['bankcode'] = $vv['name'];
+                }
+            }
+        }
+
+        $pfa_lists = M('PayForAnother')->where(['status' => 1])->select();
+        $df_list = M('PayForAnother')->select();
+
+        $this->assign('uid', session("admin_auth.uid"));
+        $this->assign('rows', $rows);
+        $this->assign("pfa_lists", $pfa_lists);
+        $this->assign("df_list", $df_list);
+        $this->assign("list", $list);
+        $this->assign("page", $page->show());
+        C('TOKEN_ON', false);
+        if($type === 2){
+            $this->display('paymentU');
+        }else{
+            $this->display();
+        }
+    }
+
+    /**
+     *  提现申请
      */
     public function dfapply()
     {
-        UserLogService::HTwrite(1, '访问代付申请页面', '表单提交方式');
+        UserLogService::HTwrite(1, '访问提现申请页面', '表单提交方式');
 
         $uid = session('admin_auth')['uid'];
         $verifysms = 0; //是否可以短信验证
@@ -1760,7 +1911,7 @@ class WithdrawalController extends BaseController
         if ($googleAuth) {
             $verifyGoogle = adminGoogleBind($uid);
         }
-        //当前可用代付渠道
+        //当前可用提现渠道
         $channel = M('pay_for_another')->where(['status' => 1])->select();
 
         $this->assign('channel', $channel);
@@ -1772,7 +1923,7 @@ class WithdrawalController extends BaseController
 
     public function dfsave()
     {
-        UserLogService::HTwrite(1, '访问代付申请页面', '表单提交方式');
+        UserLogService::HTwrite(1, '提现申请提交', '表单提交方式');
         $uid   = session('admin_auth')['uid'];
         $verifysms = 0; //是否可以短信验证
         $sms_is_open = smsStatus();
@@ -1851,14 +2002,14 @@ class WithdrawalController extends BaseController
 
             $data = I('post.item');
             if (empty($data)) {
-                UserLogService::HTwrite(2, '代付申请提交失败', '表单提交方式，错误原因：代付申请数据为空');
-                $this->error('代付申请数据不能为空！');
+                UserLogService::HTwrite(2, '提现申请提交失败', '表单提交方式，错误原因：提现申请数据为空');
+                $this->error('提现申请数据不能为空！');
             }
 
             //提现时间
             $time = date("Y-m-d H:i:s");
             //获取数据表名称
-            $Wttklist = D('Wttklist');
+            $Wttklist = D('WttklistApply');
             $table = $Wttklist->getRealTableName($time);
             $success = $fail = 0;
             foreach ($data as $k => $v) {
@@ -1868,6 +2019,7 @@ class WithdrawalController extends BaseController
                 //提现记录
                 $wttkData = [
                     'orderid'      => $orderid,
+                    "userid" => $uid,
                     "bankname"     => trim($v["bankname"]),
                     "bankzhiname"  => trim($v["subbranch"]),
                     "banknumber"   => trim($v["cardnumber"]),
@@ -1878,6 +2030,10 @@ class WithdrawalController extends BaseController
                     "sqdatetime"   => $time,
                     "status"       => 0,
                     'tkmoney'      => $v['tkmoney'],
+                    'df_id' => $channel['id'],
+                    'code' => $channel['code'],
+                    'df_name' => $channel['title'],
+                    'channel_mch_id' => $channel['mch_id'],
                 ];
                 $id = $Wttklist->table($table)->add($wttkData);
 
@@ -1910,13 +2066,13 @@ class WithdrawalController extends BaseController
                 }
             }
             if ($success > 0 && $fail == 0) {
-                UserLogService::HTwrite(2, '代付申请提交成功', '提交成功');
+                UserLogService::HTwrite(2, '提现申请提交成功', '提交成功');
                 $this->ajaxReturn(['status' => 1, 'msg' => '提交成功！']);
             } elseif ($success > 0 && $fail > 0) {
-                UserLogService::HTwrite(2, '代付申请提交成功', '成功:' . $success . '条，失败：' . $fail . '条');
+                UserLogService::HTwrite(2, '提现申请提交成功', '成功:' . $success . '条，失败：' . $fail . '条');
                 $this->ajaxReturn(['status' => 1, 'msg' => '部分成功，成功:' . $success . '条，失败：' . $fail . '条']);
             } else {
-                UserLogService::HTwrite(2, '代付申请提交失败', '提交失败');
+                UserLogService::HTwrite(2, '提现申请提交失败', '提交失败');
                 $this->ajaxReturn(['status' => 0, 'msg' => '提交失败！']);
             }
         }

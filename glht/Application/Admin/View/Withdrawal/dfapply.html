@@ -9,39 +9,15 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex m-b-10 no-block">
-                        <h5 class="card-title m-b-0 align-self-center">代付申请（银行卡）</h5>
+                        <h5 class="card-title m-b-0 align-self-center">提现申请</h5>
                     </div>
                     <div class="table-responsive m-t-10">
-                        <div class="layui-tab">
-                            <ul class="layui-tab-title">
-                                <li class="layui-this"><a href="<{:U("Withdrawal/bankdfapply")}>">表单提交方式</a></li>
-                                <li><a href="<{:U("Withdrawal/entrusted")}>">EXCEL导入方式</a></li>
-                            </ul>
-                        </div>
-                        <blockquote class="layui-elem-quote">
-                            <span class="text-danger">可提现：<{$info['balance']}> 元</span>
-                            <span style="margin:0 30px;" class="text-muted">冻结：<{$info['blockedbalance']}> 元</span>
-                            <span class="text-warning">结算：T+<{$tkconfig[t1zt]}></span>
-                            <span style="margin:0 30px;" class="text-muted">
-                            手续费：<if condition="$tkconfig[tktype] eq 1"><{$tkconfig[sxffixed]}>元/笔<else/><{$tkconfig[sxfrate]}>%</if></span>
-                            </span>
-                            <span class="text-danger">
-                            <if condition="$tkconfig[tkzxmoney] gt 0">
-                            单笔最低：<{$tkconfig[tkzxmoney]}>元
-                            </if>
-                        </span>
-                            <span class="text-warning" style="margin:0 30px;">
-                            <if condition="$tkconfig[tkzdmoney] gt 0">
-                            单笔最高：<{$tkconfig[tkzdmoney]}>元
-                            </if>
-                        </span>
-                        </blockquote>
                         <div class="layui-inline">
                             <button type="button" class="layui-btn" onclick="addRow()"><span
                                     class="glyphicon glyphicon-plus"></span> 新增
                             </button>
                         </div>
-                        <form class="layui-form layui-table-body" id="df_form" style="min-height: 800px;">
+                        <form class="layui-form layui-table-body" id="df_form" style="min-height: 600px;">
                             <table class="layui-table">
                                 <thead>
                                 <tr>
