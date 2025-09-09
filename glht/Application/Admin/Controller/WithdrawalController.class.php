@@ -1737,4 +1737,188 @@ class WithdrawalController extends BaseController
         }
     }
 
+
+    /**
+     *  代付申请
+     */
+    public function dfapply()
+    {
+        UserLogService::HTwrite(1, '访问代付申请页面', '表单提交方式');
+
+        $uid = session('admin_auth')['uid'];
+        $verifysms = 0; //是否可以短信验证
+        $sms_is_open = smsStatus();
+        if ($sms_is_open) {
+            $adminMobileBind = adminMobileBind($uid);
+            if ($adminMobileBind) {
+                $verifysms = 1;
+            }
+        }
+        //是否可以谷歌安全码验证
+        $verifyGoogle = 0;
+        $googleAuth   = M('Websiteconfig')->getField('google_auth');
+        if ($googleAuth) {
+            $verifyGoogle = adminGoogleBind($uid);
+        }
+        //当前可用代付渠道
+        $channel = M('pay_for_another')->where(['status' => 1])->select();
+
+        $this->assign('channel', $channel);
+        $this->assign('verifysms', $verifysms);
+        $this->assign('verifyGoogle', $verifyGoogle);
+        $this->assign('auth_type', $verifyGoogle ? 1 : 0);
+        $this->display();
+    }
+
+    public function dfsave()
+    {
+        UserLogService::HTwrite(1, '访问代付申请页面', '表单提交方式');
+        $uid   = session('admin_auth')['uid'];
+        $verifysms = 0; //是否可以短信验证
+        $sms_is_open = smsStatus();
+        if ($sms_is_open) {
+            $adminMobileBind = adminMobileBind($uid);
+            if ($adminMobileBind) {
+                $verifysms = 1;
+            }
+        }
+        //是否可以谷歌安全码验证
+        $verifyGoogle = 0;
+        $googleAuth   = M('Websiteconfig')->getField('google_auth');
+        if ($googleAuth) {
+            $verifyGoogle = adminGoogleBind($uid);
+        }
+        if (IS_POST) {
+            $auth_type = I('request.auth_type', 0, 'intval');
+
+            if($verifyGoogle && $verifysms) {
+                if(!in_array($auth_type,[0,1])) {
+                    $this->ajaxReturn(['status' => 0, 'msg' => "参数错误！"]);
+                }
+            } elseif($verifyGoogle && !$verifysms) {
+                if($auth_type != 1) {
+                    $this->ajaxReturn(['status' => 0, 'msg' => "参数错误！"]);
+                }
+            } elseif(!$verifyGoogle && $verifysms) {
+                if($auth_type != 0) {
+                    $this->ajaxReturn(['status' => 0, 'msg' => "参数错误！"]);
+                }
+            }
+            if ($verifyGoogle && $auth_type == 1) {
+                $res = check_auth_error($uid, 5);
+                if(!$res['status']) {
+                    $this->ajaxReturn(['status' => 0, 'msg' => $res['msg']]);
+                }
+                //谷歌安全码验证
+                $google_code = I('request.google_code');
+                if (!$google_code) {
+                    $this->ajaxReturn(['status' => 0, 'msg' => "谷歌安全码不能为空！"]);
+                } else {
+                    $ga                = new \Org\Util\GoogleAuthenticator();
+                    $google_secret_key = M('Admin')->where(['id' => $uid])->getField('google_secret_key');
+                    if (!$google_secret_key) {
+                        $this->ajaxReturn(['status' => 0, 'msg' => "您未绑定谷歌身份验证器！"]);
+                    }
+                    if(false === $ga->verifyCode($google_secret_key, $google_code, C('google_discrepancy'))) {
+                        log_auth_error($uid,5);
+                        $this->ajaxReturn(['status' => 0, 'msg' => "谷歌安全码错误！"]);
+                    } else {
+                        clear_auth_error($uid,5);
+                    }
+                }
+            } elseif ($verifysms && $auth_type == 0) {
+                $res = check_auth_error($uid, 3);
+                if(!$res['status']) {
+                    $this->ajaxReturn(['status' => 0, 'msg' => $res['msg']]);
+                }
+                //短信验证码
+                $code = I('request.code');
+                if (!$code) {
+                    $this->ajaxReturn(['status' => 0, 'msg' => "短信验证码不能为空！"]);
+                } else {
+                    if (session('send.submitDfSend') != $code || !$this->checkSessionTime('submitDfSend', $code)) {
+                        log_auth_error($uid,3);
+                        $this->ajaxReturn(['status' => 0, 'msg' => '短信验证码错误']);
+                    } else {
+                        clear_auth_error($uid,3);
+                        session('send', null);
+                    }
+                }
+            }
+
+            $channelId = I('post.channelId');
+            $channel = M('pay_for_another')->where(['id' => $channelId])->find();
+
+            $data = I('post.item');
+            if (empty($data)) {
+                UserLogService::HTwrite(2, '代付申请提交失败', '表单提交方式，错误原因：代付申请数据为空');
+                $this->error('代付申请数据不能为空！');
+            }
+
+            //提现时间
+            $time = date("Y-m-d H:i:s");
+            //获取数据表名称
+            $Wttklist = D('Wttklist');
+            $table = $Wttklist->getRealTableName($time);
+            $success = $fail = 0;
+            foreach ($data as $k => $v) {
+                //获取订单号
+                $orderid = $this->getOrderId();
+
+                //提现记录
+                $wttkData = [
+                    'orderid'      => $orderid,
+                    "bankname"     => trim($v["bankname"]),
+                    "bankzhiname"  => trim($v["subbranch"]),
+                    "banknumber"   => trim($v["cardnumber"]),
+                    "bankfullname" => trim($v['accountname']),
+                    "phone"        => $v['phone'],
+                    "idnumber"     => $v['idnumber'],
+                    "userid"       => $uid,
+                    "sqdatetime"   => $time,
+                    "status"       => 0,
+                    'tkmoney'      => $v['tkmoney'],
+                ];
+                $id = $Wttklist->table($table)->add($wttkData);
+
+                $lock_res = $Wttklist->table($table)->where(['id'=>$id, 'df_lock'=>0])->save(['df_lock' => 1, 'lock_time' => time()]);
+                if(!$lock_res) {
+                    //                return ['status' => 0, 'msg' => '系统出错，请您联系管理员处理!'];
+                    $fail++;
+                    continue;
+                }else{
+                    try {
+                        $wttkData['money'] = round($wttkData['money'],2);
+                        $result = R('Payment/' . $channel['code'] . '/PaymentExec', [$wttkData, $channel]);
+                        if (FALSE === $result) {
+                            $Wttklist->table($table)->where(['id' => $id])->save(['last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
+                            $fail++;
+                        } else {
+                            if (is_array($result)) {
+                                $data = [
+                                    'memo' => $result['msg'],
+                                ];
+                                $this->changeStatus($id, $result['status'], $data, $table);
+                                $Wttklist->table($table)->where(['id' => $id])->save(['is_auto' => 1, 'last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
+                            }
+                            $success++;
+                        }
+                    } catch (\Exception $e) {
+                        $Wttklist->table($table)->where(['id' => $id])->setField('df_lock', 0);
+                        $fail++;
+                    }
+                }
+            }
+            if ($success > 0 && $fail == 0) {
+                UserLogService::HTwrite(2, '代付申请提交成功', '提交成功');
+                $this->ajaxReturn(['status' => 1, 'msg' => '提交成功！']);
+            } elseif ($success > 0 && $fail > 0) {
+                UserLogService::HTwrite(2, '代付申请提交成功', '成功:' . $success . '条，失败：' . $fail . '条');
+                $this->ajaxReturn(['status' => 1, 'msg' => '部分成功，成功:' . $success . '条，失败：' . $fail . '条']);
+            } else {
+                UserLogService::HTwrite(2, '代付申请提交失败', '提交失败');
+                $this->ajaxReturn(['status' => 0, 'msg' => '提交失败！']);
+            }
+        }
+    }
 }
