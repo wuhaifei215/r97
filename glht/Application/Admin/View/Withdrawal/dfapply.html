@@ -61,10 +61,10 @@
                             <div class="layui-form-item layui-inline">
                                 <label class="layui-form-label">代付通道</label>
                                 <div class="layui-input-inline">
-                                    <select name="dfid">
+                                    <select name="channelId">
                                         <option value="">全部代付通道</option>
-                                        <volist name="df_list" id="vo">
-                                            <option <if condition="$dfid eq $vo[id]">selected</if>
+                                        <volist name="channel" id="vo">
+                                            <option <if condition="$channelId eq $vo[id]">selected</if>
                                             value="<{$vo.id}>"><{$vo.title}></option>
                                         </volist>
                                     </select>
