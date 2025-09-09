@@ -1998,6 +1998,10 @@ class WithdrawalController extends BaseController
             }
 
             $channelId = I('post.channelId');
+            if (!$channelId) {
+                UserLogService::HTwrite(2, '提现申请提交失败', '表单提交方式，错误原因：未选择请选择代付通道');
+                $this->error('请选择代付通道');
+            }
             $channel = M('pay_for_another')->where(['id' => $channelId])->find();
 
             $data = I('post.item');
