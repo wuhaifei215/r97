@@ -119,7 +119,7 @@ class EcomoviController extends PayController
         log_place_order($this->code, "OAuth----返回", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
         return $ans;
     }
-
+ 
     //异步通知
     public function notifyurl()
     {
