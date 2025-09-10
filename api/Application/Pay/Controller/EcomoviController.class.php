@@ -228,10 +228,12 @@ class EcomoviController extends PayController
                 CURLOPT_MAXREDIRS => 0,
                 CURLOPT_TIMEOUT => 10,
                 CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => $json,
                 CURLOPT_HTTPHEADER => $header,
-                CURLOPT_SSL_VERIFYPEER =>0,
+                CURLOPT_SSL_VERIFYPEER =>false,
+                CURLOPT_SSL_VERIFYHOST => false,
             ));
             $response = curl_exec($curl);
             $result = [];
