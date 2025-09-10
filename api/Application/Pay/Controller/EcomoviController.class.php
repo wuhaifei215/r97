@@ -232,8 +232,8 @@ class EcomoviController extends PayController
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => $json,
                 CURLOPT_HTTPHEADER => $header,
-                CURLOPT_SSLCERT => 'https://testapi.r97pay.com/cert/r97pay.com_certificate.pem',
-                CURLOPT_SSLKEY => 'https://testapi.r97pay.com/cert/r97pay.com_private.key',
+                CURLOPT_SSLCERT => '/cert/r97pay.com_certificate.pem',
+                CURLOPT_SSLKEY => '/cert/r97pay.com_private.key',
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_SSL_VERIFYHOST => 2,
             ));
