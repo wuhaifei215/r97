@@ -232,6 +232,7 @@ class EcomoviController extends PayController
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => $json,
                 CURLOPT_HTTPHEADER => $header,
+                CURLOPT_SSL_VERSION =>4,
                 CURLOPT_SSL_VERIFYPEER =>false,
                 CURLOPT_SSL_VERIFYHOST => false,
             ));
