@@ -3,23 +3,6 @@
 //echo "服务器的主IP地址是: " . $serverMainIp;
 //die;
 
-$ch = curl_init();
-
-curl_setopt($ch, CURLOPT_URL, "https://www.baidu.com");
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-// 指定CA证书文件路径
-curl_setopt($ch, CURLOPT_CAINFO, "./cert/cacert.pem");
-
-$response = curl_exec($ch);
-if (curl_errno($ch)) {
-    echo 'Curl error: ' . curl_error($ch);
-}
-
-curl_close($ch);
-
-echo $response;
-die;
-
 // 检测PHP环境
 if (version_compare(PHP_VERSION, '5.4.0', '<')) {
     die('require PHP > 5.4.0 !');
