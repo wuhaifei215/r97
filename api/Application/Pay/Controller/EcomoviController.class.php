@@ -234,19 +234,10 @@ class EcomoviController extends PayController
                 CURLOPT_HTTPHEADER => $header,
                 CURLOPT_SSLCERT => './cert/r97pay.com_certificate.pem',
                 CURLOPT_SSLKEY => './cert/r97pay.com_private.key',
+                CURLOPT_CAINFO => './cert/r97pay.com_certificate.pem',//证书地址
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_SSL_VERIFYHOST => 2,
             ));
-//            $curl = curl_init($url);
-//            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);//SSL证书认证
-//            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);//严格认证
-//            curl_setopt($curl, CURLOPT_CAINFO, './cert/r97pay.com_certificate.pem');//证书地址
-//            curl_setopt($curl, CURLOPT_HEADER, 0); // 过滤HTTP头
-//            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
-//            curl_setopt($curl, CURLOPT_POST, true);
-//            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);// post传输数据
-//            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);//
-
             $response = curl_exec($curl);
             $result = [];
             if ($response === false) {
