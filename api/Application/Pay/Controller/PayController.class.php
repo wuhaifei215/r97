@@ -1050,7 +1050,7 @@ class PayController extends Controller
     
     protected function redis_connect(){
         //创建一个redis对象
-        $redis = new \Redis();
+        $redis = new Redis();
         //连接 Redis 服务
         $redis->connect(C('REDIS_HOST'), C('REDIS_PORT'));
         //密码验证
