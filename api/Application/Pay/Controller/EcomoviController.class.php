@@ -119,7 +119,7 @@ class EcomoviController extends PayController
         log_place_order($this->code, "OAuth----返回", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
         return $ans;
     }
- 
+
     //异步通知
     public function notifyurl()
     {
@@ -234,8 +234,15 @@ class EcomoviController extends PayController
                 CURLOPT_HTTPHEADER => $header,
             ));
             $response = curl_exec($curl);
+            $result = [];
+            if ($response === false) {
+                $result['code'] = curl_errno($curl);
+                $result['message'] = curl_error($curl);
+            } else {
+                $result = json_decode($response, true);
+            }
             curl_close($curl);
-            return $response;
+            return $result;
 
         } catch (\Exception $e) {
             log_place_order($this->code. '_request', $params["reference"] . "----提交错误", $e->getMessage());    //日志
