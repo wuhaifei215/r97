@@ -219,33 +219,24 @@ class EcomoviController extends PayController
     private function request($url, $params, $header)
     {
         try {
-            $ch = curl_init();
-            $options = array(
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => false,
-                CURLOPT_HTTPHEADER => $header,
-                CURLOPT_CONNECTTIMEOUT => 10,
-                CURLOPT_TIMEOUT => 10,
-    
+            $json = json_encode($params, JSON_UNESCAPED_UNICODE);
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
                 CURLOPT_URL => $url,
-                CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => json_encode($params),
-    
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_SSL_VERIFYHOST => 0
-            );
-            curl_setopt_array($ch, $options);
-            $output = curl_exec($ch);
-    
-            $result = [];
-            if ($output === false) {
-                $result['code'] = curl_errno($ch);
-                $result['message'] = curl_error($ch);
-            } else {
-                $result = json_decode($output, true);
-            }
-            curl_close($ch);
-            return $result;
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 0,
+                CURLOPT_TIMEOUT => 10,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => $json,
+                CURLOPT_HTTPHEADER => $header,
+            ));
+            $response = curl_exec($curl);
+            curl_close($curl);
+            return $response;
+
         } catch (\Exception $e) {
             log_place_order($this->code. '_request', $params["reference"] . "----提交错误", $e->getMessage());    //日志
         }
