@@ -220,23 +220,32 @@ class EcomoviController extends PayController
     {
         try {
             $json = json_encode($params, JSON_UNESCAPED_UNICODE);
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 0,
-                CURLOPT_TIMEOUT => 10,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => $json,
-                CURLOPT_HTTPHEADER => $header,
-                CURLOPT_SSLCERT => './cert/r97pay.com_certificate.pem',
-                CURLOPT_SSLKEY => './cert/r97pay.com_private.key',
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_SSL_VERIFYHOST => 2,
-            ));
+//            $curl = curl_init();
+//            curl_setopt_array($curl, array(
+//                CURLOPT_URL => $url,
+//                CURLOPT_RETURNTRANSFER => true,
+//                CURLOPT_ENCODING => '',
+//                CURLOPT_MAXREDIRS => 0,
+//                CURLOPT_TIMEOUT => 10,
+//                CURLOPT_FOLLOWLOCATION => true,
+//                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//                CURLOPT_CUSTOMREQUEST => 'POST',
+//                CURLOPT_POSTFIELDS => $json,
+//                CURLOPT_HTTPHEADER => $header,
+//                CURLOPT_SSLCERT => './cert/r97pay.com_certificate.pem',
+//                CURLOPT_SSLKEY => './cert/r97pay.com_private.key',
+//                CURLOPT_SSL_VERIFYPEER => true,
+//                CURLOPT_SSL_VERIFYHOST => 2,
+//            ));
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
+            curl_setopt($curl, CURLOPT_CAINFO, './cert/r97pay.com_certificate.pem');//证书地址
+            curl_setopt($curl, CURLOPT_HEADER, 0); // 过滤HTTP头
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);// post传输数据
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);//
 
             $response = curl_exec($curl);
             $result = [];
