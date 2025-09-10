@@ -232,11 +232,12 @@ class EcomoviController extends PayController
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => $json,
                 CURLOPT_HTTPHEADER => $header,
-                CURLOPT_SSLCERT => './cert/r97pay.com_certificate.pem',
-                CURLOPT_SSLKEY => './cert/r97pay.com_private.key',
+                CURLOPT_CAINFO => './cert/r97pay.com_certificate.pem',
+//                CURLOPT_SSLKEY => './cert/r97pay.com_private.key',
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_SSL_VERIFYHOST => 2,
             ));
+
             $response = curl_exec($curl);
             $result = [];
             if ($response === false) {
