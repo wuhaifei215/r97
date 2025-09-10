@@ -236,6 +236,7 @@ class EcomoviController extends PayController
 //                CURLOPT_SSLKEY => './cert/r97pay.com_private.key',
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_CAINFO => '/etc/pki/tls/certs/ca-bundle.crt'
             ));
 
             $response = curl_exec($curl);
