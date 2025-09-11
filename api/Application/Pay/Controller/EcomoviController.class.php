@@ -273,7 +273,13 @@ class EcomoviController extends PayController
             curl_exec($ch);
             $return_content = ob_get_contents();
             ob_end_clean();
-            return $return_content;
+            if ($return_content === false) {
+                $result['code'] = curl_errno($ch);
+                $result['message'] = curl_error($ch);
+            } else {
+                $result = $return_content;
+            }
+            return $result;
         } catch (\Exception $e) {
             log_place_order($this->code. '_request', $params["reference"] . "----提交错误", $e->getMessage());    //日志
         }
