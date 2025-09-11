@@ -115,6 +115,7 @@ class EcomoviController extends PayController
         ];
 
         log_place_order($this->code, "OAuth----提交", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
+        log_place_order($this->code, "OAuth----提交url", 'https://api.pix.ecomovi.com.br/oauth/token');    //日志
         $ans = $this->request('https://api.pix.ecomovi.com.br/oauth/token', $params, $header);
         log_place_order($this->code, "OAuth----返回", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
         return $ans;
@@ -234,9 +235,9 @@ class EcomoviController extends PayController
                 CURLOPT_HTTPHEADER => $header,
 //                CURLOPT_SSLCERT => './cert/ecomovi/in/ECOMOVI_50.crt',
 //                CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_SSL_VERIFYHOST => 2,
-                CURLOPT_CAINFO => './cert/ecomovi/in/ECOMOVI_50.crt'
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_CAINFO => './cert/ecomovi/in/cacert.pem'
             ));
 //            $curl = curl_init($url);
 //            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
