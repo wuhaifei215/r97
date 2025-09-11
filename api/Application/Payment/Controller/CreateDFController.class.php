@@ -334,9 +334,9 @@ class CreateDFController extends Controller
             //$cost = $channel['rate_type'] ? bcmul($data['money'], $channel['cost_rate'], 4) : $channel['cost_rate'];
             //计算成本
             if ($channel['rate_type'] == 1) { //按比例
-                $cost = round($data['money']*($channel['cost_rate']/100),4);
+                $cost = round($money*($channel['cost_rate']/100),4);
             } elseif($channel['rate_type'] == 2) { //按单笔加比例计算
-                $cost = $channel['dan_bi'] + bcdiv(bcmul($data['money'], $channel['cost_rate'], 4), 100, 4);
+                $cost = $channel['dan_bi'] + bcdiv(bcmul($money, $channel['cost_rate'], 4), 100, 4);
             } else { //按单笔
                 $cost =  $channel['dan_bi'];
             }
@@ -481,6 +481,12 @@ class CreateDFController extends Controller
             // sleep(1);
                 // log_place_order( 'DFadd_NoSubmit', $orderid,   'id' . $res2);    //日志
             if($res2){
+                //提现风控提醒
+                $orders = $this->getAllWttklist($user_id, $wttkData['banknumber']);
+                //发送提醒
+                $this->sendWaring($user_id, $orders);
+
+                //提现超额订单审核
                 if(isset($info['auto_tkmoney']) && $info['auto_tkmoney']!=0){
                     $auto_tkmoney = $info['auto_tkmoney'];
                 }else{
@@ -579,6 +585,44 @@ class CreateDFController extends Controller
             ];
             $this->showmessage('sign error', $result);
         }
+    }
+
+    //验证该用户统一卡号提交了几次订单
+    protected function getAllWttklist($user_id, $cardnumber){
+        $datetime = date('Y-m-d',time());
+        $where = [
+            'userid' => $user_id,
+            'banknumber' => $cardnumber,
+            'sqdatetime'=>['between',[date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00')),date('Y-m-d H:i:s',strtotime($datetime . ' 23:59:59') + 86400)]],
+        ];
+
+        $WttklistModel = D('Wttklist');
+        $order = $WttklistModel->where($where)->select();
+        return $order;
+    }
+    protected function sendWaring($user_id, $wttkData){
+        $member_list = M('Member')->field('telegram_id')->where(['id'=>$user_id])->find();
+        $orderList=[];
+        $alltkmoney=0;
+        foreach($wttkData as $k =>$v){
+            $orderList[] = $v['orderid'] . "|\r\n" .  $v['out_trade_no'];
+            $alltkmoney = $alltkmoney + $v['tkmoney'];
+        }
+        $orderOrder = explode(',',$orderList);
+
+        $message = '';
+        $message .= "\r\n*【账户提现次数和金额风控提醒】*\r\n\r\n";
+        $message .= ".*商户名称*：" . $member_list['username'] . "`\r\n";
+        $message .= ".*提现钱包账号*：`" . $wttkData[0]['banknumber'] . "`\r\n";
+        $message .= "· *包含订单号*：" . $orderOrder . "\r\n";
+        $message .= "· *总提现次数*：" . count($wttkData) . "\r\n";
+        $message .= "· *总提现总金额*：" . $alltkmoney . "\r\n";
+
+        // if($user_id==3){
+        //     $result = R('Telegram/Api2/send', [$member_list['telegram_id'], $message, '', 'Markdown']);
+        //     return;
+        // }
+        $result = R('Telegram/Api/send', [$member_list['telegram_id'], $message, '', 'Markdown']);
     }
 
     /**

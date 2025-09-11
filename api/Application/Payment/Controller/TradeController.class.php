@@ -78,7 +78,7 @@ class TradeController extends CreateDFController
             
             $result = [
                 'mgs' => 'Please compare the splicing order and signature',
-                'PostData' => $requestarray,
+                'PostData' => $request,
                 'Field concatenation order' => substr($md5str, 0, strlen($md5str) - 1),
                 // 'sign' => $sign,
             ];
