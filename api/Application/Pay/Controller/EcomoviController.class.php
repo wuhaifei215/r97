@@ -235,6 +235,7 @@ class EcomoviController extends PayController
             curl_setopt($curl, CURLOPT_HEADER, 0); // 显示返回的Header区域内容
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // 获取的信息以文件流的形式返回
             curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2); //
 
             $response = curl_exec($curl);
             $result = [];
