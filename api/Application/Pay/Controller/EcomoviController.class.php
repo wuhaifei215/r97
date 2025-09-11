@@ -220,58 +220,38 @@ class EcomoviController extends PayController
     private function request($url, $params, $header)
     {
         try {
-//            $json = json_encode($params, JSON_UNESCAPED_UNICODE);
-//            $curl = curl_init();
-//            curl_setopt_array($curl, array(
-//                CURLOPT_URL => $url,
-//                CURLOPT_RETURNTRANSFER => true,
-//                CURLOPT_ENCODING => '',
-//                CURLOPT_MAXREDIRS => 0,
-//                CURLOPT_TIMEOUT => 10,
-//                CURLOPT_FOLLOWLOCATION => true,
-////                CURLOPT_HTTP_VERSION => CURL_SSLVERSION_TLSv1_2,
-//                CURLOPT_CUSTOMREQUEST => 'POST',
-//                CURLOPT_POSTFIELDS => $json,
-//                CURLOPT_HTTPHEADER => $header,
-//                CURLOPT_SSLCERT => './cert/ecomovi/in/ECOMOVI_50.crt',
-//                CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
-//                CURLOPT_SSL_VERIFYPEER => true,
-//                CURLOPT_SSL_VERIFYHOST => 2,
-//                CURLOPT_CAINFO => './cert/ecomovi/in/ECOMOVI_50.crt'
-//            ));
-////            $curl = curl_init($url);
-////            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
-////            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
-////            curl_setopt($curl, CURLOPT_CAINFO, './cert/ecomovi/in/ECOMOVI_50.crt');//证书地址
-////            curl_setopt($curl, CURLOPT_HEADER, 0); // 过滤HTTP头
-////            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
-////            curl_setopt($curl, CURLOPT_POST, true);
-////            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);// post传输数据
-////            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);//
-//
-//
-//            $response = curl_exec($curl);
-//            $result = [];
-//            if ($response === false) {
-//                $result['code'] = curl_errno($curl);
-//                $result['message'] = curl_error($curl);
-//            } else {
-//                $result = json_decode($response, true);
-//            }
-//            curl_close($curl);
-            $json_data = json_encode($params);
+            $json = json_encode($params, JSON_UNESCAPED_UNICODE);
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 0,
+                CURLOPT_TIMEOUT => 10,
+                CURLOPT_FOLLOWLOCATION => true,
+//                CURLOPT_HTTP_VERSION => CURL_SSLVERSION_TLSv1_2,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => $json,
+                CURLOPT_HTTPHEADER => $header,
+                CURLOPT_SSLCERT => './cert/ecomovi/in/ECOMOVI_50.crt',
+                CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_CAINFO => './cert/ecomovi/in/ECOMOVI_50.crt'
+            ));
+//            $curl = curl_init($url);
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
+//            curl_setopt($curl, CURLOPT_CAINFO, './cert/ecomovi/in/ECOMOVI_50.crt');//证书地址
+//            curl_setopt($curl, CURLOPT_HEADER, 0); // 过滤HTTP头
+//            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
+//            curl_setopt($curl, CURLOPT_POST, true);
+//            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);// post传输数据
+//            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);//
 
-            $curl = curl_init($url);
-
-            curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_HTTP_VERSION, 'CURL_SSLVERSION_TLSv1_2');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $json_data);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
 
             $response = curl_exec($curl);
-
-                        $result = [];
+            $result = [];
             if ($response === false) {
                 $result['code'] = curl_errno($curl);
                 $result['message'] = curl_error($curl);
