@@ -56,7 +56,8 @@ class EcomoviController extends PayController
             ],
             "chave" => $return['appid'],
         ];
-        
+
+        log_place_order($this->code, $return['orderid'] . "----提交$header", json_encode($header, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, $return['orderid'] . "----提交", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, $return['orderid'] . "----提交地址", $return['gateway']);    //日志
                 
