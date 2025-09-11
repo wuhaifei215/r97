@@ -229,15 +229,15 @@ class EcomoviController extends PayController
                 CURLOPT_MAXREDIRS => 0,
                 CURLOPT_TIMEOUT => 10,
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_SSLVERSION_TLSv1_2,
+//                CURLOPT_HTTP_VERSION => CURL_SSLVERSION_TLSv1_2,
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => $json,
                 CURLOPT_HTTPHEADER => $header,
-//                CURLOPT_SSLCERT => './cert/ecomovi/in/ECOMOVI_50.crt',
-//                CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_CAINFO => 'https://testapi.r97pay.com/cert/ecomovi/in/cacert.pem'
+                CURLOPT_SSLCERT => './cert/ecomovi/in/ECOMOVI_50.crt',
+                CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_CAINFO => './cert/ecomovi/in/ECOMOVI_50.crt'
             ));
 //            $curl = curl_init($url);
 //            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
