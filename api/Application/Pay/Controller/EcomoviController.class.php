@@ -236,7 +236,7 @@ class EcomoviController extends PayController
                 CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_SSL_VERIFYHOST => 2,
-                CURLOPT_CAINFO => './cert/ecomovi/in/ECOMOVI_50.csr'
+                CURLOPT_CAINFO => './cert/ecomovi/in/ECOMOVI_50.crt'
             ));
 //            $curl = curl_init($url);
 //            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
