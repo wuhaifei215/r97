@@ -223,8 +223,8 @@ class EcomoviController extends PayController
         try {
             $json = json_encode($params, JSON_UNESCAPED_UNICODE);
             $curl = curl_init();
-            curl_setopt_array($ch, [
-                CURLOPT_URL            => 'https://your-api.com/endpoint',
+            curl_setopt_array($curl, [
+                CURLOPT_URL            => $url,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_FOLLOWLOCATION => true,
 
