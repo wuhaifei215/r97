@@ -87,7 +87,7 @@ class CreateController extends PayController
             }
             
             //是否存在通道文件
-            if (!is_file(APP_PATH . '/' . MODULE_NAME . '/Controller/' . $info['code'] . 'Controller.class.php')) {
+            if (!is_file(APP_PATH . MODULE_NAME . '/Controller/' . $info['code'] . 'Controller.class.php')) {
                 $this->showmessage('channel error', ['pay_bankcode' => $this->channel['api']]);
             }
             if (R($info['code'] . '/Pay', [$this->channel]) === false) {
