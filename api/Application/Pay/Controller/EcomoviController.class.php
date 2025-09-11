@@ -243,7 +243,7 @@ class EcomoviController extends PayController
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
-            curl_setopt($curl, CURLOPT_CAINFO, APP_PATH . '../cert/ecomovi/in/cacert.pem');//证书地址
+            curl_setopt($curl, CURLOPT_CAINFO, '/www/wwwroot/r97/api/cert/ecomovi/in/cacert.pem');//证书地址
             curl_setopt($curl, CURLOPT_HEADER, 0); // 过滤HTTP头
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
             curl_setopt($curl, CURLOPT_POST, true);
