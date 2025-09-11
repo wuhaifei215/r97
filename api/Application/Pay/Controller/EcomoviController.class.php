@@ -233,11 +233,11 @@ class EcomoviController extends PayController
                 CURLOPT_SSL_VERIFYHOST => 2,      // 只接受匹配主机名的证书
 
                 // 2️⃣ 指定根证书文件（最好使用官方的 cacert.pem）
-                CURLOPT_CAINFO         => './cert/ecomovi/cacert.pem', // <-- 必须是 PEM 格式
+                CURLOPT_CAINFO         => APP_PATH . '../cert/ecomovi/cacert.pem', // <-- 必须是 PEM 格式
 
                 // 3️⃣ 如服务器要求客户端证书（双向 TLS），在此提供
-                 CURLOPT_SSLCERT        => './cert/ecomovi/r97pay.com_certificate.pem',
-                 CURLOPT_SSLKEY         => './cert/ecomovi/r97pay.com_private.key',
+                 CURLOPT_SSLCERT        => APP_PATH . '../cert/ecomovi/r97pay.com_certificate.pem',
+                 CURLOPT_SSLKEY         => APP_PATH . '../cert/ecomovi/r97pay.com_private.key',
                 // 若证书有密码，可再加：
                 // CURLOPT_KEYPASSWD      => 'your_key_password',
 
