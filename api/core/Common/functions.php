@@ -364,9 +364,9 @@ function I($name, $default = '', $filter = null, $datas = null)
         case 'server':
             $input = &$_SERVER;
             break;
-        case 'globals':
-            $input = &$GLOBALS;
-            break;
+//        case 'globals':
+//            $input = &$GLOBALS;
+//            break;
         case 'data':
             $input = &$datas;
             break;
