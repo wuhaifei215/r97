@@ -223,22 +223,43 @@ class EcomoviController extends PayController
         try {
             $json = json_encode($params, JSON_UNESCAPED_UNICODE);
             $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => $url,
+            curl_setopt_array($ch, [
+                CURLOPT_URL            => 'https://your-api.com/endpoint',
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 0,
-                CURLOPT_TIMEOUT => 10,
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_SSLVERSION_TLSv1_2,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => $json,
-                CURLOPT_HTTPHEADER => $header,
-//                CURLOPT_SSLCERT => './cert/ecomovi/in/ECOMOVI_50.crt',
-//                CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_SSL_VERIFYHOST => 0,
-            ));
+
+                // 1️⃣ 开启证书校验
+                CURLOPT_SSL_VERIFYPEER => true,   // 验证服务器证书是否可信
+                CURLOPT_SSL_VERIFYHOST => 2,      // 只接受匹配主机名的证书
+
+                // 2️⃣ 指定根证书文件（最好使用官方的 cacert.pem）
+                CURLOPT_CAINFO         => './cert/ecomovi/cacert.pem', // <-- 必须是 PEM 格式
+
+                // 3️⃣ 如服务器要求客户端证书（双向 TLS），在此提供
+                 CURLOPT_SSLCERT        => './cert/ecomovi/r97pay.com_certificate.pem',
+                 CURLOPT_SSLKEY         => './cert/ecomovi/r97pay.com_private.key',
+                // 若证书有密码，可再加：
+                // CURLOPT_KEYPASSWD      => 'your_key_password',
+
+                // 4️⃣ 如需强制 TLS 版本（可根据实际需求修改）
+                 CURLOPT_SSLVERSION     => CURL_SSLVERSION_TLSv1_2,
+            ]);
+//            curl_setopt_array($curl, array(
+//                CURLOPT_URL => $url,
+//                CURLOPT_RETURNTRANSFER => true,
+//                CURLOPT_ENCODING => '',
+//                CURLOPT_MAXREDIRS => 0,
+//                CURLOPT_TIMEOUT => 10,
+//                CURLOPT_FOLLOWLOCATION => true,
+//                CURLOPT_HTTP_VERSION => CURL_SSLVERSION_TLSv1_2,
+//                CURLOPT_CUSTOMREQUEST => 'POST',
+//                CURLOPT_POSTFIELDS => $json,
+//                CURLOPT_HTTPHEADER => $header,
+////                CURLOPT_SSLCERT => './cert/ecomovi/in/ECOMOVI_50.crt',
+////                CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
+//                CURLOPT_SSL_VERIFYPEER => false,
+//                CURLOPT_SSL_VERIFYHOST => 0,
+//            ));
 //            $curl = curl_init($url);
 //            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
 //            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
