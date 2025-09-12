@@ -111,7 +111,7 @@ class EcomoviController extends PayController
         ];
         $params = [
             'client_id: '=> $client['mch_id'],
-            'client_secret:' => $client['appid'],
+            'client_secret:' => $client['signkey'],
             'grant_type' => 'client_credentials',
         ];
 
@@ -223,35 +223,21 @@ class EcomoviController extends PayController
         try {
             $json = json_encode($params, JSON_UNESCAPED_UNICODE);
             $curl = curl_init();
-
-// 证书文件路径 - 请根据实际情况修改
-            $certPath = '/www/wwwroot/r97/api/cert/ecomovi/in/ECOMOVI_50.crt';
-            $keyPath = '/www/wwwroot/r97/api/cert/ecomovi/in/ECOMOVI_50.key';
-
-// 确保证书文件存在且可读
-            if (!file_exists($certPath) || !file_exists($keyPath)) {
-                die('证书文件不存在，请检查路径');
-            }
-
             curl_setopt_array($curl, [
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 0,
-                CURLOPT_TIMEOUT => 30,  // 增加超时时间
+                CURLOPT_TIMEOUT => 10,  // 增加超时时间
                 CURLOPT_FOLLOWLOCATION => true,
 
                 // 关键：客户端证书配置
-                CURLOPT_SSLCERT => $certPath,
-                CURLOPT_SSLKEY => $keyPath,
-
-                // 如果需要证书密码
-                // CURLOPT_SSLCERTPASSWD => '您的证书密码',
+                CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/ecomovi/in/ECOMOVI_50.crt',
+                CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/ecomovi/in/ECOMOVI_50.key',
 
                 // SSL验证设置
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_SSL_VERIFYHOST => 0,
-//                CURLOPT_CAINFO => '/www/wwwroot/r97/api/cert/cacert.pem',
 
                 // HTTP设置
                 CURLOPT_CUSTOMREQUEST => 'POST',
