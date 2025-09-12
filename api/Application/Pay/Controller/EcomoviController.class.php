@@ -238,19 +238,8 @@ class EcomoviController extends PayController
 //                CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_CAINFO => '/www/wwwroot/r97/api/cert/cacert.pem'
+//                CURLOPT_CAINFO => '/www/wwwroot/r97/api/cert/cacert.pem'
             ));
-//            $curl = curl_init($url);
-//            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
-//            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
-//            curl_setopt($curl, CURLOPT_CAINFO, './cert/ecomovi/in/ECOMOVI_50.crt');//证书地址
-//            curl_setopt($curl, CURLOPT_HEADER, 0); // 过滤HTTP头
-//            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
-//            curl_setopt($curl, CURLOPT_POST, true);
-//            curl_setopt($curl, CURLOPT_POSTFIELDS, $json);// post传输数据
-//            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);//
-
-
             $response = curl_exec($curl);
             $result = [];
             if ($response === false) {
