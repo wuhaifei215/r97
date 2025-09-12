@@ -222,45 +222,23 @@ class EcomoviController extends PayController
     {
         try {
             $json = json_encode($params, JSON_UNESCAPED_UNICODE);
-            $curl = curl_init();
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ],
+                'http' => [
+                    'method' => 'POST',
+                    'header' => implode("\r\n", $header),
+                    'content' => $json,
+                    'timeout' => 10,
+                    'ignore_errors' => true
+                ]
+            ]);
 
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 0,
-                CURLOPT_TIMEOUT => 10,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, // 改用HTTP版本控制
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2, // 明确指定TLS版本
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => $json,
-                CURLOPT_HTTPHEADER => $header,
-
-                // SSL设置 - 完全禁用验证
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_SSL_VERIFYSTATUS => false,
-
-                // 添加这些选项来绕过证书问题
-                CURLOPT_FRESH_CONNECT => true,
-                CURLOPT_FORBID_REUSE => true,
-            ));
-
-            $response = curl_exec($curl);
-            $result = [];
-
-            if ($response === false) {
-                $result['code'] = curl_errno($curl);
-                $result['message'] = curl_error($curl);
-
-                // 获取更多cURL信息用于调试
-                $result['curl_info'] = curl_getinfo($curl);
-            } else {
-                $result = json_decode($response, true);
-            }
-
-            curl_close($curl);
+            $response = file_get_contents($url, false, $context);
+            $result = json_decode($response, true);
             return $result;
         } catch (\Exception $e) {
             log_place_order($this->code. '_request', $params["reference"] . "----提交错误", $e->getMessage());    //日志
