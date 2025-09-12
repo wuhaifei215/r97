@@ -224,28 +224,32 @@ class EcomoviController extends PayController
             $json = json_encode($params, JSON_UNESCAPED_UNICODE);
             $curl = curl_init();
 
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => $url,
+// 关键配置：使用更兼容的SSL选项
+            curl_setopt_array($curl, [
+                CURLOPT_URL => 'https://api.pix.ecomovi.com.br/oauth/token',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 0,
-                CURLOPT_TIMEOUT => 10,
+                CURLOPT_TIMEOUT => 15,  // 增加超时时间
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, // 改用HTTP版本控制
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2, // 明确指定TLS版本
+
+                // 关键：使用更兼容的SSL配置
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_0,  // 使用TLS 1.0以获得更好兼容性
+                CURLOPT_SSL_CIPHER_LIST => 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA',
+
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => $json,
                 CURLOPT_HTTPHEADER => $header,
 
-                // SSL设置 - 完全禁用验证
+                // SSL验证设置
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_SSL_VERIFYSTATUS => false,
 
-                // 添加这些选项来绕过证书问题
-                CURLOPT_FRESH_CONNECT => true,
-                CURLOPT_FORBID_REUSE => true,
-            ));
+                // 添加连接选项
+                CURLOPT_TCP_KEEPALIVE => 1,
+                CURLOPT_TCP_KEEPIDLE => 30,
+                CURLOPT_TCP_KEEPINTVL => 10,
+            ]);
 
             $response = curl_exec($curl);
             $result = [];
