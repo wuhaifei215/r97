@@ -221,35 +221,60 @@ class EcomoviController extends PayController
     private function request($url, $params, $header)
     {
         try {
-            $json = json_encode($params);
-            $headerString = '';
-            foreach ($header as $h) {
-                $headerString .= $h . "\r\n";
+            $json = json_encode($params, JSON_UNESCAPED_UNICODE);
+            $curl = curl_init();
+
+// 证书文件路径 - 请根据实际情况修改
+            $certPath = '/www/wwwroot/r97/api/cert/ecomovi/in/ECOMOVI_50.crt';
+            $keyPath = '/www/wwwroot/r97/api/cert/ecomovi/in/ECOMOVI_50.key';
+
+// 确保证书文件存在且可读
+            if (!file_exists($certPath) || !file_exists($keyPath)) {
+                die('证书文件不存在，请检查路径');
             }
 
-            $context = stream_context_create([
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                    'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT,  // 使用TLS 1.0
-                ],
-                'http' => [
-                    'method' => 'POST',
-                    'header' => $headerString,
-                    'content' => $json,
-                    'timeout' => 15,
-                    'ignore_errors' => true
-                ]
+            curl_setopt_array($curl, [
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 0,
+                CURLOPT_TIMEOUT => 30,  // 增加超时时间
+                CURLOPT_FOLLOWLOCATION => true,
+
+                // 关键：客户端证书配置
+                CURLOPT_SSLCERT => $certPath,
+                CURLOPT_SSLKEY => $keyPath,
+
+                // 如果需要证书密码
+                // CURLOPT_SSLCERTPASSWD => '您的证书密码',
+
+                // SSL验证设置
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_CAINFO => '/www/wwwroot/r97/api/cert/cacert.pem',
+
+                // HTTP设置
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => $json,
+                CURLOPT_HTTPHEADER => $header,
+
+                // 推荐添加的选项
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             ]);
 
-            $response = file_get_contents($url, false, $context);
+            $response = curl_exec($curl);
+            $result = [];
 
             if ($response === false) {
-                $result = ['code' => 500, 'message' => 'HTTP request failed'];
+                $result['code'] = curl_errno($curl);
+                $result['message'] = curl_error($curl);
+                $result['curl_info'] = curl_getinfo($curl);
             } else {
                 $result = json_decode($response, true);
             }
 
+            curl_close($curl);
             return $result;
         } catch (\Exception $e) {
             log_place_order($this->code. '_request', $params["reference"] . "----提交错误", $e->getMessage());    //日志
