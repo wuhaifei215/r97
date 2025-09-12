@@ -221,50 +221,35 @@ class EcomoviController extends PayController
     private function request($url, $params, $header)
     {
         try {
-            $json = json_encode($params, JSON_UNESCAPED_UNICODE);
-            $curl = curl_init();
+            $json = json_encode($params);
+            $headerString = '';
+            foreach ($header as $h) {
+                $headerString .= $h . "\r\n";
+            }
 
-// 关键配置：使用更兼容的SSL选项
-            curl_setopt_array($curl, [
-                CURLOPT_URL => 'https://api.pix.ecomovi.com.br/oauth/token',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 0,
-                CURLOPT_TIMEOUT => 15,  // 增加超时时间
-                CURLOPT_FOLLOWLOCATION => true,
-
-                // 关键：使用更兼容的SSL配置
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_0,  // 使用TLS 1.0以获得更好兼容性
-                CURLOPT_SSL_CIPHER_LIST => 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA',
-
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => $json,
-                CURLOPT_HTTPHEADER => $header,
-
-                // SSL验证设置
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_SSL_VERIFYHOST => 0,
-
-                // 添加连接选项
-                CURLOPT_TCP_KEEPALIVE => 1,
-                CURLOPT_TCP_KEEPIDLE => 30,
-                CURLOPT_TCP_KEEPINTVL => 10,
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT,  // 使用TLS 1.0
+                ],
+                'http' => [
+                    'method' => 'POST',
+                    'header' => $headerString,
+                    'content' => $json,
+                    'timeout' => 15,
+                    'ignore_errors' => true
+                ]
             ]);
 
-            $response = curl_exec($curl);
-            $result = [];
+            $response = file_get_contents($url, false, $context);
 
             if ($response === false) {
-                $result['code'] = curl_errno($curl);
-                $result['message'] = curl_error($curl);
-
-                // 获取更多cURL信息用于调试
-                $result['curl_info'] = curl_getinfo($curl);
+                $result = ['code' => 500, 'message' => 'HTTP request failed'];
             } else {
                 $result = json_decode($response, true);
             }
 
-            curl_close($curl);
             return $result;
         } catch (\Exception $e) {
             log_place_order($this->code. '_request', $params["reference"] . "----提交错误", $e->getMessage());    //日志
