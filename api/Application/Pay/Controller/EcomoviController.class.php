@@ -223,6 +223,12 @@ class EcomoviController extends PayController
         try {
             $json = json_encode($params, JSON_UNESCAPED_UNICODE);
             $curl = curl_init();
+
+// 启用详细日志输出
+            curl_setopt($curl, CURLOPT_VERBOSE, true);
+            $verbose = fopen('php://temp', 'w+');
+            curl_setopt($curl, CURLOPT_STDERR, $verbose);
+
             curl_setopt_array($curl, array(
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true,
@@ -234,21 +240,28 @@ class EcomoviController extends PayController
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => $json,
                 CURLOPT_HTTPHEADER => $header,
-//                CURLOPT_SSLCERT => './cert/ecomovi/in/ECOMOVI_50.crt',
-//                CURLOPT_SSLKEY => './cert/ecomovi/in/ECOMOVI_50.key',
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_SSL_VERIFYHOST => 0,
-//                CURLOPT_CAINFO => '/www/wwwroot/r97/api/cert/cacert.pem'
+                CURLOPT_SSL_VERIFYPEER => true,    // 保持开启验证
+                CURLOPT_SSL_VERIFYHOST => 2,       // 严格验证
+                CURLOPT_CAINFO => '/www/wwwroot/r97/api/cert/cacert.pem'
             ));
+
             $response = curl_exec($curl);
-            $result = [];
+
+// 获取详细错误信息
             if ($response === false) {
+                rewind($verbose);
+                $verboseLog = stream_get_contents($verbose);
+
                 $result['code'] = curl_errno($curl);
                 $result['message'] = curl_error($curl);
+                $result['verbose_log'] = $verboseLog; // 这里包含详细的SSL握手信息
             } else {
                 $result = json_decode($response, true);
             }
+
             curl_close($curl);
+            fclose($verbose);
+
             return $result;
 
         } catch (\Exception $e) {
