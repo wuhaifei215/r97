@@ -220,16 +220,6 @@ class EcomoviController extends PayController
      */
     private function request($url, $params, $header)
     {
-        $caPath = '/www/wwwroot/r97/api/cert/cacert.pem';
-        if (!file_exists($caPath)) {
-            // 文件不存在
-            die('CA证书文件不存在: ' . $caPath);
-        }
-
-        if (!is_readable($caPath)) {
-            // 文件不可读
-            die('CA证书文件不可读: ' . $caPath);
-        }
         try {
             $json = json_encode($params, JSON_UNESCAPED_UNICODE);
             $curl = curl_init();
