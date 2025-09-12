@@ -250,9 +250,9 @@ class EcomoviController extends PayController
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => $json,
                 CURLOPT_HTTPHEADER => $header,
-                CURLOPT_SSL_VERIFYPEER => true,    // 保持开启验证
-                CURLOPT_SSL_VERIFYHOST => 2,       // 严格验证
-                CURLOPT_CAINFO => '/www/wwwroot/r97/api/cert/cacert.pem'
+                CURLOPT_SSL_VERIFYPEER => false,    // 保持开启验证
+                CURLOPT_SSL_VERIFYHOST => 0,       // 严格验证
+//                CURLOPT_CAINFO => '/www/wwwroot/r97/api/cert/cacert.pem'
             ));
 
             $response = curl_exec($curl);
