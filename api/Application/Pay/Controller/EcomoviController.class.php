@@ -242,8 +242,8 @@ class EcomoviController extends PayController
                 CURLOPT_FOLLOWLOCATION => true,
 
                 // 关键：客户端证书配置
-//                CURLOPT_SSLCERT => $certPath,
-//                CURLOPT_SSLKEY => $keyPath,
+                CURLOPT_SSLCERT => $certPath,
+                CURLOPT_SSLKEY => $keyPath,
 
                 // 如果需要证书密码
                 // CURLOPT_SSLCERTPASSWD => '您的证书密码',
