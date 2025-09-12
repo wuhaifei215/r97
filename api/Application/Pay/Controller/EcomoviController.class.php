@@ -224,11 +224,6 @@ class EcomoviController extends PayController
             $json = json_encode($params, JSON_UNESCAPED_UNICODE);
             $curl = curl_init();
 
-// 启用详细日志输出
-            curl_setopt($curl, CURLOPT_VERBOSE, true);
-            $verbose = fopen('php://temp', 'w+');
-            curl_setopt($curl, CURLOPT_STDERR, $verbose);
-
             curl_setopt_array($curl, array(
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true,
@@ -236,34 +231,37 @@ class EcomoviController extends PayController
                 CURLOPT_MAXREDIRS => 0,
                 CURLOPT_TIMEOUT => 10,
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_SSLVERSION_TLSv1_2,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, // 改用HTTP版本控制
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2, // 明确指定TLS版本
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => $json,
                 CURLOPT_HTTPHEADER => $header,
-                CURLOPT_SSL_VERIFYPEER => false,    // 保持开启验证
-                CURLOPT_SSL_VERIFYHOST => 0,       // 严格验证
-//                CURLOPT_CAINFO => '/www/wwwroot/r97/api/cert/cacert.pem'
+
+                // SSL设置 - 完全禁用验证
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYSTATUS => false,
+
+                // 添加这些选项来绕过证书问题
+                CURLOPT_FRESH_CONNECT => true,
+                CURLOPT_FORBID_REUSE => true,
             ));
 
             $response = curl_exec($curl);
+            $result = [];
 
-// 获取详细错误信息
             if ($response === false) {
-                rewind($verbose);
-                $verboseLog = stream_get_contents($verbose);
-
                 $result['code'] = curl_errno($curl);
                 $result['message'] = curl_error($curl);
-                $result['verbose_log'] = $verboseLog; // 这里包含详细的SSL握手信息
+
+                // 获取更多cURL信息用于调试
+                $result['curl_info'] = curl_getinfo($curl);
             } else {
                 $result = json_decode($response, true);
             }
 
             curl_close($curl);
-            fclose($verbose);
-
             return $result;
-
         } catch (\Exception $e) {
             log_place_order($this->code. '_request', $params["reference"] . "----提交错误", $e->getMessage());    //日志
         }
