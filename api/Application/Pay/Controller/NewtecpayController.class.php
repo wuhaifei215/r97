@@ -258,15 +258,15 @@ u0W5bbqUf1nOeiqOV9S8Giz0
     private function initSignConfig(){
         //支付平台支付平台提供给商户的SecretKey，登录支付平台支付平台查看
         // 需要替换为实际的数值
-        SignConfig::setSecretKey("2a6e38db0f44492a8a3aa0647a7cf311");
+        \SignConfig::setSecretKey("2a6e38db0f44492a8a3aa0647a7cf311");
         //商户自己的私钥[公钥通过登录支付平台支付平台进行配置，私钥设置到下面的变量中]
         //样例 见 merchant_rsa_private_key.pem
         // 需要替换为实际的数值
-        SignConfig::setPrivateKeyPath("merchant_rsa_private_key.pem");
+        \SignConfig::setPrivateKeyPath("merchant_rsa_private_key.pem");
         //支付平台支付平台提供给商户的公钥，响应结果验签使用，登录支付平台支付平台查看,把它保存到一个pem文件中
         //样例 见 yy_rsa_public_key.pem
         // 需要替换为实际的数值
-        SignConfig::setYhbPublicKeyPath("yy_rsa_public_key.pem");
+        \SignConfig::setYhbPublicKeyPath("yy_rsa_public_key.pem");
     }
 
     //发送post请求，提交json字符串
