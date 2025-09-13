@@ -268,10 +268,6 @@ u0W5bbqUf1nOeiqOV9S8Giz0
      * @throws Exception
      */
     private function send($url, $params, $header, $isVerifySign=true,$timeout=10,$method='POST'){
-        //处理参数是否为空
-        if ($this->uri == ''){
-            throw new Exception(__CLASS__ .": Access url is empty");
-        }
 
         //初始化CURL
         $ch = curl_init();
