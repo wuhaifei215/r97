@@ -88,11 +88,6 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             'user_ip' => $pay_IP,
             'time_start' => date("Y-m-d H:i:s"),
         );
-        $header_array = array(
-            "nonce"=>$this->createUniqid(),
-            "timestamp"=>$this->getMicroTime(),
-            "Authorization"=>$return['signkey'],
-        );
 
         log_place_order($this->code, $return['orderid'] . "----提交", json_encode($native, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, $return['orderid'] . "----提交地址", $return['gateway']);    //日志
@@ -100,7 +95,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         // 记录初始执行时间
         $beginTime = microtime(TRUE);
 
-        $returnContent =  $this->http_post_json($return['gateway'], $native, $header_array);
+        $returnContent =  $this->http_post_json($return['gateway'], $native);
 
         log_place_order($this->code, $return['orderid'] . "----返回", $returnContent);    //日志
         $ans = json_decode($returnContent, true);
@@ -218,43 +213,9 @@ u0W5bbqUf1nOeiqOV9S8Giz0
     }
 
     /*********************************辅助方法*********************************/
-    /**
-     * 设置需要发送的HTTP头信息
-     *
-     * @return void
-     */
-    private function setHeader(){
 
-        $defaultHeader = array(
-            'lang:PHP',
-            'publisher:yy',
-            'sdk-version:1.0.0',
-            'uname:'.php_uname(),
-            'lang-version:'.PHP_VERSION
-        );
-
-        $nonce = $this->createUniqid();
-        $timestamp = $this->getMicroTime();
-
-        $header = array(
-            'Content-Type:application/json; charset='.PayConfig::$CHARSET,
-            'nonce:'.$nonce,
-            'timestamp:'.$timestamp,
-            'Authorization:'.SignConfig::getSecretKey(),
-            'X-yy-Client-User-Agent:'.json_encode($defaultHeader)
-        );
-
-        $header_array = array(
-            "nonce"=>$nonce,
-            "timestamp"=>$timestamp,
-            "Authorization"=>SignConfig::getSecretKey()
-        );
-
-        $this->header = $header;
-        $this->header_array = $header_array;
-    }
-    private function http_post_json($url, $params, $header){
-        $this->send($url, $params, $header);
+    private function http_post_json($url, $params){
+        $this->send($url, $params);
     }
 
     /**
@@ -267,7 +228,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
      * @return mixed
      * @throws Exception
      */
-    private function send($url, $params, $header, $isVerifySign=true,$timeout=10,$method='POST'){
+    private function send($url, $params, $isVerifySign=true,$timeout=10,$method='POST'){
 
         //初始化CURL
         $ch = curl_init();
@@ -290,11 +251,16 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             curl_setopt($ch, CURLOPT_POST, 1 );
             curl_setopt($ch, CURLOPT_POSTFIELDS, $_json_data);
         }
+        $header = array(
+            "nonce"=>$this->createUniqid(),
+            "timestamp"=>$this->getMicroTime(),
+            "Authorization"=>"5642bd24f179435e934a7314fa0eb4ec",
+        );
 
         if ($method == 'GET'){
             $sign = $this->to_sign_data($method);
         }else{
-            $sign = $this->to_sign_data($method,$_json_data);
+            $sign = $this->to_sign_data($method, $_json_data, $header);
         }
         $header['sign:'] = $sign;
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
@@ -330,12 +296,12 @@ u0W5bbqUf1nOeiqOV9S8Giz0
      * @param $body_data
      * @return string
      */
-    private function to_sign_data($method,$body_data=null){
+    private function to_sign_data($method,$body_data=null,$header_array){
         $_query_string = "";
         $_to_sign_data = utf8_encode(strtolower($method))."\n".utf8_encode($_query_string)."\n"
-            .utf8_encode($this->header_array['nonce'])."\n".utf8_encode($this->header_array['timestamp'])."\n".utf8_encode($this->header_array['Authorization'])."\n"
+            .utf8_encode($header_array['nonce'])."\n".utf8_encode($header_array['timestamp'])."\n".utf8_encode($header_array['Authorization'])."\n"
             .$body_data;
-        return RSAUtil::sign($_to_sign_data);
+        return $this->sign($_to_sign_data);
     }
 
 
@@ -361,7 +327,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
 
         $_to_verify_data = utf8_encode($_res_nonce)."\n".$_res_timestamp."\n".$_res_secret_key."\n".$body_data;
         echo "\n同步响应报文验签原文数据:".$_to_verify_data."\n";
-        $verify_result = RSAUtil::verify($_to_verify_data, $_res_sign);
+        $verify_result = $this->verify($_to_verify_data, $_res_sign);
         echo "\n同步响应验签结果:".$verify_result."\n";
         if(empty($verify_result) || intval($verify_result)!=1){
             throw new InvalidResponseException("Invalid Response.[Response Data And Sign Verify Failure.]");
@@ -371,6 +337,96 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             throw new InvalidResponseException("Invalid Response.[Secret Key Is Invalid.]");
         }
     }
+
+    /**
+    * 签名数据
+    *
+    * @param $data 待签名数据
+    * @return string 签名后的数据
+    */
+    public static function sign($data)
+    {
+        //读取私钥文件
+        $priKey = file_get_contents(SignConfig::getPrivateKeyPath());
+
+        //转换为openssl密钥，必须是没有经过pkcs8转换的私钥
+        $res = openssl_get_privatekey($priKey);
+
+        //调用openssl内置签名方法，生成签名$sign
+        openssl_sign($data, $sign, $res,OPENSSL_ALGO_SHA256);
+
+        //释放资源
+        openssl_free_key($res);
+        //base64编码
+        $sign = base64_encode($sign);
+        return $sign;
+    }
+
+    /**
+     * 验签数据
+     *
+     * @param $data 原始数据
+     * @param $sign 签名数据
+     * @return bool 验签结果
+     */
+    public static function verify($data, $sign)  {
+
+        //读取支付平台公钥文件
+        $pubKey = file_get_contents(SignConfig::getYhbPublicKeyPath());
+        //转换为openssl格式密钥
+        $res = openssl_get_publickey($pubKey);
+        //调用openssl内置方法验签，返回bool值
+        $result = (bool)openssl_verify($data,base64_decode($sign), $res,OPENSSL_ALGO_SHA256);
+        //释放资源
+        openssl_free_key($res);
+        //返回资源是否成功
+        return $result;
+    }
+
+
+    /**
+     * 使用 RSA 私钥加密数据
+     *
+     * @param string $data 要加密的数据
+     * @return string 加密后的数据
+     */
+    public static function rsaPrivateEncrypt($data) {
+        //读取私钥文件
+        $priKey = file_get_contents(SignConfig::getPrivateKeyPath());
+
+        //转换为openssl密钥，必须是没有经过pkcs8转换的私钥
+        $res = openssl_get_privatekey($priKey);
+        if ($res === false) {
+            die('私钥获取失败');
+        }
+        // 加密数据
+        $crypted = '';
+        $result = openssl_private_encrypt($data, $crypted, $res);
+        if (!$result) {
+            die('加密失败');
+        }
+        // 释放资源
+        openssl_free_key($res);
+        // 返回 base64 编码的加密数据以便于传输和存储
+        return base64_encode($crypted);
+    }
+
+    /** JAVA格式的公钥转换为PHP格式的公钥
+     * @param $java_rsa_public_key
+     * @return string
+     */
+    public function Java2PhpRSAPublicKey($java_rsa_public_key) {
+        return $res = "-----BEGIN PUBLIC KEY-----\n" . wordwrap($java_rsa_public_key, 64, "\n", true) . "\n-----END PUBLIC KEY-----";
+    }
+
+    /** JAVA格式的私钥转换为PHP格式的私钥
+     * @param $java_rsa_private_key
+     * @return string
+     */
+    public function Java2PhpRSAPrivateKey($java_rsa_private_key) {
+        return $res = "-----BEGIN PRIVATE KEY-----\n" . wordwrap($java_rsa_private_key, 64, "\n", true) . "\n-----END PRIVATE KEY-----";
+    }
+    
     /**
      * 生成唯一id[32位]
      * @param string $namespace
