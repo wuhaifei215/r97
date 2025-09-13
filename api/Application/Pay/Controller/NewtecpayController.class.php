@@ -1,11 +1,6 @@
 <?php
 
 namespace Pay\Controller;
-use yy\config\SignConfig;
-use yy\config\PayConfig;
-use yy\sign\RSAUtil;
-use yy\util\YYUtil;
-use yy\model\ApiResource;
 
 class NewtecpayController extends PayController
 {
@@ -93,7 +88,11 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             'user_ip' => $pay_IP,
             'time_start' => date("Y-m-d H:i:s"),
         );
-        $this->initSignConfig();
+        $header_array = array(
+            "nonce"=>$this->createUniqid(),
+            "timestamp"=>$this->getMicroTime(),
+            "Authorization"=>$return['signkey'],
+        );
 
         log_place_order($this->code, $return['orderid'] . "----提交", json_encode($native, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, $return['orderid'] . "----提交地址", $return['gateway']);    //日志
@@ -101,9 +100,8 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         // 记录初始执行时间
         $beginTime = microtime(TRUE);
 
-        $returnContent =  self::_request($return['gateway'],$native);
+        $returnContent =  $this->http_post_json($return['gateway'], $native, $header_array);
 
-//        $returnContent = $this->http_post_json($return['gateway'], $native);
         log_place_order($this->code, $return['orderid'] . "----返回", $returnContent);    //日志
         $ans = json_decode($returnContent, true);
         if($ans['return_code'] === 'SUCCESS' && $ans['status'] ==='PROCESSING'){
@@ -235,8 +233,8 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             'lang-version:'.PHP_VERSION
         );
 
-        $nonce = YYUtil::createUniqid();
-        $timestamp = YYUtil::getMicroTime();
+        $nonce = $this->createUniqid();
+        $timestamp = $this->getMicroTime();
 
         $header = array(
             'Content-Type:application/json; charset='.PayConfig::$CHARSET,
@@ -255,96 +253,158 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         $this->header = $header;
         $this->header_array = $header_array;
     }
+    private function http_post_json($url, $params, $header){
+        $this->send($url, $params, $header);
+    }
 
     /**
-     * 初始化签名信息
+     * 发送HTTP请求核心函数
+     *
+     * @param string $method  使用GET还是POST方式访问
+     * @param int $timeout  连接对方服务器访问超时时间，单位为秒
+     * @param array $options
+     * @param boolean $isVerifySign 是否验签，对账单下载接口响应结果不支持对响应结果验签
+     * @return mixed
+     * @throws Exception
      */
-    private function initSignConfig(){
-        vendor('yy.init');
-        //支付平台支付平台提供给商户的SecretKey，登录支付平台支付平台查看
-        // 需要替换为实际的数值
-        \SignConfig::setSecretKey("2a6e38db0f44492a8a3aa0647a7cf311");
-        //商户自己的私钥[公钥通过登录支付平台支付平台进行配置，私钥设置到下面的变量中]
-        //样例 见 merchant_rsa_private_key.pem
-        // 需要替换为实际的数值
-        \SignConfig::setPrivateKeyPath("merchant_rsa_private_key.pem");
-        //支付平台支付平台提供给商户的公钥，响应结果验签使用，登录支付平台支付平台查看,把它保存到一个pem文件中
-        //样例 见 yy_rsa_public_key.pem
-        // 需要替换为实际的数值
-        \SignConfig::setYhbPublicKeyPath("yy_rsa_public_key.pem");
-    }
+    private function send($url, $params, $header, $isVerifySign=true,$timeout=10,$method='POST'){
+        //处理参数是否为空
+        if ($this->uri == ''){
+            throw new Exception(__CLASS__ .": Access url is empty");
+        }
 
-    //发送post请求，提交json字符串
-    private function http_post_json($url, $post = array())
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        $httpheader[] = "Accept: */*";
-        $httpheader[] = "Accept-Language: zh-CN,zh;q=0.8";
-        $httpheader[] = "Connection: close";
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $httpheader);
-        curl_setopt($ch, CURLOPT_HEADER, false);
+        //初始化CURL
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        if($post){
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+
+        //设置特殊属性
+        if (!empty($options)){
+            curl_setopt_array($ch , $options);
         }
-        $response = curl_exec($ch);
-        curl_close($ch);
-        return $response;
-    }
-    private function isEmpty($value)
-    {
-        return $value === null || trim($value) === '';
-    }
 
-    // 获取待签名字符串
-    private function getSignContent($params)
-    {
-        ksort($params);
-        $signstr = '';
-        foreach ($params as $k => $v) {
-            if (is_array($v) || $this->isEmpty($v) || $k == 'sign' || $k == 'sign_type') continue;
-            $signstr .= '&' . $k . '=' . $v;
+        $_json_data = json_encode($params,JSON_UNESCAPED_UNICODE);
+
+        echo "请求报文:".$_json_data."\n";
+
+        //处理POST请求数据
+        if ($method == 'POST'){
+            curl_setopt($ch, CURLOPT_POST, 1 );
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $_json_data);
         }
-        $signstr = substr($signstr, 1);
-        return $signstr;
-    }
 
-    // 回调验证
-    public function publicVerify($arr)
-    {
-        if (empty($arr) || empty($arr['sign'])) return false;
-        if (empty($arr['timestamp']) || abs(time() - $arr['timestamp']) > 300) return false;
-        $sign = $arr['sign'];
-        return $this->rsaPublicVerify($this->getSignContent($arr), $sign);
-    }
-
-    // 商户私钥签名
-    private function privateEncrypt($data)
-    {
-        $data = $this->getSignContent($data);
-        $key = "-----BEGIN PRIVATE KEY-----\n" . wordwrap($this->_privKey, 64, "\n", true) . "\n-----END PRIVATE KEY-----";
-        $privatekey = openssl_get_privatekey($key);
-        if (!$privatekey) {
-            throw new \Exception('签名失败，商户私钥错误');
+        if ($method == 'GET'){
+            $sign = $this->to_sign_data($method);
+        }else{
+            $sign = $this->to_sign_data($method,$_json_data);
         }
-        openssl_sign($data, $sign, $privatekey, OPENSSL_ALGO_SHA256);
-        return base64_encode($sign);
-    }
+        $header['sign:'] = $sign;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
-    // 平台公钥验签
-    private function rsaPublicVerify($data, $sign)
-    {
-        $key = "-----BEGIN PUBLIC KEY-----\n" . wordwrap($this->_pbulicKey, 64, "\n", true) . "\n-----END PUBLIC KEY-----";
-        $publickey = openssl_get_publickey($key);
-        if (!$publickey) {
-            throw new \Exception("验签失败，平台公钥错误");
+        //发送请求读取输数据
+        $data = curl_exec($ch);
+        try{
+            $body_data = null;
+            $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $res_header = substr($data, 0, $header_size);
+            $body_data = substr($data, $header_size);
+            $response_code=intval(curl_getinfo($ch, CURLINFO_HTTP_CODE));
+            echo "\n响应data：".$data."\n响应code：".$response_code."\n响应body报文：".$body_data;
+            if ($response_code==200){
+                if ($isVerifySign) {
+                    $this->to_verify_data($res_header, $body_data);
+                }
+            }
+        }catch (Exception $e) {
+            return $e->getMessage();
         }
-        $result = openssl_verify($data, base64_decode($sign), $publickey, OPENSSL_ALGO_SHA256);
-        return $result === 1;
+        finally
+        {
+            curl_close($ch);
+        }
+        return $body_data;
     }
 
+    /**
+     * 签名数据
+     *
+     * @param $method
+     * @param $body_data
+     * @return string
+     */
+    private function to_sign_data($method,$body_data=null){
+        $_query_string = "";
+        $_to_sign_data = utf8_encode(strtolower($method))."\n".utf8_encode($_query_string)."\n"
+            .utf8_encode($this->header_array['nonce'])."\n".utf8_encode($this->header_array['timestamp'])."\n".utf8_encode($this->header_array['Authorization'])."\n"
+            .$body_data;
+        return RSAUtil::sign($_to_sign_data);
+    }
+
+
+    /**
+     * 验签
+     *
+     * @param $res_header
+     * @param $body_data
+     */
+    private function to_verify_data($res_header, $body_data)
+    {
+        $res_header_array = explode("\r\n", $res_header);
+        // 构造响应header数据
+        $headList = array();
+        foreach ($res_header_array as $head) {
+            $value = explode(':',$head);
+            $headList[$value[0]] = trim($value[1]);
+        }
+        $_res_nonce = $headList['nonce']==''||$headList['nonce']==null?$headList['Nonce']:$headList['nonce'];
+        $_res_timestamp = $headList['timestamp']==''||$headList['timestamp']==null?$headList['Timestamp']:$headList['timestamp'];;
+        $_res_secret_key = $headList['Authorization']==''||$headList['Authorization']==null?$headList['authorization']:$headList['Authorization'];;
+        $_res_sign = $headList['sign']==''||$headList['sign']==null?$headList['Sign']:$headList['sign'];;
+
+        $_to_verify_data = utf8_encode($_res_nonce)."\n".$_res_timestamp."\n".$_res_secret_key."\n".$body_data;
+        echo "\n同步响应报文验签原文数据:".$_to_verify_data."\n";
+        $verify_result = RSAUtil::verify($_to_verify_data, $_res_sign);
+        echo "\n同步响应验签结果:".$verify_result."\n";
+        if(empty($verify_result) || intval($verify_result)!=1){
+            throw new InvalidResponseException("Invalid Response.[Response Data And Sign Verify Failure.]");
+        }
+
+        if (strcmp(SignConfig::getSecretKey(),$_res_secret_key)){
+            throw new InvalidResponseException("Invalid Response.[Secret Key Is Invalid.]");
+        }
+    }
+    /**
+     * 生成唯一id[32位]
+     * @param string $namespace
+     * @return string
+     */
+    public static function createUniqid($namespace = ''){
+        static $uniqid = '';
+        $uid = uniqid("", true);
+        $data = $namespace;
+        $data .= isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : "";
+        $data .= isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+        $data .= isset($_SERVER['LOCAL_ADDR']) ? $_SERVER['LOCAL_ADDR'] : "";
+        $data .= isset($_SERVER['LOCAL_PORT']) ? $_SERVER['LOCAL_PORT'] : "";
+        $data .= isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "";
+        $data .= isset($_SERVER['REMOTE_PORT']) ? $_SERVER['REMOTE_PORT'] : "";
+        $hash = strtoupper(hash('ripemd128', $uid . $uniqid . md5($data)));
+        $uniqid = substr($hash,  0,  8) .
+            substr($hash,  8,  4) .
+            substr($hash, 12,  4) .
+            substr($hash, 16,  4) .
+            substr($hash, 20, 12);
+        return $uniqid;
+    }
+    /**
+     * 获取当前时间的毫秒数
+     *
+     * @return float
+     */
+    public static function getMicroTime(){
+        list($t1, $t2) = explode(' ', microtime());
+        return (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
+    }
 }
