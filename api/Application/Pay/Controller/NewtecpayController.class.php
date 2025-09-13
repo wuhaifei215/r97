@@ -1,6 +1,11 @@
 <?php
 
 namespace Pay\Controller;
+use yy\config\SignConfig;
+use yy\config\PayConfig;
+use yy\sign\RSAUtil;
+use yy\util\YYUtil;
+use yy\model\ApiResource;
 
 class NewtecpayController extends PayController
 {
