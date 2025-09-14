@@ -152,7 +152,11 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         // $check_data = sqlInj($result);
         // if ($check_data === false) return;
 
-        $orderList = M('Order')->where(['pay_orderid' => $orderid])->find();
+        $OrderModel = D('Order');
+        $date = date('Ymd',strtotime(substr($orderid, 0, 8)));  //获取订单日期
+        $tablename = $OrderModel->getRealTableName($date);
+
+        $orderList = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->find();
         if (!$orderList) return;
 
         //验证IP白名单
