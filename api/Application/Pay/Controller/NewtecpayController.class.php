@@ -251,16 +251,37 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             curl_setopt($ch, CURLOPT_POST, 1 );
             curl_setopt($ch, CURLOPT_POSTFIELDS, $_json_data);
         }
+
+        $defaultHeader = array(
+            'lang:PHP',
+            'publisher:yy',
+            'sdk-version:1.0.0',
+            'uname:'.php_uname(),
+            'lang-version:'.PHP_VERSION
+        );
+
+        $nonce = $this->createUniqid();
+        $timestamp = $this->getMicroTime();
+        $SecretKey = '5642bd24f179435e934a7314fa0eb4ec';
+
         $header = array(
-            "nonce"=>$this->createUniqid(),
-            "timestamp"=>$this->getMicroTime(),
-            "Authorization"=>"5642bd24f179435e934a7314fa0eb4ec",
+            'Content-Type:application/json; charset='.PayConfig::$CHARSET,
+            'nonce:'.$nonce,
+            'timestamp:'.$timestamp,
+            'Authorization:'.$SecretKey,
+            'X-yy-Client-User-Agent:'.json_encode($defaultHeader)
+        );
+
+        $header_array = array(
+            "nonce"=>$nonce,
+            "timestamp"=>$timestamp,
+            "Authorization"=>$SecretKey,
         );
 
         if ($method == 'GET'){
             $sign = $this->to_sign_data($method);
         }else{
-            $sign = $this->to_sign_data($method, $_json_data, $header);
+            $sign = $this->to_sign_data($method, $_json_data, $header_array);
         }
         $header['sign:'] = $sign;
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
@@ -330,11 +351,11 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         $verify_result = $this->is_verify($_to_verify_data, $_res_sign);
         echo "\n同步响应验签结果:".$verify_result."\n";
         if(empty($verify_result) || intval($verify_result)!=1){
-            throw new InvalidResponseException("Invalid Response.[Response Data And Sign Verify Failure.]");
+            echo "Fail";
         }
 
-        if (strcmp(SignConfig::getSecretKey(),$_res_secret_key)){
-            throw new InvalidResponseException("Invalid Response.[Secret Key Is Invalid.]");
+        if (strcmp($this->privKey,$_res_secret_key)){
+            echo "Secret Key Is Invalid";
         }
     }
 
@@ -402,21 +423,6 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         return base64_encode($crypted);
     }
 
-    /** JAVA格式的公钥转换为PHP格式的公钥
-     * @param $java_rsa_public_key
-     * @return string
-     */
-    public function Java2PhpRSAPublicKey($java_rsa_public_key) {
-        return $res = "-----BEGIN PUBLIC KEY-----\n" . wordwrap($java_rsa_public_key, 64, "\n", true) . "\n-----END PUBLIC KEY-----";
-    }
-
-    /** JAVA格式的私钥转换为PHP格式的私钥
-     * @param $java_rsa_private_key
-     * @return string
-     */
-    public function Java2PhpRSAPrivateKey($java_rsa_private_key) {
-        return $res = "-----BEGIN PRIVATE KEY-----\n" . wordwrap($java_rsa_private_key, 64, "\n", true) . "\n-----END PRIVATE KEY-----";
-    }
 
     /**
      * 生成唯一id[32位]
