@@ -143,11 +143,11 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         //获取报文信息
         $json = file_get_contents("php://input");
         $data = json_decode($json, true);
-        $orderid = $data['merchant_order_no'];
+        $orderid = $data['data']['merchant_order_no'];
         //log_place_order($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
         log_place_order($this->code . '_notifyurl', $orderid . "----异步回调", $json);    //日志
         if (!$orderid) return;
-        $result = $data;
+        $result = $data['data'];
         //过滤数据，防SQL注入
         // $check_data = sqlInj($result);
         // if ($check_data === false) return;
