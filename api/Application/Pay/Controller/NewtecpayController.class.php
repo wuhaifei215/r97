@@ -283,7 +283,9 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         }else{
             $sign = $this->to_sign_data($method, $_json_data, $header_array);
         }
-        $header['sign:'] = $sign;
+        $header[] ='sign:'.$sign;
+
+        log_place_order($this->code, "----header", json_encode($header));    //日志
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
         //发送请求读取输数据
