@@ -95,7 +95,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         // 记录初始执行时间
         $beginTime = microtime(TRUE);
 
-        $returnContent =  $this->http_post_json($return['gateway'], $native);
+        $returnContent = $this->http_post_json($return['gateway'], $native);
 
         log_place_order($this->code, $return['orderid'] . "----返回", $returnContent);    //日志
         $ans = json_decode($returnContent, true);
@@ -215,7 +215,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
     /*********************************辅助方法*********************************/
 
     private function http_post_json($url, $params){
-        $this->send($url, $params);
+        return $this->send($url, $params);
     }
 
     /**
