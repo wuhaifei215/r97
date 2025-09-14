@@ -244,7 +244,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
 
         $_json_data = json_encode($params,JSON_UNESCAPED_UNICODE);
 
-        echo "请求报文:".$_json_data."\n";
+//        echo "请求报文:".$_json_data."\n";
 
         //处理POST请求数据
         if ($method == 'POST'){
