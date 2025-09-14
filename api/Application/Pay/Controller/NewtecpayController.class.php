@@ -143,7 +143,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         //获取报文信息
         $json = file_get_contents("php://input");
         $data = json_decode($json, true);
-        $orderid = $data['out_trade_no'];
+        $orderid = $data['merchant_order_no'];
         //log_place_order($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
         log_place_order($this->code . '_notifyurl', $orderid . "----异步回调", $json);    //日志
         if (!$orderid) return;
@@ -159,8 +159,9 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         $check_re = check_IP($orderList['channel_id'], getIP(), $orderid);
         if ($check_re !== true) return;
 
-        if ($this->publicVerify($data)) {
-            if ($result['trade_status'] === 'TRADE_SUCCESS') {     //	1：交易成功
+        $sign = $_SERVER["HTTP_SIGN"];
+        if ($this->is_verify($json,$sign)) {
+            if ($result['status'] === 'SUCCESS') {     //	1：交易成功
                 $re = $this->EditMoney($orderList['pay_orderid'], $this->code, 0);
                 if ($re !== false) {
                     log_place_order($this->code . '_notifyurl', $orderid . "----回调上游", "成功");    //日志
@@ -168,7 +169,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
                     log_place_order($this->code . '_notifyurl', $orderid . "----回调上游", "失败");    //日志
                 }
             } else {
-                log_place_order($this->code . '_notifyurl', $orderid . "----订单状态异常", $result['trade_status']);    //日志
+                log_place_order($this->code . '_notifyurl', $orderid . "----订单状态异常", $result['status']);    //日志
             }
             echo 'success';
         } else {
