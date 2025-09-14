@@ -6,7 +6,7 @@ class NewtecpayController extends PayController
 {
     private $code = '';
 
-    private $_pbulicKey = '-----BEGIN PUBLIC KEY-----
+    private $pbulicKey = '-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxhabKYXpiBO5A+Ph5GGn
 MgpT6U6I5asWZnEfgLzak78KhrTf4G5o8MgdI5OHxnhxXwA1J6oj6TxScV3D6Qgc
 EmKla10nm2fe30I6YlrSv8/b1RqphpoM2kzjYZoIC8yjvHRELI0cjlz9F681RePt
@@ -16,7 +16,7 @@ fa6HxOdBOlfU/S+iZuvMe3W8Upg7KE5YuoX95UVzil14J0N9P572hIx/lvFaXN8f
 JQIDAQAB
 -----END PUBLIC KEY-----';
 
-    private $_privKey = '-----BEGIN PRIVATE KEY-----
+    private $privKey = '-----BEGIN PRIVATE KEY-----
 MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC0gOCwhfnlyTg1
 Gdu7Bk2jd53K1eXt45z3BCY08RkDn+6pdzb+2dIzlWHpiI1O4s8eqtaEHuuNKgZz
 2XRUDoUIhJDqc3O7cjRSqlNpUGJq04xBlS9uqjz7+W62QCbo6vNegUyC7Rz40izG
@@ -344,13 +344,10 @@ u0W5bbqUf1nOeiqOV9S8Giz0
     * @param $data 待签名数据
     * @return string 签名后的数据
     */
-    public static function sign($data)
+    public function sign($data)
     {
-        //读取私钥文件
-        $priKey = file_get_contents(SignConfig::getPrivateKeyPath());
-
         //转换为openssl密钥，必须是没有经过pkcs8转换的私钥
-        $res = openssl_get_privatekey($priKey);
+        $res = openssl_get_privatekey($this->privKey);
 
         //调用openssl内置签名方法，生成签名$sign
         openssl_sign($data, $sign, $res,OPENSSL_ALGO_SHA256);
