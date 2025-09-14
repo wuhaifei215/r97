@@ -265,7 +265,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         $SecretKey = '5642bd24f179435e934a7314fa0eb4ec';
 
         $header = array(
-            'Content-Type:application/json; charset='.PayConfig::$CHARSET,
+            'Content-Type:application/json; charset=UTF-8',
             'nonce:'.$nonce,
             'timestamp:'.$timestamp,
             'Authorization:'.$SecretKey,
