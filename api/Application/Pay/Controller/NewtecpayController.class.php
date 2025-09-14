@@ -327,7 +327,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
 
         $_to_verify_data = utf8_encode($_res_nonce)."\n".$_res_timestamp."\n".$_res_secret_key."\n".$body_data;
         echo "\n同步响应报文验签原文数据:".$_to_verify_data."\n";
-        $verify_result = $this->verify($_to_verify_data, $_res_sign);
+        $verify_result = $this->is_verify($_to_verify_data, $_res_sign);
         echo "\n同步响应验签结果:".$verify_result."\n";
         if(empty($verify_result) || intval($verify_result)!=1){
             throw new InvalidResponseException("Invalid Response.[Response Data And Sign Verify Failure.]");
@@ -369,7 +369,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
      * @param $sign 签名数据
      * @return bool 验签结果
      */
-    public function verify($data, $sign)  {
+    public function is_verify($data, $sign)  {
 
         //读取支付平台公钥文件
         $pubKey = file_get_contents(SignConfig::getYhbPublicKeyPath());
