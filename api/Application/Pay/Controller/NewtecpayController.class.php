@@ -369,7 +369,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
      * @param $sign 签名数据
      * @return bool 验签结果
      */
-    public static function verify($data, $sign)  {
+    public function verify($data, $sign)  {
 
         //读取支付平台公钥文件
         $pubKey = file_get_contents(SignConfig::getYhbPublicKeyPath());
@@ -390,7 +390,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
      * @param string $data 要加密的数据
      * @return string 加密后的数据
      */
-    public static function rsaPrivateEncrypt($data) {
+    public function rsaPrivateEncrypt($data) {
         //读取私钥文件
         $priKey = file_get_contents(SignConfig::getPrivateKeyPath());
 
@@ -426,14 +426,14 @@ u0W5bbqUf1nOeiqOV9S8Giz0
     public function Java2PhpRSAPrivateKey($java_rsa_private_key) {
         return $res = "-----BEGIN PRIVATE KEY-----\n" . wordwrap($java_rsa_private_key, 64, "\n", true) . "\n-----END PRIVATE KEY-----";
     }
-    
+
     /**
      * 生成唯一id[32位]
      * @param string $namespace
      * @return string
      */
-    public static function createUniqid($namespace = ''){
-        static $uniqid = '';
+    public function createUniqid($namespace = ''){
+        $uniqid = '';
         $uid = uniqid("", true);
         $data = $namespace;
         $data .= isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : "";
@@ -455,7 +455,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
      *
      * @return float
      */
-    public static function getMicroTime(){
+    public function getMicroTime(){
         list($t1, $t2) = explode(' ', microtime());
         return (float)sprintf('%.0f',(floatval($t1)+floatval($t2))*1000);
     }
