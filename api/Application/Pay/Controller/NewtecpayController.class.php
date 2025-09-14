@@ -99,7 +99,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
 
         log_place_order($this->code, $return['orderid'] . "----返回", $returnContent);    //日志
         $ans = json_decode($returnContent, true);
-        if($ans['return_code'] === 'SUCCESS' && $ans['status'] ==='PROCESSING'){
+        if($ans['return_code'] === 'SUCCESS' && $ans['status'] ==='SUCCESS'){
             $payurl = $site . 'PayPage.html?sid=' . $return['orderid'] . '&amount=' . $return['amount']. '&qrcode=' .$ans['credential']['pix'];
             $return_arr = [
                 'status' => 'success',
