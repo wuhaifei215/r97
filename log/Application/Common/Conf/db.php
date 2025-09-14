@@ -2,7 +2,7 @@
 // 数据库配置
 return array(
     'DB_TYPE'   => 'mysql',       // 数据库类型
-    'DB_HOST'   => '56.124.33.3',       // 服务器地址
+    'DB_HOST'   => '172.31.9.0',       // 服务器地址
     'DB_NAME'   => 'rlogmarsdb',       // 数据库名
     'DB_USER'   => 'rlogmarsdb',       // 用户名
     'DB_PWD'    => 'BAzT4MJ6PEJBi3KG',        // 密码
