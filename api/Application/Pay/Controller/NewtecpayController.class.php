@@ -294,12 +294,12 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             $res_header = substr($data, 0, $header_size);
             $body_data = substr($data, $header_size);
             $response_code=intval(curl_getinfo($ch, CURLINFO_HTTP_CODE));
-            echo "\n响应data：".$data."\n响应code：".$response_code."\n响应body报文：".$body_data;
-            if ($response_code==200){
-                if ($isVerifySign) {
-                    $this->to_verify_data($res_header, $body_data);
-                }
-            }
+//            echo "\n响应data：".$data."\n响应code：".$response_code."\n响应body报文：".$body_data;
+//            if ($response_code==200){
+//                if ($isVerifySign) {
+//                    $this->to_verify_data($res_header, $body_data);
+//                }
+//            }
         }catch (Exception $e) {
             return $e->getMessage();
         }
