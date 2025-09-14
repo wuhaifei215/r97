@@ -367,11 +367,8 @@ u0W5bbqUf1nOeiqOV9S8Giz0
      * @return bool 验签结果
      */
     public function is_verify($data, $sign)  {
-
-        //读取支付平台公钥文件
-        $pubKey = file_get_contents(SignConfig::getYhbPublicKeyPath());
         //转换为openssl格式密钥
-        $res = openssl_get_publickey($pubKey);
+        $res = openssl_get_publickey($this->pbulicKey);
         //调用openssl内置方法验签，返回bool值
         $result = (bool)openssl_verify($data,base64_decode($sign), $res,OPENSSL_ALGO_SHA256);
         //释放资源
@@ -388,11 +385,8 @@ u0W5bbqUf1nOeiqOV9S8Giz0
      * @return string 加密后的数据
      */
     public function rsaPrivateEncrypt($data) {
-        //读取私钥文件
-        $priKey = file_get_contents(SignConfig::getPrivateKeyPath());
-
         //转换为openssl密钥，必须是没有经过pkcs8转换的私钥
-        $res = openssl_get_privatekey($priKey);
+        $res = openssl_get_privatekey($this->privKey);
         if ($res === false) {
             die('私钥获取失败');
         }
