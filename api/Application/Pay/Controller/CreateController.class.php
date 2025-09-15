@@ -291,7 +291,7 @@ class CreateController extends PayController
         if ($is_repeat_order!==1) {
             $redis = $this->redis_connect();
             $count = $redis->get($this->orderid);
-             var_dump($count);
+            // var_dump($count);
             if($count!==false){
                 $this->showmessage('Duplicate order!');
             }
