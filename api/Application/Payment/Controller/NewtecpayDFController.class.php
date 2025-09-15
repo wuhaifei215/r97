@@ -170,7 +170,6 @@ u0W5bbqUf1nOeiqOV9S8Giz0
                     'memo' => '代付成功',
                 ];
                 $this->changeStatus($Order['id'], 2, $data, $tableName);
-                // $this->handle($Order['id'], 2, $data, $tableName);
                 log_place_order($this->code . '_notifyurl', $orderid, "----代付成功");    //日志
                 $json_result = "success";
             } elseif ($re_data['data']['status'] === 'FAIL') {
@@ -179,7 +178,6 @@ u0W5bbqUf1nOeiqOV9S8Giz0
                     'memo' => '代付失败-' . $re_data['data']['return_msg'],
                 ];
                 $this->changeStatus($Order['id'], 3, $data, $tableName);
-                // $this->handle($Order['id'], 3, $data, $tableName);
                 log_place_order($this->code . '_notifyurl', $orderid, "----代付失败");    //日志
                 $json_result = "success";
             } else {
