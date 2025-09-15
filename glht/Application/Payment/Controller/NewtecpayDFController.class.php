@@ -164,7 +164,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         if ($this->is_verify($json,$sign)) {
             if ($re_data['data']['status'] === 'SUCCESS') {
 
-                $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$re_data['data']['endToEndId']]);
+                $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['billno'=>$re_data['data']['endToEndId']]);
                 //代付成功 更改代付状态 完善代付逻辑
                 $data = [
                     'memo' => '代付成功',
