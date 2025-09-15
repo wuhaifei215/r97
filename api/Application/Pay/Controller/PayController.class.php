@@ -303,16 +303,16 @@ class PayController extends Controller
             $data['account_id'] = $channel_account['id'];
             $data['t'] = $tikuanconfig['t1zt'];
             //添加订单
-            try {
+//            try {
                 $or_add = $Order->table($Order->getRealTableName(date('Y-m-d', $data['pay_applydate'])))->add($data);
-                
-                //下游单号存入缓存，防止重复提交
-                $redis = $this->redis_connect();
-                $redis->set($out_trade_id, $userid ,7200);
-                
-            } catch (\Exception $e) {
-                $this->showmessage('Duplicate order number');
-            }
+//            } catch (\Exception $e) {
+//                $this->showmessage('Duplicate order number');
+//            }
+
+            //下游单号存入缓存，防止重复提交
+            $redis = $this->redis_connect();
+            $redis->set($out_trade_id, $userid ,7200);
+
             if ($or_add) {
                 $return['datetime'] = date('Y-m-d H:i:s', $data['pay_applydate']);
                 $return["status"] = "success";
