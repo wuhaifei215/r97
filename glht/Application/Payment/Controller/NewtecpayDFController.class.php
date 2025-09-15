@@ -55,9 +55,21 @@ u0W5bbqUf1nOeiqOV9S8Giz0
     //代付提交
     public function PaymentExec($data, $config)
     {
+        if($data['type']=='EMAIL'){
+            $account_type = 0;
+        }elseif($data['type']=='CPF'){
+            $account_type = 1;
+        }elseif($data['type']=='CNPJ'){
+            $account_type = 2;
+        }elseif($data['type']=='PHONE'){
+            $account_type = 3;
+        }else{
+            $return = ['status' => 0, 'msg' => '支付类型错误'];
+            return $return;
+        }
         $post_data = array(
             "merchant_order_no" => $data['orderid'], //订单号
-            "account_type" => $data['type'],        // 账号类型：0-EMAIL, 1-CPF, 2-CNPJ , 3-PHONE
+            "account_type" => $account_type,        // 账号类型：0-EMAIL, 1-CPF, 2-CNPJ , 3-PHONE
             "account_no" => $data['banknumber'],    //如CPF为CPF号码，CNPJ为CNPJ号码，PHONE为⼿机号码，EMAIL为邮箱地址，EVP为evp地址
             "amount" => sprintf("%.2f", $data['money']) * 100,  //提现金额（单位分）
             'description'=>'Confirmação de pagamento', // 交易描述，要求300个字符内
@@ -101,6 +113,8 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$result['order_no']]);
 
             $return = ['status' => 1, 'msg' => '申请正常'];
+        }elseif($result['return_code'] === 'SYSTEM_ERROR'){
+            $return = ['status' => 0, 'msg' => $result['return_msg']];
         }else{
             $return = ['status' => 0, 'msg' => $result['return_msg']];
         }
