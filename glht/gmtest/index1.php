@@ -14,7 +14,7 @@ $pay_notifyurl = $http_type . $_SERVER['HTTP_HOST'] . "/gmtest/server.php";   //
 $pay_callbackurl = $http_type . "glht.yunpay.me/gmtest/page.php";  //页面跳转返回地址
 $Md5key = "bb5d4o184z9oi4wnew131q292d14uhkh";   //密钥
 // if($pay_bankcode=='909'){
-    $tjurl = $http_type . "testapi.r97pay.com/Pay_Create_payinBRL.html";   //提交地址
+    $tjurl = $http_type . "api.r97pay.com/Pay_Create_payinBRL.html";   //提交地址
 // }else{
 //     $tjurl = $http_type . "api.yunpay.me/Pay_Create_payinPHP.html";   //提交地址
 // }
