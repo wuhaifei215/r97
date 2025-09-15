@@ -159,7 +159,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             } elseif ($re_data['data']['status'] === 'TRADE_FAIL') {
                 //代付失败
                 $data = [
-                    'memo' => '代付失败-' . $re_data['return_msg'],
+                    'memo' => '代付失败-' . $re_data['data']['return_msg'],
                 ];
                 $this->changeStatus($Order['id'], 3, $data, $tableName);
                 // $this->handle($Order['id'], 3, $data, $tableName);
