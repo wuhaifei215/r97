@@ -156,6 +156,15 @@ u0W5bbqUf1nOeiqOV9S8Giz0
                 // $this->handle($Order['id'], 2, $data, $tableName);
                 log_place_order($this->code . '_notifyurl', $orderid, "----代付成功");    //日志
                 $json_result = "success";
+            } elseif ($re_data['data']['status'] === 'TRADE_FAIL') {
+                //代付失败
+                $data = [
+                    'memo' => '代付失败-' . $re_data['return_msg'],
+                ];
+                $this->changeStatus($Order['id'], 3, $data, $tableName);
+                // $this->handle($Order['id'], 3, $data, $tableName);
+                log_place_order($this->code . '_notifyurl', $orderid, "----代付失败");    //日志
+                $json_result = "success";
             } else {
                 log_place_order($this->code . '_notifyurl', $orderid . "----订单状态异常", $re_data['data']['status']);    //日志
                 $json_result = "status error | " . $re_data['data']['status'];
