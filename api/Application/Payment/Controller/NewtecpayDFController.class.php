@@ -141,7 +141,24 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             exit;
         }
 
-//        $config = M('pay_for_another')->where(['code' => $this->code,'id'=>$Order['df_id']])->find();
+        $config = M('pay_for_another')->where(['code' => $this->code,'id'=>$Order['df_id']])->find();
+        //验证IP白名单
+        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = getRealIp();
+        }
+        $check_re = checkNotifyurlIp($ip, $config['notifyip']);
+        if ($check_re !== true) {
+            log_place_order($this->code . '_notifyurl', $orderid . "----IP异常", $ip.'==='.$config['notifyip']);    //日志
+            $json_result = "IP异常:" . $ip.'==='.$config['notifyip'];
+            try{
+                logApiAddNotify($orderid, 1, $re_data, $json_result);
+            }catch (\Exception $e) {
+                // var_dump($e);
+            }
+            return;
+        }
 
         $sign = $_SERVER["HTTP_SIGN"];
         if ($this->is_verify($json,$sign)) {
@@ -156,7 +173,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
                 // $this->handle($Order['id'], 2, $data, $tableName);
                 log_place_order($this->code . '_notifyurl', $orderid, "----代付成功");    //日志
                 $json_result = "success";
-            } elseif ($re_data['data']['status'] === 'TRADE_FAIL') {
+            } elseif ($re_data['data']['status'] === 'FAIL') {
                 //代付失败
                 $data = [
                     'memo' => '代付失败-' . $re_data['data']['return_msg'],
