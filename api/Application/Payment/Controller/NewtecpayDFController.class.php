@@ -110,7 +110,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             $Wttklistmodel = D('Wttklist');
             $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
             $tableName = $Wttklistmodel->getRealTableName($date);
-            $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$result['order_no']]);
+//            $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$result['order_no']]);
 
             $return = ['status' => 1, 'msg' => '申请正常'];
         }elseif($result['return_code'] === 'SYSTEM_ERROR'){
