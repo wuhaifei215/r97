@@ -55,9 +55,21 @@ u0W5bbqUf1nOeiqOV9S8Giz0
     //代付提交
     public function PaymentExec($data, $config)
     {
+        if($data['type']=='EMAIL'){
+            $account_type = 0;
+        }elseif($data['type']=='CPF'){
+            $account_type = 1;
+        }elseif($data['type']=='CNPJ'){
+            $account_type = 2;
+        }elseif($data['type']=='PHONE'){
+            $account_type = 3;
+        }else{
+            $return = ['status' => 0, 'msg' => '支付类型错误'];
+            return $return;
+        }
         $post_data = array(
             "merchant_order_no" => $data['orderid'], //订单号
-            "account_type" => $data['type'],        // 账号类型：0-EMAIL, 1-CPF, 2-CNPJ , 3-PHONE
+            "account_type" => $account_type,        // 账号类型：0-EMAIL, 1-CPF, 2-CNPJ , 3-PHONE
             "account_no" => $data['banknumber'],    //如CPF为CPF号码，CNPJ为CNPJ号码，PHONE为⼿机号码，EMAIL为邮箱地址，EVP为evp地址
             "amount" => sprintf("%.2f", $data['money']) * 100,  //提现金额（单位分）
             'description'=>'Confirmação de pagamento', // 交易描述，要求300个字符内
@@ -66,28 +78,28 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         );
         log_place_order($this->code, $data['orderid'] . "----提交", json_encode($post_data, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, $data['orderid'] . "----提交地址", $config['exec_gateway']);    //日志
-        
+
         // 记录初始执行时间
         $beginTime = microtime(TRUE);
-        
+
         $returnContent = $this->http_post_json($config['exec_gateway'], $post_data);
         $result = json_decode($returnContent, true);
         // if($data['userid'] == 2){
-            try{
-                
-                $redis = $this->redis_connect();
-                $userdfpost = $redis->get('userdfpost_' . $data['out_trade_no']);
-                $userdfpost = json_decode($userdfpost,true);
-                
-                logApiAddPayment('下游商户提交', __METHOD__, $data['orderid'], $data['out_trade_no'], '/', $userdfpost, [], '0', '0', '1', '2');
-                
-                // 结束并输出执行时间
-                $endTime = microtime(TRUE);
-                $doTime = floor(($endTime-$beginTime)*1000);
-                logApiAddPayment('订单提交上游', __METHOD__, $data['orderid'], $data['out_trade_no'], $config['exec_gateway'], $post_data, $result, $doTime, '0', '1', '2');
-            }catch (\Exception $e) {
-                // var_dump($e);
-            }
+        try{
+
+            $redis = $this->redis_connect();
+            $userdfpost = $redis->get('userdfpost_' . $data['out_trade_no']);
+            $userdfpost = json_decode($userdfpost,true);
+
+            logApiAddPayment('下游商户提交', __METHOD__, $data['orderid'], $data['out_trade_no'], '/', $userdfpost, [], '0', '0', '1', '2');
+
+            // 结束并输出执行时间
+            $endTime = microtime(TRUE);
+            $doTime = floor(($endTime-$beginTime)*1000);
+            logApiAddPayment('订单提交上游', __METHOD__, $data['orderid'], $data['out_trade_no'], $config['exec_gateway'], $post_data, $result, $doTime, '0', '1', '2');
+        }catch (\Exception $e) {
+            // var_dump($e);
+        }
         // }
         log_place_order($this->code, $data['orderid'] . "----返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
 
@@ -101,6 +113,8 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$result['order_no']]);
 
             $return = ['status' => 1, 'msg' => '申请正常'];
+        }elseif($result['return_code'] === 'SYSTEM_ERROR'){
+            $return = ['status' => 0, 'msg' => $result['return_msg']];
         }else{
             $return = ['status' => 0, 'msg' => $result['return_msg']];
         }
@@ -115,7 +129,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         $orderid = $re_data['data']['merchant_order_no'];
         //log_place_order($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
         log_place_order($this->code . '_notifyurl', $orderid . "----异步回调", $json);    //日志
-        
+
         $tableName ='';
         $Wttklistmodel = D('Wttklist');
         $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
@@ -126,14 +140,14 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             log_place_order($this->code . '_notifyurl', $orderid . '----没有查询到Order！ ', $orderid);
             exit;
         }
-        
+
 //        $config = M('pay_for_another')->where(['code' => $this->code,'id'=>$Order['df_id']])->find();
 
         $sign = $_SERVER["HTTP_SIGN"];
         if ($this->is_verify($json,$sign)) {
             if ($re_data['data']['status'] === 'SUCCESS') {
 
-                 $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$re_data['data']['endToEndId']]);
+                $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$re_data['data']['endToEndId']]);
                 //代付成功 更改代付状态 完善代付逻辑
                 $data = [
                     'memo' => '代付成功',
@@ -157,7 +171,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             // var_dump($e);
         }
     }
-    
+
     //账户余额查询
     public function queryBalance()
     {
@@ -195,8 +209,8 @@ AAA;
 
         }
     }
-    
-        //账户余额查询
+
+    //账户余额查询
     public function queryBalance2($config)
     {
         $post_data = array(
@@ -206,10 +220,10 @@ AAA;
         $returnContent = $this->http_post_json($config['serverreturn'], $post_data);
         log_place_order($this->code . '_queryBalance2', "返回", $returnContent);    //日志
         $result = json_decode($returnContent, true);
-         if($result['return_code'] === "SUCCESS"){
+        if($result['return_code'] === "SUCCESS"){
             $result_data['resultCode'] = "0";
             $result_data['balance'] = $result['balance_amt'];
-         }
+        }
         return $result_data;
     }
 
@@ -243,7 +257,7 @@ AAA;
         }
         return $return;
     }
-    
+
     public function PaymentVoucher($data, $config){
         $post_data = [
             'merchant_order_no' => $data['orderid'],
