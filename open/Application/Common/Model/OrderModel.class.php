@@ -13,7 +13,7 @@ class OrderModel extends Model {
     protected $timeoptions = ['pay_applydate','pay_successdate'];
     // 数据库表达式
     protected $exp = array('eq' => '=', 'neq' => '<>', 'gt' => '>', 'egt' => '>=', 'lt' => '<', 'elt' => '<=', 'notlike' => 'NOT LIKE', 'like' => 'LIKE', 'in' => 'IN', 'notin' => 'NOT IN', 'not in' => 'NOT IN', 'between' => 'BETWEEN', 'not between' => 'NOT BETWEEN', 'notbetween' => 'NOT BETWEEN');
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -45,7 +45,7 @@ class OrderModel extends Model {
             $creatSql = "CREATE TABLE `" . $tableName . "` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                   `pay_memberid` int(10) NOT NULL COMMENT '商户编号',
-                  `pay_orderid` varchar(100) NOT NULL COMMENT '系统订单号',
+                  `pay_orderid` varchar(40) NOT NULL COMMENT '系统订单号',
                   `pay_amount` decimal(15,4) unsigned NOT NULL DEFAULT '0.0000',
                   `pay_poundage` decimal(15,4) unsigned NOT NULL DEFAULT '0.0000',
                   `pay_actualamount` decimal(15,4) unsigned NOT NULL DEFAULT '0.0000',
@@ -61,6 +61,7 @@ class OrderModel extends Model {
                   `pay_zh_tongdao` varchar(50) DEFAULT NULL,
                   `pay_tjurl` varchar(1000) DEFAULT NULL,
                   `out_trade_id` varchar(50) NOT NULL COMMENT '商户订单号',
+                  `billno` varchar(50) NOT NULL COMMENT '上游交易流水号',
                   `paytype` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '渠道类型: 1 Gcash直连 2 Gcash扫码 3 Maya 4 VietQR',
                   `num` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '已补发次数',
                   `memberid` varchar(100) DEFAULT NULL COMMENT '支付渠道商家号',
@@ -100,7 +101,7 @@ class OrderModel extends Model {
             $this->execute($creatSql);
         }
     }
-        
+
     public function getTables($data=array()){
         if(!empty($data) && $data['pay_applydate']){
             //获取时间范围内的表
@@ -117,7 +118,7 @@ class OrderModel extends Model {
         }
         return $tables;
     }
-    
+
     public function getLastIds($returnAllArray = false){
         foreach ($this->orderTables as $k => $v){
             $lastIds = $this->query("SELECT id FROM " . $v . ' ORDER BY id DESC LIMIT 1');
@@ -131,7 +132,7 @@ class OrderModel extends Model {
             return $lastAllArray;
         }
     }
- 
+
     // 获取实际表名的方法
     public function getRealTableName($date) {
         if(date('Ymd', strtotime($date)) < $this->expire_date){
@@ -142,7 +143,7 @@ class OrderModel extends Model {
         return $this->tablePrefix . $this->tableName . $date_md;
     }
 
-    
+
     // 获取实际表名的方法
     public function setRealTableName($date =array()) {
         $date = isset($data['pay_applydate']) ? $data['pay_applydate'] : date('Ymd',time());
@@ -151,7 +152,7 @@ class OrderModel extends Model {
         $this->table($realTableName);
         return $this;
     }
-    
+
     public function getCount($options=array()){
         $field = 'count(id) as tp_count';
         $count_arr = $this->getOrderByDateRange($field, $options);
@@ -161,7 +162,7 @@ class OrderModel extends Model {
         }
         return $count;
     }
-    
+
     public function getSum($field='', $options=array()){
         $field_arr = explode(',' , $field);
         $field_str='';
@@ -179,7 +180,7 @@ class OrderModel extends Model {
         }
         return $sum;
     }
-    
+
     // 按时间范围查询数据表
     public function getOrderByDateRange($field=array(), $options=array(), $limit='', $orderby='' , $groupby='') {
         if(!$field){
@@ -196,7 +197,7 @@ class OrderModel extends Model {
         if($limit){
             $limit = ' LIMIT ' . $limit;
         }
-        
+
         $where = '';
         $optionstr = $this->new_parseOptions($options);
         if($optionstr){
@@ -208,6 +209,7 @@ class OrderModel extends Model {
             //获取时间段内的每一天
             $data_arr = $this->getDateRange($startdate, $enddate);        // 构建查询语句
             $break = 0;
+            $unionSql='';
             foreach ($data_arr as $date) {
                 $realTableName = $this->getRealTableName($date);
                 if(in_array($realTableName,$this->orderTables) && intval($date) >= $this->expire_date){
@@ -256,8 +258,8 @@ class OrderModel extends Model {
                     $unionSql .= $where;
                 }
                 if($groupby){
-                        $unionSql .= $groupby;
-                    }
+                    $unionSql .= $groupby;
+                }
                 if($orderby){
                     $unionSql .= $orderby;
                 }
@@ -265,7 +267,7 @@ class OrderModel extends Model {
                     $unionSql .= $limit;
                 }
                 // 执行联合查询
-                
+
                 // var_dump($unionSql);
                 $result = $this->query($unionSql);
             }
@@ -282,7 +284,7 @@ class OrderModel extends Model {
         $this->table($tableName);
         return $this->addAll($data, $options);
     }
-    
+
     public function saveByDate($data, $options = array()){
         // 根据创建时间计算应该使用的分表
         $date = isset($options['pay_applydate']) ? $options['pay_applydate'] : date('Ymd',time());
@@ -292,7 +294,7 @@ class OrderModel extends Model {
         $options['table'] = $tableName;
         return $this->db->update($data, $options);
     }
-    
+
     public function new_parseDate($options){
         $startdate = $enddate = '';
         if(!isset($options['pay_applydate']) && !isset($options['pay_successdate'])){
@@ -318,7 +320,7 @@ class OrderModel extends Model {
         }
         return [$startdate,$enddate];
     }
-    
+
     //where条件转换为语句
     public function new_parseOptions($options){
         if (is_array($options) && (count($options) > 0)) {
@@ -328,15 +330,15 @@ class OrderModel extends Model {
             $options = implode(" AND ", $where);
         }
         return $options;
-    } 
-    
+    }
+
     public function new_parseField($field){
         if(is_array($field) && (count($field) > 0)) {
             $field = implode(",", $field);
         }
         return $field;
     }
-    
+
     //获取时间段内的每一天
     public function getDateRange($startdate, $enddate) {
         $stimestamp = is_numeric($startdate)?$startdate:strtotime($startdate);
@@ -350,7 +352,7 @@ class OrderModel extends Model {
         }
         return $date;
     }
-    
+
     // where子单元分析
     public function parseWhereItem($key, $val)
     {
@@ -428,7 +430,7 @@ class OrderModel extends Model {
         }
         return $whereStr;
     }
-        /**
+    /**
      * value分析
      * @access protected
      * @param mixed $value
@@ -449,7 +451,7 @@ class OrderModel extends Model {
         }
         return $value;
     }
-        /**
+    /**
      * SQL指令安全过滤
      * @access public
      * @param string $str  SQL字符串
@@ -459,7 +461,7 @@ class OrderModel extends Model {
     {
         return addslashes($str);
     }
-    
+
 }
 
 ?>

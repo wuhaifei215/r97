@@ -61,6 +61,7 @@ class OrderModel extends Model {
                   `pay_zh_tongdao` varchar(50) DEFAULT NULL,
                   `pay_tjurl` varchar(1000) DEFAULT NULL,
                   `out_trade_id` varchar(50) NOT NULL COMMENT '商户订单号',
+                  `billno` varchar(50) NOT NULL COMMENT '上游交易流水号',
                   `paytype` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '渠道类型: 1 Gcash直连 2 Gcash扫码 3 Maya 4 VietQR',
                   `num` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '已补发次数',
                   `memberid` varchar(100) DEFAULT NULL COMMENT '支付渠道商家号',

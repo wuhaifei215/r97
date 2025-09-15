@@ -166,6 +166,8 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         $sign = $_SERVER["HTTP_SIGN"];
         if ($this->is_verify($json,$sign)) {
             if ($result['status'] === 'SUCCESS') {     //	1：交易成功
+                //保存E单号
+                $re_save = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->save(['billno'=>$result['endToEndId']]);
                 $re = $this->EditMoney($orderList['pay_orderid'], $this->code, 0);
                 if ($re !== false) {
                     log_place_order($this->code . '_notifyurl', $orderid . "----回调上游", "成功");    //日志
@@ -178,42 +180,6 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             echo 'success';
         } else {
             log_place_order($this->code . '_notifyurl', $orderid . "----验签", '失败');    //日志
-        }
-    }
-
-    /**
-     * 订单查询
-     * @param $return
-     * @param $key
-     * @return int
-     */
-    private function queryOrder($return, $key)
-    {
-        $native = array(
-            "pid" => $return['merch_no'],
-            "out_trade_no" => $return['out_trade_no'],
-            "trade_no" => $return['trade_no'],
-            "req_id" => time(),
-        );
-        $native['sign'] = $this->sign($native, $key);//签名
-
-        $param = [
-            'param' => json_encode($native),
-            'url' => $return['gateway'],
-        ];
-        log_place_order($this->code . '_checkorder', $native['mer_order_no'] . "----提交", json_encode($native));    //日志
-        $returnContent = $this->http_post_json($return['unlockdomain'] . '/open/index.php', $param);
-
-        log_place_order($this->code . '_checkorder', $native['mer_order_no'] . "----返回", $returnContent);    //日志
-        $ans = json_decode($returnContent, true);
-        if ($ans['result_code'] === '10000') {
-            if ($ans['trade_status'] === '1') {         //交易状态.1：交易成功,2：交易失败,3：交易进行中
-                return 11;
-            } else {
-                return $ans;
-            }
-        } else {
-            die($ans['result_msg']);
         }
     }
 
