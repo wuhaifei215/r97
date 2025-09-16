@@ -2080,7 +2080,9 @@ class WithdrawalController extends BaseController
                                         $data['memo']  = 'Status does not change！ - '. $result['memo'];
                                         break;
                                 }
+                                var_dump($data);
                                 $ad = $WttklistApply->table($table)->where(['id' => $id])->save($data);
+                                var_dump($ad);
 //                                $WttklistApply->table($table)->where(['id' => $id])->save(['is_auto' => 1, 'last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
                             }
                             $success++;
