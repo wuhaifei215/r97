@@ -1898,7 +1898,10 @@ class WithdrawalController extends BaseController
      */
     public function dfapplylist1()
     {
+        $df_list = M('PayForAnother')->select();
+
         $where    = array();
+        $where['bankcode'] = ['eq',900];
         $currency = I("request.currency");
         if($currency ==='PHP'){
             $where['paytype'] = ['between', [1,3]];
@@ -1909,10 +1912,6 @@ class WithdrawalController extends BaseController
             $all_balance = M('member')->sum('balance_inr');
         }
         $this->assign('currency', $currency);
-        $df_list = M('PayForAnother')->where($where)->select();
-
-        $where['df_type'] = ['eq', 1];
-        $where['bankcode'] = ['eq',900];
 
         $memberid = I("request.memberid", '', 'string,strip_tags,htmlspecialchars');
         if ($memberid) {
@@ -1920,34 +1919,14 @@ class WithdrawalController extends BaseController
         }
         $this->assign("memberid", $memberid);
 
-        $money = I("request.money", '', 'string,strip_tags,htmlspecialchars');
-        if ($money) {
-            $where['money'] = array('eq', $money);
-        }
-        $this->assign("money", $money);
-        $memo = I("request.memo", '', 'string,strip_tags,htmlspecialchars');
-        if ($memo) {
-            $where['memo'] = ['like', "%" . $memo . "%"];
-        }
-        $this->assign("memo", $memo);
-
         //U下发
         $type = I("request.type",  0, 'intval');
-        $bankfullname = I("request.bankfullname", '', 'string,strip_tags,htmlspecialchars');
-        if ($bankfullname) {
-            $where['bankfullname'] = array('eq', $bankfullname);
+        if($type === 2){
+            $where['df_type'] = ['eq', 2];
+        }else{
+            $where['df_type'] = ['neq', 2];
         }
-        $this->assign("bankfullname", $bankfullname);
-        $bankcode = I("request.bankcode", '', 'string,strip_tags,htmlspecialchars');
-        if ($bankcode) {
-            $where['bankcode'] = array('eq', $bankcode);
-        }
-        $this->assign("bankcode", $bankcode);
-        $T = I("request.T", '', 'string,strip_tags,htmlspecialchars');
-        if ($T != "") {
-            $where['t'] = array('eq', $T);
-        }
-        $this->assign("T", $T);
+        $this->assign('type', $type);
 
         $dfid = I("get.dfid", '', 'string,strip_tags,htmlspecialchars');
         if ($dfid != '') {
@@ -1955,65 +1934,37 @@ class WithdrawalController extends BaseController
         }
         $this->assign("dfid", $dfid);
 
-        $createtime = urldecode(I("request.createtime", '', 'string,strip_tags,htmlspecialchars'));
-        if ($createtime) {
-            list($cstime, $cetime) = explode('|', $createtime);
-            $where['sqdatetime']   = ['between', [$cstime, $cetime ? $cetime : date('Y-m-d')]];
-        }
         $successtime = urldecode(I("request.successtime", '', 'string,strip_tags,htmlspecialchars'));
         if ($successtime) {
             list($sstime, $setime) = explode('|', $successtime);
-            $where['cldatetime']   = ['between', [$sstime, $setime ? $setime : date('Y-m-d')]];
+        }else{
+            //没有搜索条件，默认显示当前
+            $sstime = date('Y-m-d') . ' 00:00:00';
+            $setime = date('Y-m-d') . ' 23:59:59';
+            $successtime = $sstime . ' | ' . $setime;
         }
         $this->assign("successtime", $successtime);
-        //没有搜索条件，默认显示当前
-        if (!$createtime) {
-            $todayBegin = date('Y-m-d') . ' 00:00:00';
-            $todyEnd = date('Y-m-d') . ' 23:59:59';
-            if (!$createtime && !$successtime) {
-                $where['sqdatetime'] = ['between', [$todayBegin, $todyEnd]];
-            }
-            $createtime = $todayBegin . ' | ' . $todyEnd;
-        }
-        $this->assign("createtime", $createtime);
 
+
+        $cstime =  date('Y-m-d 00:00:00' ,strtotime($sstime)- 3600 * 24 * 7);
+        $cetime = $setime;
+        $where['sqdatetime']   = ['between', [$cstime, $cetime]];
+        $where['cldatetime']   = ['between', [$sstime, $setime]];
         $Wttklist = D('Wttklist');
 
         //统计总结算信息
         $totalMap           = $where;
-        // $totalMap['status'] = ['in', '2,3'];
         $totalMap['status']   = array('between', ['2','3']);
-
         //结算金额
-        $stat_total = $Wttklist->getSum('tkmoney',$totalMap);
-        $stat['total_tk'] = round($stat_total['tkmoney'], 2);
-        //结算U金额
         $stat_total = $Wttklist->getSum('money',$totalMap);
         $stat['total'] = round($stat_total['money'], 2);
-
-        //待结算
-        // $totalMap['status'] = ['in', '0,1'];
-        $totalMap['status']   = array('between', ['0','1']);
-        $stat_total_wait = $Wttklist->getSum('tkmoney',$totalMap);
-        $stat['total_wait_tk'] = round($stat_total_wait['tkmoney'], 2);
-        //待结算U
-        // $totalMap['status'] = ['in', '0,1'];
-        $totalMap['status']   = array('between', ['0','1']);
-        $stat_total_wait = $Wttklist->getSum('money',$totalMap);
-        $stat['total_wait'] = round($stat_total_wait['money'], 2);
-
         //完成笔数
-        // $totalMap['status']          = ['in', '2,3'];
         $totalMap['status']   = array('between', ['2','3']);
         $stat['total_success_count'] = $Wttklist->getCount($totalMap);
-        //失败笔数
-        $totalMap['status']       = array('between', ['4','6']);
-        $stat['total_fail_count'] = $Wttklist->getCount($totalMap);
         //平台手续费利润
-        // $totalMap['status']   = ['in', '2,3'];
-        $totalMap['status']   = array('between', ['2','3']);
-        $stat_total_profit = $Wttklist->getSum('sxfmoney,cost',$totalMap);
-        $stat['total_profit'] = round($stat_total_profit['sxfmoney'] - $stat_total_profit['cost'], 2);
+        // $totalMap['status']   = array('between', ['2','3']);
+        // $stat_total_profit = $Wttklist->getSum('sxfmoney,cost',$totalMap);
+        // $stat['total_profit'] = round($stat_total_profit['sxfmoney'] - $stat_total_profit['cost'], 2);
 
         foreach ($stat as $k => $v) {
             $stat[$k] += 0;
