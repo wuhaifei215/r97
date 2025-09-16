@@ -50,7 +50,7 @@
 						</div>
 					</div>
                     <div class="layui-form-item layui-inline">
-                        <label class="layui-form-label">商户编号</label>
+                        <label class="layui-form-label">管理员编号</label>
                         <div class="layui-input-inline">
                             <input type="text" name="memberid" value="<if condition="$memberid gt 0"><{$memberid}></if>" placeholder="请输入商户号" class="layui-input">
                         </div>
@@ -189,7 +189,7 @@
                         <tr>
                             <td><input type="checkbox"  title="" value="<{$vo.id}>" class='checkIds' lay-skin="primary"></td>
                             <td><{$vo.id}></td>
-                            <td><{$vo["username"]}></td>
+                            <td><{$vo["userid"]}><br><{$vo["username"]}></td>
                             <td><{$vo.orderid}></td>
                             <td><{$vo["tkmoney"]}></td>
                             <!--<td><{$vo["sxfmoney"]}></td>-->
