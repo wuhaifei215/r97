@@ -2049,7 +2049,7 @@ class WithdrawalController extends BaseController
                     continue;
                 }else{
                     try {
-                        $wttkData['money'] = round($wttkData['money'],2);
+                        $wttkData['money'] = round($wttkData['tkmoney'],2);
                         $wttkData['type'] = $wttkData["bankname"];
                         $result = R('Payment/' . $channel['code'] . '/PaymentExec', [$wttkData, $channel]);
                         var_dump($channel);
