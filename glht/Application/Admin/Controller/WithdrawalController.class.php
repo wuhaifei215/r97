@@ -583,7 +583,6 @@ class WithdrawalController extends BaseController
     public function payment1U()
     {
         $where    = array();
-        $where['bankcode'] = ['neq',900];
         $currency = I("request.currency");
         if($currency ==='PHP'){
             $where['paytype'] = ['between', [1,3]];
@@ -595,7 +594,8 @@ class WithdrawalController extends BaseController
         }
         $this->assign('currency', $currency);
         $df_list = M('PayForAnother')->where($where)->select();
-        
+
+        $where['bankcode'] = ['neq',900];
         $where['df_type'] = ['eq', 2];
         
         $memberid = I("request.memberid", '', 'string,strip_tags,htmlspecialchars');
@@ -1894,7 +1894,7 @@ class WithdrawalController extends BaseController
     }
 
     /**
-     *  提现申请
+     *  提现申请RF
      */
     public function dfapply()
     {
@@ -2027,7 +2027,7 @@ class WithdrawalController extends BaseController
                 //提现记录
                 $wttkData = [
                     'orderid'      => $orderid,
-                    'out_trade_no'=> $orderid,
+                    'out_trade_no'
                     "userid" => $uid,
                     "bankname"     => trim($v["bankname"]),
                     "bankzhiname"  => trim($v["subbranch"]),
