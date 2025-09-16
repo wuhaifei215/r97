@@ -22,7 +22,7 @@
         <div class="ibox float-e-margins">
             <!--条件查询-->
             <div class="ibox-title">
-                <h5>代付成功统计</h5>
+                <h5>体现成功统计</h5>
                 <div class="ibox-tools">
                     <i class="layui-icon" onclick="location.replace(location.href);" title="刷新"
                        style="cursor:pointer;">ဂ</i>
@@ -38,9 +38,9 @@
                     <input type="hidden" name="rows" id="rows" value="<{$rows}>">
                     
                     <div class="layui-form-item layui-inline">
-                        <label class="layui-form-label">商户编号</label>
+                        <label class="layui-form-label">管理员编号</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="memberid" value="<if condition="$memberid gt 0"><{$memberid}></if>" placeholder="请输入商户号" class="layui-input">
+                            <input type="text" name="memberid" value="<if condition="$memberid gt 0"><{$memberid}></if>" placeholder="请输入管理员编号" class="layui-input">
                         </div>
                     </div>
                     <neq name="type" value="2">
@@ -57,18 +57,6 @@
                         </div>
                     </div>
                     </neq>
-                    <eq name="type" value="2">
-                    <div class="layui-form-item layui-inline">
-                        <label class="layui-form-label">币种</label>
-                        <div class="layui-input-inline">
-                            <select name="currency">
-                                <option value="">全部</option>
-                                <option <if condition="$currency eq PHP">selected</if> value="PHP">国家(1)</option>
-                                <option <if condition="$currency eq INR">selected</if> value="INR">国家(2)</option>
-                            </select>
-                        </div>
-                    </div>
-                    </eq>
                     <br>
                     <!--<div class="layui-form-item layui-inline">-->
                     <!--    <label class="layui-form-label">申请时间</label>-->
@@ -120,10 +108,10 @@
                         <!--    <td>平台手续费利润</td>-->
                         <!--    <td><span class="stat_success"><{$stat.total_profit}></span> -->
                         <!--<tr/>-->
-                        <tr class="layui-table channel_tr">
-                            <td>可代付余额</td>
-                            <td><span class="stat_success"><{$all_balance}> </span></td>
-                        <tr/>
+                        <!--<tr class="layui-table channel_tr">-->
+                            <!--<td>可代付余额</td>-->
+                            <!--<td><span class="stat_success"><{$all_balance}> </span></td>-->
+                        <!--<tr/>-->
                         </neq>
                     </table>
                 </blockquote>
