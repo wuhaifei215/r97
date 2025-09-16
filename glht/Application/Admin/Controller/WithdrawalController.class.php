@@ -2039,7 +2039,6 @@ class WithdrawalController extends BaseController
                     'df_name' => $channel['title'],
                     'channel_mch_id' => $channel['mch_id'],
                     "bankcode" =>900,
-                    "type" => trim($v["bankname"]),
                 ];
                 $id = $WttklistApply->table($table)->add($wttkData);
 
@@ -2051,6 +2050,7 @@ class WithdrawalController extends BaseController
                 }else{
                     try {
                         $wttkData['money'] = round($wttkData['money'],2);
+                        $wttkData['type'] = $wttkData["bankname"];
                         $result = R('Payment/' . $channel['code'] . '/PaymentExec', [$wttkData, $channel]);
                         var_dump($channel);
                         var_dump($result);
