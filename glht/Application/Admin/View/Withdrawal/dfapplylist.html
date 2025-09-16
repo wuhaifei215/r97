@@ -22,7 +22,7 @@
         <div class="ibox float-e-margins">
             <!--条件查询-->
             <div class="ibox-title">
-                <h5>提现管理</h5>
+                <h5>提现订单管理</h5>
                 <div class="ibox-tools">
                     <i class="layui-icon" onclick="location.replace(location.href);" title="刷新"
                        style="cursor:pointer;">ဂ</i>
@@ -169,11 +169,11 @@
                     <tr>
                         <th lay-data="{field:'check' , width:60}"> </th>
                         <th lay-data="{field:'key', width:80}"> ID </th>
-                        <th lay-data="{field:'userid', width:140}">商户编号/通道类型</th>
-                        <th lay-data="{field:'orderid', width:220}">系统订单号/外部订单号</th>
+                        <th lay-data="{field:'userid', width:140}">管理员编号/通道类型</th>
+                        <th lay-data="{field:'orderid', width:220}">系统订单号</th>
                         <th lay-data="{field:'tkmoney', width:110}">结算金额</th>
-                        <th lay-data="{field:'sxfmoney', width:100,style:'color:#060;'}">手续费</th>
-                        <th lay-data="{field:'money', width:110}">到账金额</th>
+                        <!--<th lay-data="{field:'sxfmoney', width:100,style:'color:#060;'}">手续费</th>-->
+                        <!--<th lay-data="{field:'money', width:110}">到账金额</th>-->
                         <th lay-data="{field:'bankname', width:180}">开户名/银行卡号/账户类型</th>
                         <!--<th lay-data="{field:'area', width:80}">省/市</th>-->
                         <th lay-data="{field:'sqdatetime', width:170}">申请时间/处理时间</th>
@@ -189,12 +189,12 @@
                         <tr>
                             <td><input type="checkbox"  title="" value="<{$vo.id}>" class='checkIds' lay-skin="primary"></td>
                             <td><{$vo.id}></td>
-                            <td><{$vo["userid"]+10000}><br><{$vo.bankcode}></td>
-                            <td><{$vo.orderid}><br><{$vo.out_trade_no}></td>
+                            <td><{$vo["userid"]}><br><{$vo.bankcode}></td>
+                            <td><{$vo.orderid}></td>
                             <td><{$vo["tkmoney"]}></td>
-                            <td><{$vo["sxfmoney"]}></td>
-                            <td><{$vo["money"]}></td>
-                            <td><{$vo.bankfullname}><br><{$vo.banknumber}><br><{$vo.type}></td>
+                            <!--<td><{$vo["sxfmoney"]}></td>-->
+                            <!--<td><{$vo["money"]}></td>-->
+                            <td><{$vo.bankfullname}><br><{$vo.banknumber}><br><{$vo.bankname}></td>
                             <!--<td><{$vo.sheng}><br><{$vo.shi}></td>-->
                             <td><{$vo.sqdatetime}><br><{$vo.cldatetime}></td>
                             <!--<td><{$vo["channel_mch_id"]}></td>-->
