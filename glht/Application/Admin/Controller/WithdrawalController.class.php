@@ -347,6 +347,8 @@ class WithdrawalController extends BaseController
         $this->assign("banklist", $banklist);
 
         $where    = array();
+        $where['bankcode'] = ['neq',900];
+
         $currency = I("request.currency", '', 'string,strip_tags,htmlspecialchars');
         if($currency ==='PHP'){
             $where['paytype'] = ['between', [1,3]];
@@ -494,10 +496,10 @@ class WithdrawalController extends BaseController
      */
     public function payment1()
     {
-        $df_list = M('PayForAnother')->where($where)->select();
-        
-        
+        $df_list = M('PayForAnother')->select();
+
         $where    = array();
+        $where['bankcode'] = ['neq',900];
         $currency = I("request.currency");
         if($currency ==='PHP'){
             $where['paytype'] = ['between', [1,3]];
@@ -581,7 +583,7 @@ class WithdrawalController extends BaseController
     public function payment1U()
     {
         $where    = array();
-        
+        $where['bankcode'] = ['neq',900];
         $currency = I("request.currency");
         if($currency ==='PHP'){
             $where['paytype'] = ['between', [1,3]];
@@ -2061,7 +2063,7 @@ class WithdrawalController extends BaseController
                                 $change_data=[];
                                 switch($result['status']){
                                     case 1:
-                                        //提交代付成功
+                                        //提交提现成功
                                         $change_data['status'] = 1;
                                         $change_data['memo']  = '申请成功！';
                                         break;
@@ -2069,12 +2071,12 @@ class WithdrawalController extends BaseController
                                         //支付成功
                                         $change_data['status'] = 2;
                                         $change_data['cldatetime'] = date('Y-m-d H:i:s', time());
-                                        $change_data['memo']  = '代付成功！';
+                                        $change_data['memo']  = '提现成功！';
                                         break;
                                     case 3:
                                         $change_data['status'] = 4;
                                         $change_data['cldatetime'] = date('Y-m-d H:i:s', time());
-                                        $change_data['memo']  = '代付失败！ - '. $result['msg'];
+                                        $change_data['memo']  = '提现失败！ - '. $result['msg'];
                                         break;
                                     default:
                                         //订单状态不改变
