@@ -2081,4 +2081,16 @@ class WithdrawalController extends BaseController
             }
         }
     }
+    /**
+     * 获得订单号
+     *
+     * @return string
+     */
+    public function getOrderId()
+    {
+        $year_code = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        $i = intval(date('Y')) - 2010;
+
+        return $year_code[$i] . date('YmdHis') . substr(time(), -5) . str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT) . rand(1000,9999);
+    }
 }
