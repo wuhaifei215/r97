@@ -2027,6 +2027,7 @@ class WithdrawalController extends BaseController
                 //提现记录
                 $wttkData = [
                     'orderid'      => $orderid,
+                    'out_trade_no'=> $orderid,
                     "userid" => $uid,
                     "bankname"     => trim($v["bankname"]),
                     "bankzhiname"  => trim($v["subbranch"]),
