@@ -114,7 +114,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
 
             $return = ['status' => 1, 'msg' => '申请正常'];
         }elseif($result['return_code'] === 'SYSTEM_ERROR'){
-            $return = ['status' => 0, 'msg' => $result['return_msg']];
+            $return = ['status' => 3, 'msg' => $result['return_msg']];
         }else{
             $return = ['status' => 0, 'msg' => $result['return_msg']];
         }
