@@ -2013,8 +2013,8 @@ class WithdrawalController extends BaseController
             //提现时间
             $time = date("Y-m-d H:i:s");
             //获取数据表名称
-            $Wttklist = D('WttklistApply');
-            $table = $Wttklist->getRealTableName($time);
+            $WttklistApply = D('WttklistApply');
+            $table = $WttklistApply->getRealTableName($time);
             $success = $fail = 0;
             foreach ($data as $k => $v) {
                 //获取订单号
@@ -2040,9 +2040,9 @@ class WithdrawalController extends BaseController
                     'channel_mch_id' => $channel['mch_id'],
                     "bankcode" =>900,
                 ];
-                $id = $Wttklist->table($table)->add($wttkData);
+                $id = $WttklistApply->table($table)->add($wttkData);
 
-                $lock_res = $Wttklist->table($table)->where(['id'=>$id, 'df_lock'=>0])->save(['df_lock' => 1, 'lock_time' => time()]);
+                $lock_res = $WttklistApply->table($table)->where(['id'=>$id, 'df_lock'=>0])->save(['df_lock' => 1, 'lock_time' => time()]);
                 if(!$lock_res) {
                     //                return ['status' => 0, 'msg' => '系统出错，请您联系管理员处理!'];
                     $fail++;
@@ -2052,7 +2052,7 @@ class WithdrawalController extends BaseController
                         $wttkData['money'] = round($wttkData['money'],2);
                         $result = R('Payment/' . $channel['code'] . '/PaymentExec', [$wttkData, $channel]);
                         if (FALSE === $result) {
-                            $Wttklist->table($table)->where(['id' => $id])->save(['last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
+                            $WttklistApply->table($table)->where(['id' => $id])->save(['last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
                             $fail++;
                         } else {
                             if (is_array($result)) {
@@ -2060,12 +2060,12 @@ class WithdrawalController extends BaseController
                                     'memo' => $result['msg'],
                                 ];
                                 $this->changeStatus($id, $result['status'], $data, $table);
-                                $Wttklist->table($table)->where(['id' => $id])->save(['is_auto' => 1, 'last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
+                                $WttklistApply->table($table)->where(['id' => $id])->save(['is_auto' => 1, 'last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
                             }
                             $success++;
                         }
                     } catch (\Exception $e) {
-                        $Wttklist->table($table)->where(['id' => $id])->setField('df_lock', 0);
+                        $WttklistApply->table($table)->where(['id' => $id])->setField('df_lock', 0);
                         $fail++;
                     }
                 }

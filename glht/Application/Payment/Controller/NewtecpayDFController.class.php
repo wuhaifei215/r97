@@ -373,7 +373,7 @@ AAA;
         }
         $header[] ='sign:'.$sign;
 
-        log_place_order($this->code, "----header", json_encode($header));    //日志
+//        log_place_order($this->code, "----header", json_encode($header));    //日志
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
         //发送请求读取输数据
