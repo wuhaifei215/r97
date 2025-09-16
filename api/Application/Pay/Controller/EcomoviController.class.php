@@ -51,7 +51,7 @@ class EcomoviController extends PayController
                 "expiracao" => 3600,
             ],
             "valor" => [
-                "original" => sprintf("%.2f", $return['amount']) * 100,     //立即付款金额。必须大于零
+                "original" => intval(sprintf("%.2f", $return['amount']) * 100),     //立即付款金额。必须大于零
                 "modalidadeAlteracao" => 0      //应用的模式将被假定为 0，这意味着收费金额无法更改。如果值为 1，则收费金额可以修改
             ],
             "chave" => $return['appid'],

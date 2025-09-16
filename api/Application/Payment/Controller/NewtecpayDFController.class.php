@@ -71,7 +71,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             "merchant_order_no" => $data['orderid'], //订单号
             "account_type" => $account_type,        // 账号类型：0-EMAIL, 1-CPF, 2-CNPJ , 3-PHONE
             "account_no" => $data['banknumber'],    //如CPF为CPF号码，CNPJ为CNPJ号码，PHONE为⼿机号码，EMAIL为邮箱地址，EVP为evp地址
-            "amount" => sprintf("%.2f", $data['money']) * 100,  //提现金额（单位分）
+            "amount" => intval(sprintf("%.2f", $data['money']) * 100),  //提现金额（单位分）
             'description'=>'Confirmação de pagamento', // 交易描述，要求300个字符内
             'apply_time' => date("YmdHis"),
             "notify_url" => 'https://' . C('NOTIFY_DOMAIN') . "/Payment_" . $this->code . "_notifyurl.html",      //异步通知地址
