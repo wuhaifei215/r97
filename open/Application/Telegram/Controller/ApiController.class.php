@@ -742,9 +742,9 @@ class ApiController extends Controller
             }
             $message .= "开户名 ：" . $info['bankfullname'] . "\r\n";
             $message .= "账号 ：" . $info['banknumber'] . "\r\n";
-            if(isset($remark) || $remark!=''){
-                $message .= "凭证地址 ：" . $remark . "\r\n";
-            }
+//            if(isset($remark) || $remark!=''){
+//                $message .= "凭证地址 ：" . $remark . "\r\n";
+//            }
 
             // }else{
 
