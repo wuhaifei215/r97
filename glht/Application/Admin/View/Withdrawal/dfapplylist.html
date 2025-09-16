@@ -169,7 +169,7 @@
                     <tr>
                         <th lay-data="{field:'check' , width:60}"> </th>
                         <th lay-data="{field:'key', width:80}"> ID </th>
-                        <th lay-data="{field:'userid', width:140}">管理员编号/通道类型</th>
+                        <th lay-data="{field:'userid', width:140}">管理员编号</th>
                         <th lay-data="{field:'orderid', width:220}">系统订单号</th>
                         <th lay-data="{field:'tkmoney', width:110}">结算金额</th>
                         <!--<th lay-data="{field:'sxfmoney', width:100,style:'color:#060;'}">手续费</th>-->
@@ -181,7 +181,7 @@
                         <th lay-data="{field:'status', width:100}">状态</th>
                         <th lay-data="{field:'memo', width:100}">备注</th>
                         <th lay-data="{field:'code', width:150}">代付渠道</th>
-                        <th lay-data="{field:'op',width:'100%'}">操作</th>
+                        <th lay-data="{field:'op',width:'100'}">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -189,7 +189,7 @@
                         <tr>
                             <td><input type="checkbox"  title="" value="<{$vo.id}>" class='checkIds' lay-skin="primary"></td>
                             <td><{$vo.id}></td>
-                            <td><{$vo["userid"]}><br><{$vo.bankcode}></td>
+                            <td><{$vo["userid"]}></td>
                             <td><{$vo.orderid}></td>
                             <td><{$vo["tkmoney"]}></td>
                             <!--<td><{$vo["sxfmoney"]}></td>-->
