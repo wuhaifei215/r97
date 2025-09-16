@@ -718,10 +718,10 @@ class ApiController extends Controller
             }
 
             $message .= "\r\n最新代付订单详情\r\n---------------------------------------------\r\n";
-            $message .= "系统订单号：" . $info['orderid'] . "\r\n";
-            $message .= "外部订单号：" . $info['out_trade_no'] . "\r\n";
+            $message .= "系统订单号：`" . $info['orderid'] . "`\r\n";
+            $message .= "外部订单号：`" . $info['out_trade_no'] . "`\r\n";
             if ($info['billno'] != '') {
-                $message .= "E单号：" . $info['billno'] . "\r\n";
+                $message .= "E订单号：`" . $info['billno'] . "`\r\n";
             }
             $message .= "订单金额：" . $info['tkmoney'] . "\r\n";
             if ($info['sqdatetime'] != '') {
@@ -801,7 +801,7 @@ class ApiController extends Controller
             $message .= "系统订单号：`" . $info['pay_orderid'] . "`\r\n";
             $message .= "外部订单号：`" . $info['out_trade_id'] . "`\r\n";
             if ($info['billno'] != '') {
-                $message .= "E单号：`" . $info['billno'] . "`\r\n";
+                $message .= "E订单号：`" . $info['billno'] . "`\r\n";
             }
             $message .= "订单金额：" . $info['pay_amount'] . "\r\n";
             if ($info['pay_applydate'] != '') {
