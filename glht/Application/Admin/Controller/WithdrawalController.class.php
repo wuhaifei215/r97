@@ -2058,6 +2058,7 @@ class WithdrawalController extends BaseController
                         } else {
                             if (is_array($result)) {
                                 $change_data=[];
+                                var_dump($result);
                                 switch($result['status']){
                                     case 1:
                                         //提交代付成功
