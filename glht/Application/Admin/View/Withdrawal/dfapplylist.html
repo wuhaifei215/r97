@@ -171,7 +171,7 @@
                         <th lay-data="{field:'key', width:80}"> ID </th>
                         <th lay-data="{field:'userid', width:140}">管理员编号/名称</th>
                         <th lay-data="{field:'orderid', width:220}">系统订单号</th>
-                        <th lay-data="{field:'tkmoney', width:110}">结算金额</th>
+                        <th lay-data="{field:'tkmoney', width:110}">订单金额</th>
                         <!--<th lay-data="{field:'sxfmoney', width:100,style:'color:#060;'}">手续费</th>-->
                         <!--<th lay-data="{field:'money', width:110}">到账金额</th>-->
                         <th lay-data="{field:'bankname', width:180}">开户名/银行卡号/账户类型</th>
@@ -189,7 +189,7 @@
                         <tr>
                             <td><input type="checkbox"  title="" value="<{$vo.id}>" class='checkIds' lay-skin="primary"></td>
                             <td><{$vo.id}></td>
-                            <td><{$vo["userid"]}><br><{$vo["username"]}></td>
+                            <td><{$vo["username"]}></td>
                             <td><{$vo.orderid}></td>
                             <td><{$vo["tkmoney"]}></td>
                             <!--<td><{$vo["sxfmoney"]}></td>-->
