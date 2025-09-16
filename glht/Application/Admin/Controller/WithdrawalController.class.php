@@ -2070,14 +2070,9 @@ class WithdrawalController extends BaseController
                                         $data['memo']  = '代付成功！';
                                         break;
                                     case 3:
-                                        try {
-                                            $data['status'] = 4;
-                                            $data['cldatetime'] = date('Y-m-d H:i:s', time());
-                                            $data['memo']  = '代付失败！ - '. $result['memo'];
-                                        } catch (\Exception $e) {
-//                                            log_place_order( 'DFadd_error', $withdraw['orderid'] . '$e',  $e);    //日志
-                                        }
-                                        break;
+                                        $data['status'] = 4;
+                                        $data['cldatetime'] = date('Y-m-d H:i:s', time());
+                                        $data['memo']  = '代付失败！ - '. $result['memo'];
                                     default:
                                         //订单状态不改变
                                         $sta = $WttklistApply->table($table)->where(['id' => $id])->getField('status');
