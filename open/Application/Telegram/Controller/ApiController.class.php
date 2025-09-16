@@ -680,7 +680,7 @@ class ApiController extends Controller
     }
 
     //代付处理
-    public function doDF($order_info, $chat_id, $message, $message_id, $parse_mode='HTML'){
+    public function doDF($order_info, $chat_id, $message, $message_id, $parse_mode='Markdown'){
         if ($order_info && $order_info['status'] === 1) {
             $info = $order_info['info'];
             $message = '';
