@@ -113,7 +113,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
 //            $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$result['order_no']]);
 
             $return = ['status' => 1, 'msg' => '申请正常'];
-        }elseif($result['return_code'] === 'SYSTEM_ERROR'){
+        }elseif($result['return_code'] === 'TRADE_FAIL'){
             $return = ['status' => 3, 'msg' => $result['return_msg']];
         }else{
             $return = ['status' => 0, 'msg' => $result['return_msg']];
