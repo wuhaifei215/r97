@@ -17,7 +17,7 @@ class WinPayDFController extends PaymentController
     public function PaymentExec($data, $config)
     {
         $post_data = array(
-            "amount" => intval($data['money'] * 100),  //提现金额（单位分）
+            "amount" => intval(sprintf("%.2f", $data['money']) * 100),  //提现金额（单位分）
             "appId" => $config['appid'], //appId
             "backUrl" => 'https://' . C('NOTIFY_DOMAIN') . "/Payment_" . $this->code . "_notifyurl.html",      //异步通知地址
             'countryCode' =>'BR',
