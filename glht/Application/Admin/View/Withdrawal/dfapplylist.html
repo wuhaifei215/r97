@@ -181,7 +181,7 @@
                         <th lay-data="{field:'status', width:100}">状态</th>
                         <th lay-data="{field:'memo', width:100}">备注</th>
                         <th lay-data="{field:'code', width:150}">代付渠道</th>
-                        <th lay-data="{field:'op',width:'220'}">操作</th>
+                        <th lay-data="{field:'op',width:'100%'}">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -189,7 +189,7 @@
                         <tr>
                             <td><input type="checkbox"  title="" value="<{$vo.id}>" class='checkIds' lay-skin="primary"></td>
                             <td><{$vo.id}></td>
-                            <td><{$vo["userid"]}></td>
+                            <td><{$vo["userid"]}><br><{$vo["username"]}></td>
                             <td><{$vo.orderid}></td>
                             <td><{$vo["tkmoney"]}></td>
                             <!--<td><{$vo["sxfmoney"]}></td>-->
