@@ -1859,7 +1859,7 @@ class WithdrawalController extends BaseController
         }
 
         $field = '*';
-        $Wttklist = D('WttklistApply');
+        $Wttklist = D('Wttklist');
         $count = $Wttklist->getCount($where);
         $page = new Page($count, $rows);
         $list = $Wttklist->getOrderByDateRange($field, $where, $page->firstRow . ',' . $page->listRows, 'id desc');
@@ -2013,8 +2013,8 @@ class WithdrawalController extends BaseController
             //提现时间
             $time = date("Y-m-d H:i:s");
             //获取数据表名称
-            $WttklistApply = D('WttklistApply');
-            $table = $WttklistApply->getRealTableName($time);
+            $Wttklist = D('Wttklist');
+            $table = $Wttklist->getRealTableName($time);
             $success = $fail = 0;
             foreach ($data as $k => $v) {
                 //获取订单号
@@ -2040,9 +2040,9 @@ class WithdrawalController extends BaseController
                     'channel_mch_id' => $channel['mch_id'],
                     "bankcode" =>900,
                 ];
-                $id = $WttklistApply->table($table)->add($wttkData);
+                $id = $Wttklist->table($table)->add($wttkData);
 
-                $lock_res = $WttklistApply->table($table)->where(['id'=>$id, 'df_lock'=>0])->save(['df_lock' => 1, 'lock_time' => time()]);
+                $lock_res = $Wttklist->table($table)->where(['id'=>$id, 'df_lock'=>0])->save(['df_lock' => 1, 'lock_time' => time()]);
                 if(!$lock_res) {
                     //                return ['status' => 0, 'msg' => '系统出错，请您联系管理员处理!'];
                     $fail++;
@@ -2053,12 +2053,11 @@ class WithdrawalController extends BaseController
                         $wttkData['type'] = $wttkData["bankname"];
                         $result = R('Payment/' . $channel['code'] . '/PaymentExec', [$wttkData, $channel]);
                         if (FALSE === $result) {
-                            $WttklistApply->table($table)->where(['id' => $id])->save(['last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
+                            $Wttklist->table($table)->where(['id' => $id])->save(['last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
                             $fail++;
                         } else {
                             if (is_array($result)) {
                                 $change_data=[];
-                                var_dump($result);
                                 switch($result['status']){
                                     case 1:
                                         //提交代付成功
@@ -2077,20 +2076,18 @@ class WithdrawalController extends BaseController
                                         $change_data['memo']  = '代付失败！ - '. $result['memo'];
                                     default:
                                         //订单状态不改变
-                                        $sta = $WttklistApply->table($table)->where(['id' => $id])->getField('status');
+                                        $sta = $Wttklist->table($table)->where(['id' => $id])->getField('status');
                                         $change_data['status'] = $sta;
                                         $change_data['memo']  = 'Status does not change！ - '. $result['memo'];
                                         break;
                                 }
-                                var_dump($change_data);
-                                $ad = $WttklistApply->table($table)->where(['id' => $id])->save($change_data);
-                                var_dump($ad);
-//                                $WttklistApply->table($table)->where(['id' => $id])->save(['is_auto' => 1, 'last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
+                                $ad = $Wttklist->table($table)->where(['id' => $id])->save($change_data);
+//                                $Wttklist->table($table)->where(['id' => $id])->save(['is_auto' => 1, 'last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
                             }
                             $success++;
                         }
                     } catch (\Exception $e) {
-                        $WttklistApply->table($table)->where(['id' => $id])->setField('df_lock', 0);
+                        $Wttklist->table($table)->where(['id' => $id])->setField('df_lock', 0);
                         $fail++;
                     }
                 }
