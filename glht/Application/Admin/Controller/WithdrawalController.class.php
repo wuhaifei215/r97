@@ -2057,31 +2057,32 @@ class WithdrawalController extends BaseController
                             $fail++;
                         } else {
                             if (is_array($result)) {
+                                $change_data=[];
                                 switch($result['status']){
                                     case 1:
                                         //提交代付成功
-                                        $data['status'] = 1;
-                                        $data['memo']  = '申请成功！';
+                                        $change_data['status'] = 1;
+                                        $change_data['memo']  = '申请成功！';
                                         break;
                                     case 2:
                                         //支付成功
-                                        $data['status'] = 2;
-                                        $data['cldatetime'] = date('Y-m-d H:i:s', time());
-                                        $data['memo']  = '代付成功！';
+                                        $change_data['status'] = 2;
+                                        $change_data['cldatetime'] = date('Y-m-d H:i:s', time());
+                                        $change_data['memo']  = '代付成功！';
                                         break;
                                     case 3:
-                                        $data['status'] = 4;
-                                        $data['cldatetime'] = date('Y-m-d H:i:s', time());
-                                        $data['memo']  = '代付失败！ - '. $result['memo'];
+                                        $change_data['status'] = 4;
+                                        $change_data['cldatetime'] = date('Y-m-d H:i:s', time());
+                                        $change_data['memo']  = '代付失败！ - '. $result['memo'];
                                     default:
                                         //订单状态不改变
                                         $sta = $WttklistApply->table($table)->where(['id' => $id])->getField('status');
-                                        $data['status'] = $sta;
-                                        $data['memo']  = 'Status does not change！ - '. $result['memo'];
+                                        $change_data['status'] = $sta;
+                                        $change_data['memo']  = 'Status does not change！ - '. $result['memo'];
                                         break;
                                 }
-                                var_dump($data);
-                                $ad = $WttklistApply->table($table)->where(['id' => $id])->save($data);
+                                var_dump($change_data);
+                                $ad = $WttklistApply->table($table)->where(['id' => $id])->save($change_data);
                                 var_dump($ad);
 //                                $WttklistApply->table($table)->where(['id' => $id])->save(['is_auto' => 1, 'last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
                             }
