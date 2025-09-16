@@ -2058,6 +2058,7 @@ class WithdrawalController extends BaseController
                             $fail++;
                         } else {
                             if (is_array($result)) {
+                                var_dump($result);
                                 $change_data=[];
                                 switch($result['status']){
                                     case 1:
