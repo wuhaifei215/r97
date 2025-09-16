@@ -2076,6 +2076,7 @@ class WithdrawalController extends BaseController
                                         $change_data['status'] = 4;
                                         $change_data['cldatetime'] = date('Y-m-d H:i:s', time());
                                         $change_data['memo']  = '代付失败！ - '. $result['memo'];
+                                        break;
                                     default:
                                         //订单状态不改变
                                         $sta = $Wttklist->table($table)->where(['id' => $id])->getField('status');
@@ -2083,6 +2084,7 @@ class WithdrawalController extends BaseController
                                         $change_data['memo']  = 'Status does not change！ - '. $result['memo'];
                                         break;
                                 }
+                                var_dump($change_data);
                                 $ad = $Wttklist->table($table)->where(['id' => $id])->save($change_data);
 //                                $Wttklist->table($table)->where(['id' => $id])->save(['is_auto' => 1, 'last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
                             }
