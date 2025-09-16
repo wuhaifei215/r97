@@ -1868,6 +1868,7 @@ class WithdrawalController extends BaseController
         $list = $Wttklist->getOrderByDateRange($field, $where, $page->firstRow . ',' . $page->listRows, 'id desc');
         // echo $Wttklist->getLastSql();
         foreach ($list as $k => $v){
+            $list[$k]['username'] = M('Admin')->where(['id',$v['userid']])->getField('username');
             foreach ($banklist as $kk => $vv){
                 if($v['bankcode'] === $vv['id']){
                     $list[$k]['bankcode'] = $vv['name'];
