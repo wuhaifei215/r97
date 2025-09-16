@@ -2038,6 +2038,7 @@ class WithdrawalController extends BaseController
                     'code' => $channel['code'],
                     'df_name' => $channel['title'],
                     'channel_mch_id' => $channel['mch_id'],
+                    "bankcode" =>900,
                 ];
                 $id = $Wttklist->table($table)->add($wttkData);
 
