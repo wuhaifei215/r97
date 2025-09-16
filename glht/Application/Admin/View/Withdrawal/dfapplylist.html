@@ -71,18 +71,6 @@
                     </div>
                     <neq name="type" value="2">
                     <div class="layui-form-item layui-inline">
-                        <label class="layui-form-label">通道类型</label>
-                        <div class="layui-input-inline">
-                          <select name="bankcode">
-                            <option value="">全部类型</option>
-                            <volist name="banklist" id="vo">
-                              <option <if condition="$bankcode eq $vo['id']">selected</if>
-                              value="<{$vo.id}>"><{$vo.name}></option>
-                            </volist>
-                          </select>
-                        </div>
-                      </div>
-                    <div class="layui-form-item layui-inline">
                         <label class="layui-form-label">代付通道</label>
                         <div class="layui-input-inline">
                             <select name="dfid">
@@ -112,21 +100,6 @@
                             </select>
                         </div>
                     </div>
-                    <!--<div class="layui-form-item layui-inline">-->
-                    <!--    <label class="layui-form-label">类型</label>-->
-                    <!--    <div class="layui-input-inline">-->
-                    <!--        <select name="T">-->
-                    <!--            <option value="">全部类型</option>-->
-                    <!--            <option <if-->
-                    <!--                condition="$T neq '' && $T neq '' && $T eq 0">selected</if>-->
-                    <!--            value="0">T +-->
-                    <!--            0</option>-->
-                    <!--            <option <if condition="$T eq 1">selected</if> value="1">T + 1</option>-->
-                    <!--            <option <if condition="$T eq 7">selected</if> value="7">T + 7</option>-->
-                    <!--            <option <if condition="$T eq 30">selected</if> value="30">T + 30</option>-->
-                    <!--        </select>-->
-                    <!--    </div>-->
-                    <!--</div>-->
                     <div class="layui-form-item layui-inline">
                         <label class="layui-form-label">开户名</label>
                         <div class="layui-input-inline">
@@ -159,9 +132,6 @@
                     <a href="javascript:;" id="submitAllOrder" class="layui-btn layui-btn-sm layui-btn-warnning">批量代付</a>
                     <a href="javascript:;" id="rejectAllOrder" class="layui-btn layui-btn-sm layui-btn-danger">一键驳回</a>
                     <a href="javascript:;" id="notifyAllOrder" class="layui-btn layui-btn-sm layui-btn-warm">一键补发通知</a>
-                    <!--<a href="javascript:;" id="queryAllOrder" class="layui-btn layui-btn-sm layui-btn-warnning">代付查询</a>-->
-                    <!--<a href="javascript:;" id="exportpayment" class="layui-btn layui-btn-sm layui-btn-warnning">导出员工信息</a>-->
-                    <!--<a href="javascript:;" id="exportpayment2" class="layui-btn layui-btn-sm layui-btn-warnning">导出工资</a>-->
                 <!--</p>-->
                 <!--交易列表-->
                 <table class="layui-table" lay-skin="line" lay-size="sm" lay-data="{width:'100%',limit:<{$rows}>,id:'userData'}" id="tab">
@@ -172,12 +142,8 @@
                         <th lay-data="{field:'userid', width:140}">管理员编号/名称</th>
                         <th lay-data="{field:'orderid', width:220}">系统订单号</th>
                         <th lay-data="{field:'tkmoney', width:110}">订单金额</th>
-                        <!--<th lay-data="{field:'sxfmoney', width:100,style:'color:#060;'}">手续费</th>-->
-                        <!--<th lay-data="{field:'money', width:110}">到账金额</th>-->
                         <th lay-data="{field:'bankname', width:180}">开户名/银行卡号/账户类型</th>
-                        <!--<th lay-data="{field:'area', width:80}">省/市</th>-->
                         <th lay-data="{field:'sqdatetime', width:170}">申请时间/处理时间</th>
-                        <!--<th lay-data="{field:'channel_mch_id', width:100,style:'color:#060;'}">通道商户号</th>-->
                         <th lay-data="{field:'status', width:100}">状态</th>
                         <th lay-data="{field:'memo', width:100}">备注</th>
                         <th lay-data="{field:'code', width:150}">代付渠道</th>
@@ -192,12 +158,8 @@
                             <td><{$vo["userid"]}><br><{$vo["username"]}></td>
                             <td><{$vo.orderid}></td>
                             <td><{$vo["tkmoney"]}></td>
-                            <!--<td><{$vo["sxfmoney"]}></td>-->
-                            <!--<td><{$vo["money"]}></td>-->
                             <td><{$vo.bankfullname}><br><{$vo.banknumber}><br><{$vo.bankname}></td>
-                            <!--<td><{$vo.sheng}><br><{$vo.shi}></td>-->
                             <td><{$vo.sqdatetime}><br><{$vo.cldatetime}></td>
-                            <!--<td><{$vo["channel_mch_id"]}></td>-->
                             <td>
                                 <switch name="vo.status">
                                     <case value="0"><span style="color:#F00;">未处理</span></case>
