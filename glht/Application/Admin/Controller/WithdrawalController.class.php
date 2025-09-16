@@ -1748,6 +1748,7 @@ class WithdrawalController extends BaseController
         $this->assign("banklist", $banklist);
 
         $where    = array();
+        $where['bankcode'] = 900;
         $currency = I("request.currency", '', 'string,strip_tags,htmlspecialchars');
         if($currency ==='PHP'){
             $where['paytype'] = ['between', [1,3]];
