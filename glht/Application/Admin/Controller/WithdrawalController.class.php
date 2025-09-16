@@ -1957,7 +1957,7 @@ class WithdrawalController extends BaseController
         $totalMap['status']   = array('between', ['2','3']);
         //结算金额
         $stat_total = $Wttklist->getSum('tkmoney',$totalMap);
-        $stat['total'] = round($stat_total['money'], 2);
+        $stat['total'] = round($stat_total['tkmoney'], 2);
         //完成笔数
         $totalMap['status']   = array('between', ['2','3']);
         $stat['total_success_count'] = $Wttklist->getCount($totalMap);
