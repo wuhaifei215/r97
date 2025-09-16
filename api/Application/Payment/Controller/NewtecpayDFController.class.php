@@ -106,10 +106,10 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         // log_place_order($this->code, $data['orderid'] . "----状态：", $result['status']);    //日志
         if($result['return_code'] === 'SUCCESS'){
             //保存第三方订单号
-            $orderid = $data['orderid'];
-            $Wttklistmodel = D('Wttklist');
-            $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
-            $tableName = $Wttklistmodel->getRealTableName($date);
+//            $orderid = $data['orderid'];
+//            $Wttklistmodel = D('Wttklist');
+//            $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
+//            $tableName = $Wttklistmodel->getRealTableName($date);
 //            $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$result['order_no']]);
 
             $return = ['status' => 1, 'msg' => '申请正常'];
