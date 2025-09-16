@@ -2051,6 +2051,8 @@ class WithdrawalController extends BaseController
                     try {
                         $wttkData['money'] = round($wttkData['money'],2);
                         $result = R('Payment/' . $channel['code'] . '/PaymentExec', [$wttkData, $channel]);
+                        var_dump($channel);
+                        var_dump($result);
                         if (FALSE === $result) {
                             $WttklistApply->table($table)->where(['id' => $id])->save(['last_submit_time' => time(), 'auto_submit_try' => ['exp', 'auto_submit_try+1'], 'df_lock' => 0]);
                             $fail++;
