@@ -322,7 +322,7 @@ class ApiController extends Controller
                     $where['id'] = $str[1] - 10000;
                     $re = M('Member')->where($where)->save(['telegram_id' => $chat_id]);
                     if ($re) {
-                        $message = "成功绑定商户号：" . $uid . "\r\n--------------------------------\r\n";
+                        $message = "成功绑定商户号：" . $str[1] . "\r\n--------------------------------\r\n";
                         $message .= $this->title . "，7*24小时服务\r\n 可以帮助您查询余额，收款订单详情、出款订单详情\r\n ";
                         $message .= "输入 /show 可查看群组信息及提示，无需再添加其他参数\r\n ";
                         $message .= "输入 /balance 可查询当前账户的查询余额，无需再添加其他参数\r\n ";
@@ -546,7 +546,7 @@ class ApiController extends Controller
         //查询代付订单
         if (strpos($text, '/df') !== false) {
             $order_info = self:: get_dforder($str[1], $userInfo['info']['id']);
-            $this->doDF($order_info, $chat_id, $message, $message_id);
+            $this->doDF($order_info, $chat_id, $message_id);
             return;
         }
 
@@ -555,7 +555,7 @@ class ApiController extends Controller
             // log_place_order($this->code . '_get_order', $message_id . "用户", $userInfo['info']['id']);    //日志
             $order_info = self:: get_order($str[1], $userInfo['info']['id']);
             // log_place_order($this->code . '_get_order', $message_id . "订单", json_encode($order_info, JSON_UNESCAPED_UNICODE));    //日志
-            $this->doDS($order_info, $chat_id, $message, $message_id);
+            $this->doDS($order_info, $chat_id, $message_id);
             return;
         }
         return;
@@ -572,7 +572,7 @@ class ApiController extends Controller
             $member_list = M('Member')->field('telegram_id')->where($where)->order('id asc')->limit($row * 50,50)->select();
             if(isset($member_list) && !empty($member_list)){
                 foreach ($member_list as $mv){
-                    if(isset($_REQUEST['photo']) && $photo==1){
+                    if(isset($_REQUEST['photo'])){
                         $this->sendPhoto($mv['telegram_id'], $_REQUEST['file_id'],$text);
                     }else{
                         $this->sendMessage($mv['telegram_id'], $text);
@@ -680,7 +680,7 @@ class ApiController extends Controller
     }
 
     //代付处理
-    public function doDF($order_info, $chat_id, $message, $message_id, $parse_mode='Markdown'){
+    public function doDF($order_info, $chat_id, $message_id, $parse_mode='Markdown'){
         if ($order_info && $order_info['status'] === 1) {
             $info = $order_info['info'];
             $message = '';
@@ -775,7 +775,7 @@ class ApiController extends Controller
     }
 
     //代收处理
-    public function doDS($order_info, $chat_id, $message, $message_id, $parse_mode='Markdown'){
+    public function doDS($order_info, $chat_id, $message_id, $parse_mode='Markdown'){
 
         if ($order_info && $order_info['status'] === 1) {
             $info = $order_info['info'];
