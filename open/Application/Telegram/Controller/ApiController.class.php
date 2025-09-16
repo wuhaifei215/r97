@@ -881,7 +881,7 @@ class ApiController extends Controller
                 if(!empty($order)) break;
             }
             $info = $order[0];
-            // log_place_order($this->code . '_get_order', "sql", M('Order')->getLastSql());    //日志
+             log_place_order($this->code . '_get_order', "sql", M('Order')->getLastSql());    //日志
             if ($info) {
                 $status = 1;
             } else {
