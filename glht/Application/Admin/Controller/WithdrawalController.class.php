@@ -595,8 +595,8 @@ class WithdrawalController extends BaseController
         $this->assign('currency', $currency);
         $df_list = M('PayForAnother')->where($where)->select();
 
-        $where['bankcode'] = ['neq',900];
         $where['df_type'] = ['eq', 2];
+        $where['bankcode'] = ['neq',900];
         
         $memberid = I("request.memberid", '', 'string,strip_tags,htmlspecialchars');
         if ($memberid) {
@@ -2027,7 +2027,7 @@ class WithdrawalController extends BaseController
                 //提现记录
                 $wttkData = [
                     'orderid'      => $orderid,
-                    'out_trade_no'
+                    'out_trade_no' => $orderid,
                     "userid" => $uid,
                     "bankname"     => trim($v["bankname"]),
                     "bankzhiname"  => trim($v["subbranch"]),
