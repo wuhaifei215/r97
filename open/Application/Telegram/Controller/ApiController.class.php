@@ -720,6 +720,9 @@ class ApiController extends Controller
             $message .= "\r\n最新代付订单详情\r\n---------------------------------------------\r\n";
             $message .= "系统订单号：" . $info['orderid'] . "\r\n";
             $message .= "外部订单号：" . $info['out_trade_no'] . "\r\n";
+            if ($info['billno'] != '') {
+                $message .= "E单号：" . $info['billno'] . "\r\n";
+            }
             $message .= "订单金额：" . $info['tkmoney'] . "\r\n";
             if ($info['sqdatetime'] != '') {
                 $message .= "申请时间：" . $info['sqdatetime'] . "\r\n";
@@ -797,6 +800,9 @@ class ApiController extends Controller
             $message .= "\r\n最新订单详情\r\n---------------------------------------------\r\n";
             $message .= "系统订单号：`" . $info['pay_orderid'] . "`\r\n";
             $message .= "外部订单号：`" . $info['out_trade_id'] . "`\r\n";
+            if ($info['billno'] != '') {
+                $message .= "E单号：`" . $info['billno'] . "``\r\n";
+            }
             $message .= "订单金额：" . $info['pay_amount'] . "\r\n";
             if ($info['pay_applydate'] != '') {
                 $message .= "申请时间：" . date('Y-m-d H:i:s', $info['pay_applydate']) . "\r\n";
@@ -857,11 +863,12 @@ class ApiController extends Controller
             $where=[];
             $map['pay_orderid']  = ['eq',$orderid];
             $map['out_trade_id']  = ['eq',$orderid];
+            $map['billno']  = ['eq',$orderid];
             $map['_logic'] = 'or';
             $where['_complex'] = $map;
             $where['pay_memberid'] = ['eq', $uid + 10000];
 
-            $field = 'id,pay_memberid, pay_orderid, pay_amount, pay_poundage, pay_actualamount, pay_applydate ,pay_successdate, pay_bankname, pay_status, out_trade_id';
+            $field = 'id,pay_memberid, pay_orderid, billno, pay_amount, pay_poundage, pay_actualamount, pay_applydate ,pay_successdate, pay_bankname, pay_status, out_trade_id';
             $OrderModel = D('Order');
             $tables = $OrderModel->getTables();
             // log_place_order($this->code . '_get_order', "表", json_encode($tables, JSON_UNESCAPED_UNICODE));    //日志
@@ -899,10 +906,11 @@ class ApiController extends Controller
             $where=[];
             $map['orderid']  = ['eq', $orderid];
             $map['out_trade_no']  = ['eq', $orderid];
+            $map['billno']  = ['eq',$orderid];
             $map['_logic'] = 'or';
             $where['_complex'] = $map;
             $where['userid'] =['eq', $uid];
-            $field = 'id, userid, orderid, out_trade_no, tkmoney, sxfmoney, money, status, bankname, bankzhiname, banknumber, bankfullname, sqdatetime, cldatetime, memo, notifyurl, notifycount, last_notify_time,df_id, df_name, three_orderid';
+            $field = 'id, userid, orderid, out_trade_no, billno, tkmoney, sxfmoney, money, status, bankname, bankzhiname, banknumber, bankfullname, sqdatetime, cldatetime, memo, notifyurl, notifycount, last_notify_time,df_id, df_name, three_orderid';
             $Wttklist = D('Wttklist');
             $tables = $Wttklist->getTables();
             foreach ($tables as $v){
