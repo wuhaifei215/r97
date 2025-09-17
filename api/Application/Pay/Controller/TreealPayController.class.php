@@ -105,7 +105,7 @@ class TreealPayController extends PayController
     }
 
     public function getOAuth($client){
-        $url = 'https://api.pix.treeal.com/oauth/token';
+        $url = 'https://api.qrcodes-h.sulcredi.coop.br/oauth/token';
         $header = [
             'accept: application/json',
             'content-type: application/x-www-form-urlencoded'
