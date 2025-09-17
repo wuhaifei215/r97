@@ -105,14 +105,14 @@ class TreealPayController extends PayController
     }
 
     public function getOAuth($client){
-        $url = 'https://api.qrcodes-h.sulcredi.coop.br/oauth/token';
+        $url = 'https://api.pix.treeal.com/oauth/token';
         $header = [
             'accept: application/json',
             'content-type: application/x-www-form-urlencoded'
         ];
         $params = [
-            'clientId: '=> $client['mch_id'],
-            'clientSecret:' => $client['signkey'],
+            'clientId'=> $client['mch_id'],
+            'clientSecret' => $client['signkey'],
             'grantType' => 'client_credentials',
         ];
         log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
