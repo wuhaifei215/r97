@@ -24,6 +24,22 @@ class TradeController extends PayController
             $this->showmessage('The memberid does not exist');
         }
         $this->apikey = $fans['apikey'];
+
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = $ip_arr[0];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = get_client_ip();
+        }
+        if ($fans['df_ip'] == '') {
+            $this->showmessage('The submitted IP address has not been reported!');
+        } elseif ($fans['df_ip'] != '') {
+            if (!checkDfIp($ip, $fans['df_ip'])) {
+                $this->showmessage('The submitted IP address has not been reported!');
+            }
+        }
     }
 
     //订单查询
@@ -60,7 +76,7 @@ class TradeController extends PayController
             $sign = strtoupper(md5($md5str . "key=" . $this->apikey));
             $result = [
                 'mgs' => 'Please compare the splicing order and signature',
-                'Post data' => $requestarray,
+                'Post data' => $request,
                 'Field concatenation order' => substr($md5str, 0, strlen($md5str) - 1),
                 'sign' => $sign,
             ];
@@ -124,4 +140,5 @@ class TradeController extends PayController
         $return['sign'] = $this->createSign($this->apikey,$return);
         echo json_encode($return);
     }
+
 }
