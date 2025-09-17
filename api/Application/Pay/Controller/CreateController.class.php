@@ -63,6 +63,8 @@ class CreateController extends PayController
 
         $this->judgeRepeatOrder(); //验证是否可以提交重复订单
 
+        $this->checkIP();
+
         $this->userRiskcontrol(); //用户风控检测
 
         $this->productUserIsSet();
@@ -159,19 +161,21 @@ class CreateController extends PayController
         } else {
             $ip = get_client_ip();
         }
+        $member_info = M('Member')->where(['id' => $this->memberid]) ->find();
+
         $referer = getHttpReferer();
-        if ($this->member_info['df_domain'] != '') {
-            if (!checkDfDomain($referer, $this->member_info['df_domain'])) {
+        if ($member_info['df_domain'] != '') {
+            if (!checkDfDomain($referer, $member_info['df_domain'])) {
                 return 'The request source domain name is inconsistent with the reported domain name';
             }
         }
-        if ($this->member_info['df_ip'] != '') {
-            if (!checkDfIp($ip, $this->member_info['df_ip'])) {
+        if ($member_info['df_ip'] != '') {
+            if (!checkDfIp($ip, $member_info['df_ip'])) {
                 return 'The submitted IP address has not been reported!';
             }
             $hostname = getHost($referer);//请求来源域名
             $domainIp = gethostbyname($hostname);//域名IP
-            if (!checkDfIp($domainIp, $this->member_info['df_ip'])) {
+            if (!checkDfIp($domainIp, $member_info['df_ip'])) {
                 return 'The IP address is inconsistent with the reported IP!';
             }
         }
