@@ -105,7 +105,7 @@ class TreealPayController extends PayController
     }
 
     public function getOAuth($client){
-        $url = 'https://api.pix.treeal.com/api/v1/oauth/token';
+        $url = 'https://api.pix.treeal.com/oauth/token';
         $header = [
             'accept: application/json',
             'Content-Type: application/x-www-form-urlencoded'
