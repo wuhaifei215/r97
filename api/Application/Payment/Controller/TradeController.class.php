@@ -38,7 +38,11 @@ class TradeController extends CreateDFController
         if (!$this->merchants['df_api']) {
             $this->showmessage('The merchant has not enabled the payment function');
         }
-        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = $ip_arr[0];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
             $ip = $_SERVER['REMOTE_ADDR'];
         } else {
             $ip = get_client_ip();
@@ -170,7 +174,10 @@ class TradeController extends CreateDFController
         if (!$this->merchants['df_api']) {
             $this->showmessage('The merchant has not enabled the payment function');
         }
-        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = $ip_arr[0];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
             $ip = $_SERVER['REMOTE_ADDR'];
         } else {
             $ip = get_client_ip();
@@ -183,7 +190,7 @@ class TradeController extends CreateDFController
         }
         if ($this->merchants['df_ip'] != '') {
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
-            $this->showmessage('The submitted IP address has not been reported!');
+                $this->showmessage('The submitted IP address has not been reported!');
             }
             $hostname = getHost($referer);//请求来源域名
             $domainIp = gethostbyname($hostname);//域名IP
@@ -259,7 +266,10 @@ class TradeController extends CreateDFController
         if (!$this->merchants['df_api']) {
             $this->showmessage('The merchant has not enabled the payment function');
         }
-        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = $ip_arr[0];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
             $ip = $_SERVER['REMOTE_ADDR'];
         } else {
             $ip = get_client_ip();
@@ -272,12 +282,12 @@ class TradeController extends CreateDFController
         }
         if ($this->merchants['df_ip'] != '') {
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
-                $this->showmessage('The IP address is inconsistent with the reported IP');
+                $this->showmessage('The submitted IP address has not been reported!');
             }
             $hostname = getHost($referer);//请求来源域名
             $domainIp = gethostbyname($hostname);//域名IP
             if (!checkDfIp($domainIp, $this->merchants['df_ip'])) {
-                $this->showmessage('The source domain name IP address is inconsistent with the reported IP');
+                $this->showmessage('The IP address is inconsistent with the reported IP!');
             }
         }
         $request = [

@@ -30,6 +30,7 @@ class UserRiskcontrolLogic extends RiskcontrolLogic
             return 'No such merchant number！';
         }
 
+
         /*******************生成基本风控配置********************/
         $this->config_info = $this->m_UserRiskcontrolConfig->findConfigInfo($user_id);
         if ($this->config_info) {
@@ -46,6 +47,31 @@ class UserRiskcontrolLogic extends RiskcontrolLogic
     //监测数据
     public function monitoringData()
     {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = $ip_arr[0];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = get_client_ip();
+        }
+        $referer = getHttpReferer();
+        if ($this->member_info['df_domain'] != '') {
+            if (!checkDfDomain($referer, $this->member_info['df_domain'])) {
+                return 'The request source domain name is inconsistent with the reported domain name';
+            }
+        }
+        if ($this->member_info['df_ip'] != '') {
+            if (!checkDfIp($ip, $this->member_info['df_ip'])) {
+                return 'The submitted IP address has not been reported!';
+            }
+            $hostname = getHost($referer);//请求来源域名
+            $domainIp = gethostbyname($hostname);//域名IP
+            if (!checkDfIp($domainIp, $this->member_info['df_ip'])) {
+                return 'The IP address is inconsistent with the reported IP!';
+            }
+        }
+
         if ($this->config_info) {
 
             //---------------------基本风控规则-----------------
