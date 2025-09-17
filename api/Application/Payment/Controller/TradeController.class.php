@@ -53,7 +53,9 @@ class TradeController extends CreateDFController
                 $this->showmessage('The request source domain name is inconsistent with the reported domain name');
             }
         }
-        if ($this->merchants['df_ip'] != '') {
+        if ($this->merchants['df_ip'] == '') {
+            $this->showmessage('The submitted IP address has not been reported!');
+        } elseif ($this->merchants['df_ip'] != '') {
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
             $this->showmessage('The submitted IP address has not been reported!');
             }
@@ -188,7 +190,9 @@ class TradeController extends CreateDFController
                 $this->showmessage('The request source domain name is inconsistent with the reported domain name');
             }
         }
-        if ($this->merchants['df_ip'] != '') {
+        if ($this->merchants['df_ip'] == '') {
+            $this->showmessage('The submitted IP address has not been reported!');
+        } elseif ($this->merchants['df_ip'] != '') {
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
                 $this->showmessage('The submitted IP address has not been reported!');
             }
@@ -280,7 +284,9 @@ class TradeController extends CreateDFController
                 $this->showmessage('The request source domain name is inconsistent with the reported domain name');
             }
         }
-        if ($this->merchants['df_ip'] != '') {
+        if ($this->merchants['df_ip'] == '') {
+            $this->showmessage('The submitted IP address has not been reported!');
+        } elseif ($this->merchants['df_ip'] != '') {
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
                 $this->showmessage('The submitted IP address has not been reported!');
             }

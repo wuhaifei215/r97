@@ -163,9 +163,11 @@ class CreateController extends PayController
             $ip = get_client_ip();
         }
         $df_ip = M('Member')->where(['id' => $memberid])->getField('df_ip');
-        if ($df_ip['df_ip'] != '') {
-            if (!checkDfIp($ip, $df_ip['df_ip'])) {
-                return 'The submitted IP address has not been reported!';
+        if ($df_ip == '') {
+            $this->showmessage('The submitted IP address has not been reported!');
+        } elseif ($df_ip != '') {
+            if (!checkDfIp($ip, $df_ip)) {
+                $this->showmessage('The submitted IP address has not been reported!');
             }
         }
     }
