@@ -111,8 +111,8 @@ class TreealPayController extends PayController
             'content-type: application/x-www-form-urlencoded'
         ];
         $params = [
-            'clientId'=> $client['mch_id'],
-            'clientSecret' => $client['signkey'],
+            'client_id'=> $client['mch_id'],
+            'client_secret' => $client['signkey'],
             'grantType' => 'client_credentials',
         ];
         log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
