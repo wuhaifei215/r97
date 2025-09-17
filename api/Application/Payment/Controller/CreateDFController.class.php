@@ -140,8 +140,6 @@ class CreateDFController extends Controller
             $this->showmessage("pay_md5sign error");
         }
 
-        
-        $user_id = $this->memberid - 10000;
 //        PaymentLogs( 'DFpay_add_server', $this->memberid.':'.json_encode($_SERVER) );
         //用户信息
         $this->merchants = D('Member')->where(array('id' => $user_id))->find();
@@ -181,7 +179,7 @@ class CreateDFController extends Controller
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
                 
                 PaymentLogs( 'DFpay_add_server', $user_id.'::'.$ip.'=='. $this->merchants['df_ip']);
-                $this->showmessage('The IP address is inconsistent with the reported IP!');
+                $this->showmessage('The IP address is inconsistent with the reported IP!=='.$ip);
             }
         }
         

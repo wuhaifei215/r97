@@ -60,7 +60,7 @@ class R97payController extends PayController
         // 记录初始执行时间
         $beginTime = microtime(TRUE);
 
-        $returnContent = $this->http_post_json($return['gateway'], $native);
+        $returnContent = $this->http_post_data($return['gateway'], $native);
         log_place_order($this->code, $return['orderid'] . "----返回", $returnContent);    //日志
         $ans = json_decode($returnContent, true);
         if($ans['status'] === 'success'){
@@ -169,6 +169,23 @@ class R97payController extends PayController
             log_place_order($this->code . '_notifyurl', $orderid . "----签名错误，加密后", $sign);    //日志
             echo "签名";
         }
+    }
+
+    //发送post请求，提交data字符串
+    private function http_post_data($url, $postData)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        $response = curl_exec($ch);
+//        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        return $response;
     }
 
     /**
