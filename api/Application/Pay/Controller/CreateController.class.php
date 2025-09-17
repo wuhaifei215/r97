@@ -41,26 +41,6 @@ class CreateController extends PayController
             $this->showmessage("The currency type is incorrect");
         }
 
-        $this->judgeRepeatOrder(); //验证是否可以提交重复订单
-
-        $this->userRiskcontrol(); //用户风控检测
-
-        $this->productUserIsSet();
-        
-        $this->setChannelApiControl(); //判断是否开启支付渠道 ，获取并设置支付通api的id和通道风控
-        
-        $this->doNext();
-    }
-    //越南代收接口
-    public function payinINR(){
-        $this->firstCheckParams(); //初步验证参数 ，设置memberid，pay_amount，bankcode属性
-        
-        $this->productIsOpen(); //判断通道是否开启
-        
-        if(getPaytypeCurrency($this->product['paytype']) !=='INR'){
-            $this->showmessage("The currency type is incorrect");
-        }
-
         $this->checkIP();
 
         $this->judgeRepeatOrder(); //验证是否可以提交重复订单
@@ -73,6 +53,27 @@ class CreateController extends PayController
         
         $this->doNext();
     }
+    //越南代收接口
+//    public function payinINR(){
+//        $this->firstCheckParams(); //初步验证参数 ，设置memberid，pay_amount，bankcode属性
+//
+//        $this->productIsOpen(); //判断通道是否开启
+//
+//        if(getPaytypeCurrency($this->product['paytype']) !=='INR'){
+//            $this->showmessage("The currency type is incorrect");
+//        }
+//
+//        $this->judgeRepeatOrder(); //验证是否可以提交重复订单
+//
+//          $this->checkIP();
+//        $this->userRiskcontrol(); //用户风控检测
+//
+//        $this->productUserIsSet();
+//
+//        $this->setChannelApiControl(); //判断是否开启支付渠道 ，获取并设置支付通api的id和通道风控
+//
+//        $this->doNext();
+//    }
     
     //创建代收申请
     protected function doNext()
