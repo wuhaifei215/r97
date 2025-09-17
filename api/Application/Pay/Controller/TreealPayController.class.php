@@ -210,10 +210,18 @@ class TreealPayController extends PayController
         ]);
 
         $response = curl_exec($curl);
-        $err = curl_error($curl);
+        $result = [];
+
+        if ($response === false) {
+            $result['code'] = curl_errno($curl);
+            $result['message'] = curl_error($curl);
+            $result['curl_info'] = curl_getinfo($curl);
+        } else {
+            $result = json_decode($response, true);
+        }
 
         curl_close($curl);
-        return $response;
+        return $result;
     }
 
     /**
