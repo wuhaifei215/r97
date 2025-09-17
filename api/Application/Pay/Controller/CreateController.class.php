@@ -153,6 +153,7 @@ class CreateController extends PayController
     }
 
     protected function checkIP(){
+        $memberid = I("request.pay_memberid", 0, 'intval') - 10000;
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
             $ip = $ip_arr[0];
@@ -161,22 +162,10 @@ class CreateController extends PayController
         } else {
             $ip = get_client_ip();
         }
-        $member_info = M('Member')->where(['id' => $this->memberid]) ->find();
-
-        $referer = getHttpReferer();
-        if ($member_info['df_domain'] != '') {
-            if (!checkDfDomain($referer, $member_info['df_domain'])) {
-                return 'The request source domain name is inconsistent with the reported domain name';
-            }
-        }
-        if ($member_info['df_ip'] != '') {
-            if (!checkDfIp($ip, $member_info['df_ip'])) {
+        $df_ip = M('Member')->where(['id' => $memberid])->getField('df_ip');
+        if ($df_ip['df_ip'] != '') {
+            if (!checkDfIp($ip, $df_ip['df_ip'])) {
                 return 'The submitted IP address has not been reported!';
-            }
-            $hostname = getHost($referer);//请求来源域名
-            $domainIp = gethostbyname($hostname);//域名IP
-            if (!checkDfIp($domainIp, $member_info['df_ip'])) {
-                return 'The IP address is inconsistent with the reported IP!';
             }
         }
     }
