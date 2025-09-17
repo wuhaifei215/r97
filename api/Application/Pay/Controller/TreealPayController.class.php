@@ -193,45 +193,27 @@ class TreealPayController extends PayController
             $postData = http_build_query($postData);
         }
         $curl = curl_init();
+
         curl_setopt_array($curl, [
-            CURLOPT_URL => $url,
+            CURLOPT_URL => "https://api.qrcodes-h.sulcredi.coop.br/oauth/token",
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
+            CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 10,  // 增加超时时间
-            CURLOPT_FOLLOWLOCATION => true,
-
-            // 关键：客户端证书配置
-            CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.crt',
-            CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.key',
-
-            // SSL验证设置
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => 0,
-
-            // HTTP设置
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => $postData,
-            CURLOPT_HTTPHEADER => $options,
-
-            // 推荐添加的选项
-            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+            CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => [
+                "accept: application/json",
+                "content-type: application/x-www-form-urlencoded"
+            ],
         ]);
 
         $response = curl_exec($curl);
-        $result = [];
-
-        if ($response === false) {
-            $result['code'] = curl_errno($curl);
-            $result['message'] = curl_error($curl);
-            $result['curl_info'] = curl_getinfo($curl);
-        } else {
-            $result = json_decode($response, true);
-        }
+        $err = curl_error($curl);
 
         curl_close($curl);
-        return $result;
+        return $response;
     }
 
     /**
