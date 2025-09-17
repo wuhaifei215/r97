@@ -117,7 +117,7 @@ class TreealPayController extends PayController
         ];
         log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, "OAuth----url", $url);    //日志
-        $ans = $this->request($url, $params, $header);
+        $ans = $this->http_post_json($url, $params, $header);
         log_place_order($this->code, "OAuth----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
         return $ans;
     }
@@ -185,6 +185,28 @@ class TreealPayController extends PayController
         }catch (\Exception $e) {
             // var_dump($e);
         }
+    }
+    //发送post请求
+    private function http_post_json($url, $postData, $options = array())
+    {
+        if (is_array($postData)) {
+            $postData = http_build_query($postData);
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30); //设置cURL允许执行的最长秒数
+        if (!empty($options)) {
+            curl_setopt_array($ch, $options);
+        }
+        //https请求 不验证证书和host
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
     }
 
     /**
