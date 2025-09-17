@@ -39,10 +39,18 @@ class TreealPayController extends PayController
         $site = trim($return['unlockdomain']) ? $return['unlockdomain'] . '/' : $_site;
 
         /*********************************引入支付方类*********************************/
-        $authorization = $this->getOAuth($return);
+        $redis = $this->redis_connect();
+        $authorization_redis = $redis->get('getOAuth');
+        $authorization = json_decode($authorization_redis,true);
+        if(!$authorization_redis || empty($productUser)) {
+            $authorization = $this->getOAuth($return);
+            $redis->set(getOAuth, json_encode($authorization, JSON_UNESCAPED_UNICODE));
+            $redis->expire(getOAuth , 60);
+        };
         $header = [
-            'Authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
-            'Content-Type: application/json'
+            'accept: application/json',
+            'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
+            'content-type: application/json',
         ];
 
         $params = [
