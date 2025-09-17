@@ -56,15 +56,15 @@ class TreealPayController extends PayController
             "chave" => $return['appid'],
         ];
 
-        log_place_order($this->code, $return['orderid'] . "----提交header", json_encode($header, JSON_UNESCAPED_UNICODE));    //日志
-        log_place_order($this->code, $return['orderid'] . "----提交", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
-        log_place_order($this->code, $return['orderid'] . "----提交地址", $return['gateway']);    //日志
+        log_place_order($this->code, $return['orderid'] . "----header", json_encode($header, JSON_UNESCAPED_UNICODE));    //日志
+        log_place_order($this->code, $return['orderid'] . "----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
+        log_place_order($this->code, $return['orderid'] . "----地址", $return['gateway']);    //日志
 
         // 记录初始执行时间
         $beginTime = microtime(TRUE);
 
         $ans = $this->request($return['gateway'], $params, $header);
-        log_place_order($this->code, $return['orderid'] . "----返回", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
+        log_place_order($this->code, $return['orderid'] . "----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
 
         if($ans['status'] ==='ATIVA'){
             $payurl = $site . 'PayPage.html?sid=' . $return['orderid'] . '&amount=' . $return['amount']. '&qrcode=' .$ans['pixCopiaECola'];
@@ -91,12 +91,12 @@ class TreealPayController extends PayController
             $userpost = $redis->get('userpost_' . $return['out_trade_id']);
             $userpost = json_decode($userpost,true);
 
-            logApiAddReceipt('下游商户提交', __METHOD__, $return['orderid'], $return['out_trade_id'], '/', $userpost, $return_arr, '0', '0', '1', '2');
+            logApiAddReceipt('下游商户body', __METHOD__, $return['orderid'], $return['out_trade_id'], '/', $userpost, $return_arr, '0', '0', '1', '2');
 
             // 结束并输出执行时间
             $endTime = microtime(TRUE);
             $doTime = floor(($endTime-$beginTime)*1000);
-            logApiAddReceipt('订单提交上游' . $this->code, __METHOD__, $return['orderid'], $return['out_trade_id'], $return['gateway'], $params, $ans, $doTime, '0', '1', '2');
+            logApiAddReceipt('订单body上游' . $this->code, __METHOD__, $return['orderid'], $return['out_trade_id'], $return['gateway'], $params, $ans, $doTime, '0', '1', '2');
         }catch (\Exception $e) {
             // var_dump($e);
         }
@@ -108,17 +108,17 @@ class TreealPayController extends PayController
         $url = 'https://api.pix.treeal.com/oauth/token';
         $header = [
             'accept: application/json',
-            'Content-Type: application/x-www-form-urlencoded'
+            'content-type: application/x-www-form-urlencoded'
         ];
         $params = [
             'clientId: '=> $client['mch_id'],
             'clientSecret:' => $client['signkey'],
             'grantType' => 'client_credentials',
         ];
-        log_place_order($this->code, "OAuth----提交", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
-        log_place_order($this->code, "OAuth----提交url", $url);    //日志
+        log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
+        log_place_order($this->code, "OAuth----url", $url);    //日志
         $ans = $this->request($url, $params, $header);
-        log_place_order($this->code, "OAuth----返回", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
+        log_place_order($this->code, "OAuth----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
         return $ans;
     }
 
@@ -239,7 +239,7 @@ class TreealPayController extends PayController
             curl_close($curl);
             return $result;
         } catch (\Exception $e) {
-            log_place_order($this->code. '_request', $params["reference"] . "----提交错误", $e->getMessage());    //日志
+            log_place_order($this->code. '_request', $params["reference"] . "----body错误", $e->getMessage());    //日志
         }
     }
 }
