@@ -170,8 +170,10 @@ class CreateDFController extends Controller
             // } else {
             //     $ip = get_client_ip();
             // }
-        
-            if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
                 $ip = $_SERVER['REMOTE_ADDR'];
             } else {
                 $ip = getRealIp();
