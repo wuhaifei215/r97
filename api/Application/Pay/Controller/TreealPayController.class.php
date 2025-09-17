@@ -192,22 +192,46 @@ class TreealPayController extends PayController
         if (is_array($postData)) {
             $postData = http_build_query($postData);
         }
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30); //设置cURL允许执行的最长秒数
-        if (!empty($options)) {
-            curl_setopt_array($ch, $options);
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,  // 增加超时时间
+            CURLOPT_FOLLOWLOCATION => true,
+
+            // 关键：客户端证书配置
+            CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.crt',
+            CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.key',
+
+            // SSL验证设置
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => 0,
+
+            // HTTP设置
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => $options,
+
+            // 推荐添加的选项
+            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        ]);
+
+        $response = curl_exec($curl);
+        $result = [];
+
+        if ($response === false) {
+            $result['code'] = curl_errno($curl);
+            $result['message'] = curl_error($curl);
+            $result['curl_info'] = curl_getinfo($curl);
+        } else {
+            $result = json_decode($response, true);
         }
-        //https请求 不验证证书和host
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        $data = curl_exec($ch);
-        curl_close($ch);
-        return $data;
+
+        curl_close($curl);
+        return $result;
     }
 
     /**
