@@ -27,16 +27,28 @@
 				<thead>
 				<tr>
 				  <th>接口名称</th>
-				  <th>运营费率</th>
+				  <th>手续费类型</th>
+					<th>单笔提款比例（%）</th>
+					<th>单笔提款收取（元）</th>
 				</tr> 
 				</thead>
 				<tbody>
 				<volist name="products" id="p">
 				<tr>
 					<td><{$p.id}> -- <{$p.name}></td>
+					<td >
+						<input type="radio" name="u[systemxz]" lay-filter="changeRule" <if condition="$u[systemxz] eq 0">checked</if> value="0" title="按比例计算" checked="">
+						<input type="radio" name="u[systemxz]" lay-filter="changeRule" <if condition="$u[systemxz] eq 1">checked</if> value="1" title="按单笔计算">
+						<input type="radio" name="u[systemxz]" lay-filter="changeRule" <if condition="$u[systemxz] eq 2">checked</if> value="2" title="按单笔加比例计算">
+					</td>
 					<td>
 						<div class="layui-input-inline" style="width: 100px;">
 							<input type="text" name="u[<{$p.id}>][feilv]" placeholder="" autocomplete="off" class="layui-input" value="<{$p.feilv}>">
+						</div>
+					</td>
+					<td>
+						<div class="layui-input-inline" style="width: 100px;">
+							<input type="text" name="u[<{$p.id}>][sxffixed]" placeholder="" autocomplete="off" class="layui-input" value="<{$p.feilv}>">
 						</div>
 					</td>
 				</tr>
