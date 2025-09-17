@@ -41,9 +41,9 @@ class CreateController extends PayController
             $this->showmessage("The currency type is incorrect");
         }
 
-        $this->checkIP();
-
         $this->judgeRepeatOrder(); //验证是否可以提交重复订单
+
+        $this->checkIP();
 
         $this->userRiskcontrol(); //用户风控检测
 
