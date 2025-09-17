@@ -177,7 +177,7 @@ class CreateDFController extends Controller
                 $ip = getRealIp();
             }
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
-                
+                PaymentLogs( 'DFpay_add_server', $user_id.'::'.json_encode($_SERVER, JSON_UNESCAPED_UNICODE));
                 PaymentLogs( 'DFpay_add_server', $user_id.'::'.$ip.'=='. $this->merchants['df_ip']);
                 $this->showmessage('The IP address is inconsistent with the reported IP!=='.$ip);
             }
