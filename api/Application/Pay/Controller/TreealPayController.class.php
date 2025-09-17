@@ -193,22 +193,30 @@ class TreealPayController extends PayController
             $postData = http_build_query($postData);
         }
         $curl = curl_init();
-
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
+            CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
+            CURLOPT_TIMEOUT => 10,  // 增加超时时间
+            CURLOPT_FOLLOWLOCATION => true,
+
+            // 关键：客户端证书配置
             CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.crt',
             CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.key',
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
+
+            // SSL验证设置
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => 0,
+
+            // HTTP设置
+            CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => $postData,
-            CURLOPT_HTTPHEADER => [
-                "accept: application/json",
-                "content-type: application/x-www-form-urlencoded"
-            ],
+            CURLOPT_HTTPHEADER => $options,
+
+            // 推荐添加的选项
+            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         ]);
 
         $response = curl_exec($curl);
