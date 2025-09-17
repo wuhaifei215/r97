@@ -483,9 +483,7 @@ class CreateDFController extends Controller
                 // log_place_order( 'DFadd_NoSubmit', $orderid,   'id' . $res2);    //日志
             if($res2){
                 //提现风控提醒
-                $orders = $this->getAllWttklist($user_id, $wttkData['banknumber']);
-                //发送提醒
-                $this->sendWaring($user_id, $orders);
+                $this->sendWaring($user_id, $wttkData['banknumber']);
 
                 //提现超额订单审核
                 if(isset($info['auto_tkmoney']) && $info['auto_tkmoney']!=0){
@@ -601,9 +599,18 @@ class CreateDFController extends Controller
         $order = $WttklistModel->where($where)->select();
         return $order;
     }
-    protected function sendWaring($user_id, $wttkData){
+    protected function sendWaring($user_id, $cardnumber){
         $member_list = M('Member')->field('telegram_id')->where(['id'=>$user_id])->find();
         if($member_list['telegram_id']){
+            $datetime = date('Y-m-d',time());
+            $where = [
+                'userid' => $user_id,
+                'banknumber' => $cardnumber,
+                'sqdatetime'=>['between',[date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00') - 86400),date('Y-m-d H:i:s',strtotime($datetime . ' 23:59:59'))]],
+            ];
+
+            $WttklistModel = D('Wttklist');
+            $wttkData = $WttklistModel->where($where)->select();
             $orderList=[];
             $alltkmoney=0;
             foreach($wttkData as $k =>$v){
