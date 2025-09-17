@@ -44,8 +44,8 @@ class TreealPayController extends PayController
         $authorization = json_decode($authorization_redis,true);
         if(!$authorization_redis || empty($productUser)) {
             $authorization = $this->getOAuth($return);
-            $redis->set(getOAuth, json_encode($authorization, JSON_UNESCAPED_UNICODE));
-            $redis->expire(getOAuth , 60);
+            $redis->set('getOAuth', json_encode($authorization, JSON_UNESCAPED_UNICODE));
+            $redis->expire('getOAuth' , 60);
         };
         $header = [
             'accept: application/json',
@@ -91,7 +91,11 @@ class TreealPayController extends PayController
                 'msg' => $ans['detail']?$ans['detail']:'fail',
             ];
         }
-        echo json_encode($return_arr);
+        if($array['userid'] == 2) {
+            echo '<script type="text/javascript">window.location.href="' . $payurl . '"</script>';
+        }else{
+            echo json_encode($return_arr);
+        }
 
         // if($array['userid'] == 2){
         try{
