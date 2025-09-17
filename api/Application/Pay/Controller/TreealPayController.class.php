@@ -117,7 +117,7 @@ class TreealPayController extends PayController
         ];
         log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, "OAuth----url", $url);    //日志
-        $ans = $this->http_post_data($url, $params, $header);
+        $ans = $this->request($url, $params, $header);
         log_place_order($this->code, "OAuth----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
         return $ans;
     }
@@ -185,36 +185,6 @@ class TreealPayController extends PayController
         }catch (\Exception $e) {
             // var_dump($e);
         }
-    }
-    //发送post请求，提交data字符串
-    private function http_post_data($url, $postData,$header)
-    {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => $postData,
-            CURLOPT_HTTPHEADER => $header,
-        ]);
-
-        $response = curl_exec($curl);
-        $result = [];
-
-        if ($response === false) {
-            $result['code'] = curl_errno($curl);
-            $result['message'] = curl_error($curl);
-            $result['curl_info'] = curl_getinfo($curl);
-        } else {
-            $result = json_decode($response, true);
-        }
-        curl_close($curl);
-        return $response;
     }
 
     /**
