@@ -24,6 +24,8 @@ class UserRiskcontrolLogic extends RiskcontrolLogic
                 'unit_paying_amount',
                 'paying_money',
                 'last_paying_time',
+                'df_domain',
+                'df_ip'
             ])->where(['id' => $user_id])
             ->find();
         if (!$this->member_info) {
