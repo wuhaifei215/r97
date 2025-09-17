@@ -160,8 +160,23 @@ u0W5bbqUf1nOeiqOV9S8Giz0
         if (!$orderList) return;
 
         //验证IP白名单
-        $check_re = check_IP($orderList['channel_id'], getIP(), $orderid);
-        if ($check_re !== true) return;
+        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = getRealIp();
+        }
+
+        $check_re = check_IP($orderList['channel_id'], $ip, $orderid);
+        if ($check_re !== true) {
+            log_place_order($this->code . '_notifyurl', $orderid . "----IP异常", $ip);    //日志
+            $json_result = "IP异常:" . $ip;
+            try{
+                logApiAddNotify($orderid, 1, $result, $json_result);
+            }catch (\Exception $e) {
+                // var_dump($e);
+            }
+            return;
+        }
 
         $sign = $_SERVER["HTTP_SIGN"];
         if ($this->is_verify($json,$sign)) {
