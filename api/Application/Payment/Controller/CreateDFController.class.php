@@ -603,27 +603,29 @@ class CreateDFController extends Controller
     }
     protected function sendWaring($user_id, $wttkData){
         $member_list = M('Member')->field('telegram_id')->where(['id'=>$user_id])->find();
-        $orderList=[];
-        $alltkmoney=0;
-        foreach($wttkData as $k =>$v){
-            $orderList[] = $v['orderid'] . "|\r\n" .  $v['out_trade_no'];
-            $alltkmoney = $alltkmoney + $v['tkmoney'];
+        if($member_list['telegram_id']){
+            $orderList=[];
+            $alltkmoney=0;
+            foreach($wttkData as $k =>$v){
+                $orderList[] = $v['orderid'] . "|\r\n" .  $v['out_trade_no'];
+                $alltkmoney = $alltkmoney + $v['tkmoney'];
+            }
+            $orderOrder = explode(',',$orderList);
+
+            $message = '';
+            $message .= "\r\n*【账户提现次数和金额风控提醒】*\r\n\r\n";
+            $message .= ".*商户名称*：" . $member_list['username'] . "`\r\n";
+            $message .= ".*提现钱包账号*：`" . $wttkData[0]['banknumber'] . "`\r\n";
+            $message .= "· *包含订单号*：" . $orderOrder . "\r\n";
+            $message .= "· *总提现次数*：" . count($wttkData) . "\r\n";
+            $message .= "· *总提现总金额*：" . $alltkmoney . "\r\n";
+
+            // if($user_id==3){
+            //     $result = R('Telegram/Api2/send', [$member_list['telegram_id'], $message, '', 'Markdown']);
+            //     return;
+            // }
+            $result = R('Telegram/Api/send', [$member_list['telegram_id'], $message, '', 'Markdown']);
         }
-        $orderOrder = explode(',',$orderList);
-
-        $message = '';
-        $message .= "\r\n*【账户提现次数和金额风控提醒】*\r\n\r\n";
-        $message .= ".*商户名称*：" . $member_list['username'] . "`\r\n";
-        $message .= ".*提现钱包账号*：`" . $wttkData[0]['banknumber'] . "`\r\n";
-        $message .= "· *包含订单号*：" . $orderOrder . "\r\n";
-        $message .= "· *总提现次数*：" . count($wttkData) . "\r\n";
-        $message .= "· *总提现总金额*：" . $alltkmoney . "\r\n";
-
-        // if($user_id==3){
-        //     $result = R('Telegram/Api2/send', [$member_list['telegram_id'], $message, '', 'Markdown']);
-        //     return;
-        // }
-        $result = R('Telegram/Api/send', [$member_list['telegram_id'], $message, '', 'Markdown']);
     }
 
     /**
