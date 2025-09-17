@@ -105,7 +105,7 @@ class TreealPayController extends PayController
     }
 
     public function getOAuth($client){
-        $url = 'https://api.pix.treeal.com/oauth/token';
+        $url = 'https://api.pix.treeal.com/api/v1/oauth/token';
         $header = [
             'accept: application/json',
             'Content-Type: application/json'
@@ -203,13 +203,13 @@ class TreealPayController extends PayController
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 0,
+                CURLOPT_MAXREDIRS => 10,
                 CURLOPT_TIMEOUT => 10,  // 增加超时时间
                 CURLOPT_FOLLOWLOCATION => true,
 
                 // 关键：客户端证书配置
-                CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.crt',
-                CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.key',
+//                CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.crt',
+//                CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.key',
 
                 // SSL验证设置
                 CURLOPT_SSL_VERIFYPEER => false,
