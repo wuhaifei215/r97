@@ -325,10 +325,9 @@ class PayController extends Controller
             $data['account_id'] = $channel_account['id'];
             $data['t'] = $tikuanconfig['t1zt'];
             //添加订单
-            var_dump($data);
             try {
                 $or_add = $Order->table($Order->getRealTableName(date('Y-m-d', $data['pay_applydate'])))->add($data);
-                echo $Order->getLastSql();die;
+
             } catch (\Exception $e) {
                 $this->showmessage('system error');
             }
