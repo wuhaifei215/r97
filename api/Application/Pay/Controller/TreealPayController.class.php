@@ -201,7 +201,7 @@ class TreealPayController extends PayController
                 'client_secret' => $client['signkey'],
                 'grant_type' => 'client_credentials',
             ];
-//        log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
+        log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
 //        log_place_order($this->code, "OAuth----url", $url);    //日志
             $authorization = $this->http_post_json($url, $params, $header);
 //        log_place_order($this->code, "OAuth----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志

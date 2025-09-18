@@ -1,5 +1,5 @@
 <?php
-$pay_orderid = 'E' . date("YmdHis") . rand(10000, 99999);    //订单号
+$pay_orderid = 'OD' . date("YmdHis") . rand(10000, 99999);    //订单号
 $pay_amount = "0.01";    //交易金额
 $product_name = "Vip基础服务";
 ?>
