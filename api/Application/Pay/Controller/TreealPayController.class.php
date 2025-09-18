@@ -39,14 +39,7 @@ class TreealPayController extends PayController
         $site = trim($return['unlockdomain']) ? $return['unlockdomain'] . '/' : $_site;
 
         /*********************************引入支付方类*********************************/
-        $redis = $this->redis_connect();
-        $authorization_redis = $redis->get('getOAuth');
-        $authorization = json_decode($authorization_redis,true);
-        if(!$authorization_redis || empty($productUser)) {
-            $authorization = $this->getOAuth($return);
-            $redis->set('getOAuth', json_encode($authorization, JSON_UNESCAPED_UNICODE));
-            $redis->expire('getOAuth' , 60);
-        };
+        $authorization = $this->getOAuth();
         $header = [
             'accept: application/json',
             'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
@@ -116,24 +109,6 @@ class TreealPayController extends PayController
         exit;
     }
 
-    public function getOAuth($client){
-        $url = 'https://api.pix.treeal.com/oauth/token';
-        $header = [
-            'accept: application/json',
-            'content-type: application/x-www-form-urlencoded'
-        ];
-        $params = [
-            'client_id'=> $client['mch_id'],
-            'client_secret' => $client['signkey'],
-            'grant_type' => 'client_credentials',
-        ];
-//        log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
-//        log_place_order($this->code, "OAuth----url", $url);    //日志
-        $ans = $this->http_post_json($url, $params, $header);
-//        log_place_order($this->code, "OAuth----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
-        return $ans;
-    }
-
     //异步通知
     public function notifyurl()
     {
@@ -141,6 +116,7 @@ class TreealPayController extends PayController
 
         //获取报文信息
         $result = json_decode(file_get_contents('php://input'), true);
+        log_place_order($this->code . '_notifyurl', "----异步回调", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
         var_dump($result);
         $arrayData = json_decode($result['data'], true);
         $orderid = $arrayData['reference'];
@@ -200,6 +176,33 @@ class TreealPayController extends PayController
             // var_dump($e);
         }
     }
+
+    public function getOAuth($client){
+        $redis = $this->redis_connect();
+        $authorization_redis = $redis->get('getOAuth');
+        $authorization = json_decode($authorization_redis,true);
+        if(!$authorization_redis || empty($authorization)) {
+            $url = 'https://api.pix.treeal.com/oauth/token';
+            $header = [
+                'accept: application/json',
+                'content-type: application/x-www-form-urlencoded'
+            ];
+            $params = [
+                'client_id'=> $client['mch_id'],
+                'client_secret' => $client['signkey'],
+                'grant_type' => 'client_credentials',
+            ];
+//        log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
+//        log_place_order($this->code, "OAuth----url", $url);    //日志
+            $authorization = $this->http_post_json($url, $params, $header);
+//        log_place_order($this->code, "OAuth----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
+            $redis->set('getOAuth', json_encode($authorization, JSON_UNESCAPED_UNICODE));
+            $redis->expire('getOAuth' , 60);
+        };
+
+        return $authorization;
+    }
+
     //发送post请求
     private function http_post_json($url, $postData, $options = array())
     {
