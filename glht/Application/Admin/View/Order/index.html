@@ -188,7 +188,8 @@
           <tr>
             <th lay-data="{field:'key',width:160}">ID/支付银行/支付通道</th>
             <th lay-data="{field:'pay_memberid', width:100, align:'center'}">商户编号</th>
-            <th lay-data="{field:'pay_orderid', width:250,style:'color:#060;'}">系统订单号/下游订单号/E单号</th>
+            <th lay-data="{field:'pay_orderid', width:250,style:'color:#060;'}">系统订单号/下游订单号</th>
+            <th lay-data="{field:'three_orderid', width:250,style:'color:#060;'}">TxId/E单号</th>
             <th lay-data="{field:'amount', width:100,style:'color:#060;'}">交易金额</th>
             <th lay-data="{field:'rate', width:100}">手续费</th>
             <th lay-data="{field:'actualamount', width:100,style:'color:#C00;'}">实际金额</th>
@@ -210,8 +211,11 @@
               <td style="text-align:center; color:#090;"><{$vo[pay_orderid]}>
                 <br>
                 <{$vo[out_trade_id]}>
-                <br>
+              </td>
+              <td style="text-align:center; color:#090;">
                 <{$vo[billno]}>
+                <br>
+                <{$vo[three_orderid]}>
               </td>
               <td style="text-align:center; color:#060"><{$vo.pay_amount}></td>
               <td style="text-align:center; color:#666"><{$vo.pay_poundage}></td>
