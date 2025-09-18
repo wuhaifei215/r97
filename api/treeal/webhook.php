@@ -21,7 +21,7 @@ import('Pay.Controller.TreealPayController');   // 对应 /Application/Pay/Actio
 /*-------------------------------------------------
  4️⃣ 实例化并调用 notifyurl 方法
  -------------------------------------------------*/
-$controller = new TreealPayController();   // 类名必须与文件里定义的类名一致
+$controller = new TreealPay();   // 类名必须与文件里定义的类名一致
 $controller->notifyurl();              // 直接执行业务代码
 
 /*-------------------------------------------------
