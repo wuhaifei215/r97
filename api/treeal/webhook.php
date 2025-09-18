@@ -10,7 +10,7 @@ if (!defined('APP_PATH')) {
 }
 
 // 3. 加载 ThinkPHP
-require dirname(__DIR__) . '/ThinkPHP/ThinkPHP.php';
+require dirname(__DIR__) . '/core/ThinkPHP.php';
 
 // 4. 调用控制器方法
 R('Pay/TreealPay/notifyurl');   // 或者
