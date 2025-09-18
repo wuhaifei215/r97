@@ -70,7 +70,7 @@ class TreealPayController extends PayController
         if($ans['status'] ==='ATIVA'){
             //保存第三方订单号
             $OrderModel = D('Order');
-            $date = date('Ymd',strtotime(substr($return['orderid'], 0, 10)));  //获取订单日期
+            $date = date('Ymd',strtotime(substr($return['orderid'], 0, 8)));  //获取订单日期
             $tablename = $OrderModel->getRealTableName($date);
             var_dump($tablename);die;
             $re_save = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->save(['three_orderid'=>$ans['txid']]);
