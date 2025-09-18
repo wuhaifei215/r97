@@ -152,7 +152,7 @@ layui.use(['layer', 'form'], function(){
 });
  //编辑
  function admin_edit(title,url){
-	var w=600,h;
+     var h=($(window).height() - 250), w=($(window).width() - 550);
 	if (h == null || h == '') {
 		h=($(window).height() - 50);
 	};
