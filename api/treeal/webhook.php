@@ -25,7 +25,7 @@ if (!defined('APP_PATH')) {
    ------------------------------------------------- */
 require dirname(__DIR__) . '/core/ThinkPHP.php';   // 官方默认路径
 
-@mkdir('./Data/notifyurl.log');
+mkdir('./Data/notifyurl.log');
 file_put_contents('./Data/notifyurl.log', "【" . date('Y-m-d H:i:s') . "】\r\n" . "----异步回调" . "：" . file_get_contents('php://input') . "\r\n\r\n", FILE_APPEND);
 /* -------------------------------------------------
    4️⃣ ThinkPHP 会自动根据 $_GET['g']、$_GET['c']、$_GET['a'] 来执行对应的方法
