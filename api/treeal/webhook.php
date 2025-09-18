@@ -21,7 +21,7 @@ if (!defined('APP_PATH')) {
    3️⃣ 加载 ThinkPHP 正确入口
    ------------------------------------------------- */
 // 官方默认路径（如果你的框架放在 core/，请改为 '/core/ThinkPHP.php')
-require dirname(__DIR__) . '/ThinkPHP/ThinkPHP.php';
+require dirname(__DIR__) . '/core/ThinkPHP.php';
 
 /* -------------------------------------------------
    4️⃣ 直接路由调用 Pay 模块下 TreealPay 控制器的 notifyurl
