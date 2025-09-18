@@ -141,8 +141,8 @@ class TreealPayController extends PayController
 
         //获取报文信息
         $result = json_decode(file_get_contents('php://input'), true);
+        var_dump($result);
         $arrayData = json_decode($result['data'], true);
-        var_dump($arrayData);
         $orderid = $arrayData['reference'];
         //log_place_order($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
         log_place_order($this->code . '_notifyurl', $orderid . "----异步回调", file_get_contents('php://input'));    //日志
