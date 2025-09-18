@@ -270,11 +270,11 @@ class PayController extends Controller
         $pay_shijiamount = $pay_amount - $pay_sxfamount; // 实际到账金额
 
         //计算通道成本
-        if ($syschannel['rate_type'] == 1) { //按比例计算
+        if ($syschannel['rate_type'] == 1) {    //按单笔计算
             $cost = $syschannel['sxffixed'];
         } elseif ($syschannel['rate_type'] == 2) {   //按单笔加比例计算
             $cost = $syschannel['sxffixed'] + bcmul($pay_amount, $syschannel['rate'], 4);
-        } else {    //按单笔计算
+        } else { //按比例计算
             $cost = bcmul($pay_amount, $syschannel['rate'], 4); //计算成本
         }
 
