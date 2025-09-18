@@ -1,43 +1,19 @@
 <?php
-/**
- *  notify.php
- *  -----------------
- *  用途：让外部（如支付平台）回调到 Pay 模块下的 TreealPayController::notifyurl()
- *
- *  说明：
- *  - ThinkPHP 在请求真实文件时会直接返回该文件，不会走伪静态路由。
- *  - 本文件手动引入 ThinkPHP 核心，然后使用 ThinkPHP 的 A() / R() 函数
- *    调用模块/控制器/方法。
- *  - 只需要把 $_POST / $_GET 等原始参数原样保留下来，框架内部会自动读取。
- */
-
-/*-------------------------------------------------
-  第一步：确保 ThinkPHP 所需的常量已定义
-  -------------------------------------------------*/
-if (!defined('APP_PATH')) {
-    // Application 目录的完整路径（与 index.php 中保持一致）
-    define('APP_PATH', dirname(__DIR__) . '/Application/');
-}
+// /api/notify.php   （或任意可以直接被访问的路径）
 
 // 1. 强制模块为 Pay
 $_GET['g'] = 'Pay';
 
-/*-------------------------------------------------
-  第二步：载入 ThinkPHP 核心文件
-  -------------------------------------------------*/
-require dirname(__DIR__) . '/core/ThinkPHP.php';
+// 2. 定义 Application 路径
+if (!defined('APP_PATH')) {
+    define('APP_PATH', dirname(__DIR__) . '/Application/');
+}
 
-/*-------------------------------------------------
-  第三步：调用 Pay 模块的 TreealPay 控制器
-  -------------------------------------------------*/
+// 3. 加载 ThinkPHP
+require dirname(__DIR__) . '/ThinkPHP/ThinkPHP.php';
 
-// 方法一：使用 A()（返回控制器实例）
-// -------------------------------------------------
-//$controller = A('Pay/TreealPay');   // Pay 为模块名，TreealPay 为控制器名（不需要加 Action）
-//$controller->notifyurl();           // 直接执行方法
-//// 结束脚本，防止 ThinkPHP 后续自动输出模板
-//exit;
+// 4. 调用控制器方法
+R('Pay/TreealPay/notifyurl');   // 或者
+// $c = A('Pay/TreealPay'); $c->notifyurl();
 
-
-// 方法二：如果你只想“一行代码”触发（不需要实例化），可以改为下面的 R()，记得把上面的代码改为注释掉
- R('Pay/TreealPay/notifyurl');  // 同样会执行 notifyurl 方法
+exit;
