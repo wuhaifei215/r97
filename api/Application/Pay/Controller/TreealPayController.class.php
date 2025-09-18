@@ -173,7 +173,7 @@ class TreealPayController extends PayController
             }else{
                 log_place_order($this->code . '_notifyurl', $orderid . "----订单状态异常", $arrayData['status']);    //日志
             }
-            $json_result = "SUCCESS";
+            $json_result = "success";
 //        } else {
 //            log_place_order($this->code . '_notifyurl', $orderid . "----签名错误，加密后", $sign);    //日志
 //        }
