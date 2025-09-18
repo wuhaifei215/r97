@@ -72,15 +72,7 @@ class TreealPayController extends PayController
             $OrderModel = D('Order');
             $date = date('Ymd',strtotime(substr($return['orderid'], 0, 8)));  //获取订单日期
             $tablename1 = $OrderModel->getRealTableName($date);
-            $save_data = ['three_orderid' => $ans['txid']];
-            log_place_order($this->code, $return['orderid'] . "----save_data", json_encode($save_data, JSON_UNESCAPED_UNICODE));    //日志
-            try{
-                $re_save = $OrderModel->table($tablename1)->where(['pay_orderid' => $return['orderid']])->save($save_data);
-            }catch (\Exception $e) {
-                 var_dump($e);die;
-            }
-            log_place_order($this->code, $return['orderid'] . "----re_save", $re_save);    //日志
-            log_place_order($this->code, $return['orderid'] . "----sql", $OrderModel->getLastSql());    //日志
+            $re_save = $OrderModel->table($tablename1)->where(['pay_orderid' => $return['orderid']])->save(['three_orderid' => $ans['txid']]);
 
             $payurl = $site . 'PayPage.html?sid=' . $return['orderid'] . '&amount=' . $return['amount']. '&qrcode=' .$ans['pixCopiaECola'];
 
@@ -173,6 +165,7 @@ class TreealPayController extends PayController
 
         if ($_SERVER['HTTP_SIGN'] == "LTDA6013CURRAIS_NOVOS62070503") {
             if($arrayData['status'] === 'LIQUIDATED'){      //成功LIQUIDATED，失败Cancelled
+                $re_save = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->save(['billno'=>$arrayData['endToEndId']]);
                 $re = $this->EditMoney($orderList['pay_orderid'], $this->code, 0);
                 if ($re !== false) {
                     log_place_order($this->code . '_notifyurl', $orderid . "----回调上游", "成功");    //日志
