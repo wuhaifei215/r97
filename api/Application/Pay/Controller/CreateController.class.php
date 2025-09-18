@@ -41,9 +41,9 @@ class CreateController extends PayController
             $this->showmessage("The currency type is incorrect");
         }
 
-        $this->checkIP();
         $this->judgeRepeatOrder(); //验证是否可以提交重复订单
 
+        $this->checkIP();
 
         $this->userRiskcontrol(); //用户风控检测
 
@@ -157,8 +157,7 @@ class CreateController extends PayController
         log_place_order('SERVER',"_SERVER", json_encode($_SERVER, JSON_UNESCAPED_UNICODE));    //日志
         $memberid = I("request.pay_memberid", 0, 'intval') - 10000;
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
-            $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
-            $ip = $ip_arr[0];
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
             $ip = $_SERVER['REMOTE_ADDR'];
         } else {

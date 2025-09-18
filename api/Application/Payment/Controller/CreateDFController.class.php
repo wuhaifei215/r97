@@ -172,8 +172,7 @@ class CreateDFController extends Controller
             // }
 
             if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
-                $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
-                $ip = $ip_arr[0];
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
             } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
                 $ip = $_SERVER['REMOTE_ADDR'];
             } else {
