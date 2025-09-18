@@ -9,32 +9,27 @@
 /* -------------------------------------------------
    1️⃣ 先把模块锁定为 Pay（必须在加载框架之前执行）
    ------------------------------------------------- */
-$_GET['g']     = 'Pay';             // 让入口代码看到请求的模块是 Pay
-$_REQUEST['g'] = 'Pay';
-define('BIND_MODULE','Pay');        // TP3.2.4 支持 BIND_MODULE
+$_GET['g'] = 'Pay';                // ThinkPHP 3.2.4 使用 $_GET['g'] 来决定模块
+$_GET['c'] = 'TreealPay';          // ThinkPHP 3.2.4 使用 $_GET['c'] 来决定控制器
+$_GET['a'] = 'notifyurl';          // ThinkPHP 3.2.4 使用 $_GET['a'] 来决定方法
+define('BIND_MODULE','Pay');       // TP3.2.4 支持 BIND_MODULE
 
 /* -------------------------------------------------
    2️⃣ 定义 Application 目录的完整路径
    ------------------------------------------------- */
 if (!defined('APP_PATH')) {
-    // 本文件假设在站点根目录的子目录 /api/
-    // dirname(__DIR__) 返回站点根目录，例如 /var/www/html
     define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
 
 /* -------------------------------------------------
    3️⃣ 加载 ThinkPHP 正确的入口文件
    ------------------------------------------------- */
-// 下面两行任选其一，取决于你的框架实际所在位置
-//require dirname(__DIR__) . '/ThinkPHP/ThinkPHP.php';   // 官方默认路径
- require dirname(__DIR__) . '/core/ThinkPHP.php';    // 如果框架在 core/ 里，打开此行
+require dirname(__DIR__) . '/ThinkPHP/ThinkPHP.php';   // 官方默认路径
 
 /* -------------------------------------------------
-   4️⃣ 手动导入并实例化 TreealPayController（不走路由回退）
+   4️⃣ ThinkPHP 会自动根据 $_GET['g']、$_GET['c']、$_GET['a'] 来执行对应的方法
    ------------------------------------------------- */
-import('Pay.Controller.TreealPayController');   // 导入  Application/Pay/Controller/TreealPayController.class.php
-$controller = new TreealPayController();       // 实例化（类名必须是 TreealPayController）
-$controller->notifyurl();                       // 直接执行业务方法
+// 不需要手动导入和实例化，ThinkPHP 会自动处理
 
 /* -------------------------------------------------
    5️⃣ 结束脚本，防止 ThinkPHP 再渲染默认模板
