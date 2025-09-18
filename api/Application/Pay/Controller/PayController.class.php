@@ -310,6 +310,7 @@ class PayController extends Controller
             $data['pay_yzh_tongdao'] = $parameter["title"];
             $data['pay_tjurl'] = isset($_SERVER['HTTP_REFERER'])?substr((string)$_SERVER['HTTP_REFERER'], 0, 1000):'';
             $data['pay_productname'] = I("request.pay_productname");
+            $data['pay_sxf_type'] = $_userrate['rate_type'];
             $data['attach'] = I("request.pay_attach");
             $data['out_trade_id'] = $out_trade_id;
             $data['paytype'] = $syschannel['paytype'];      //通道类型
@@ -317,7 +318,8 @@ class PayController extends Controller
             $data['key'] = $return["signkey"];
             $data['account'] = $return["appid"];
             $data['cost'] = $cost;
-            $data['cost_rate'] = $tikuanconfig['t1zt'] == 0 ? $syschannel['t0rate'] : $syschannel['rate'];
+            $data['cost_rate'] = $syschannel['rate'];
+            $data['cost_type'] = $syschannel['rate_type'];
             $data['channel_id'] = $this->channel['api'];
             $data['account_id'] = $channel_account['id'];
             $data['t'] = $tikuanconfig['t1zt'];

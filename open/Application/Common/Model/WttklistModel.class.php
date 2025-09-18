@@ -46,7 +46,7 @@ class WttklistModel extends Model {
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                   `userid` int(11) NOT NULL,
                   `orderid` varchar(100) NOT NULL DEFAULT ' ' COMMENT '订单id',
-                  `out_trade_no` varchar(30) DEFAULT '' COMMENT '下游订单号',
+                  `out_trade_no` varchar(40) DEFAULT '' COMMENT '下游订单号',
                   `bankname` varchar(300) NOT NULL,
                   `bankzhiname` varchar(300) DEFAULT NULL,
                   `banknumber` varchar(300) NOT NULL,
@@ -68,7 +68,7 @@ class WttklistModel extends Model {
                   `channel_mch_id` varchar(50) NOT NULL DEFAULT '' COMMENT '通道商户号',
                   `cost` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '成本',
                   `cost_rate` decimal(10,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '成本费率',
-                  `rate_type` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '费率类型：按单笔收费0，按比例收费：1',
+                  `rate_type` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '费率类型：按单笔收费0，按比例收费：1，按单笔+比例收费：2',
                   `extends` text COMMENT '扩展数据',
                   `auto_submit_try` int(10) NOT NULL DEFAULT '0' COMMENT '自动代付尝试提交次数',
                   `last_submit_time` int(11) NOT NULL DEFAULT '0' COMMENT '最后提交时间',
@@ -196,7 +196,7 @@ class WttklistModel extends Model {
         if($limit){
             $limit = ' LIMIT ' . $limit;
         }
-        
+
         $where = '';
         $optionstr = $this->new_parseOptions($options);
         if($optionstr){
@@ -208,6 +208,7 @@ class WttklistModel extends Model {
             //获取时间段内的每一天
             $data_arr = $this->getDateRange($startdate, $enddate);        // 构建查询语句
             $break = 0;
+            $unionSql='';
             foreach ($data_arr as $date) {
                 $realTableName = $this->getRealTableName($date);
                 if(in_array($realTableName,$this->orderTables) && intval($date) >= $this->expire_date){
@@ -255,8 +256,8 @@ class WttklistModel extends Model {
                     $unionSql .= $where;
                 }
                 if($groupby){
-                        $unionSql .= $groupby;
-                    }
+                    $unionSql .= $groupby;
+                }
                 if($orderby){
                     $unionSql .= $orderby;
                 }
