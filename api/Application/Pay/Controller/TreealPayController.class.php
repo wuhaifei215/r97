@@ -74,8 +74,11 @@ class TreealPayController extends PayController
             $tablename1 = $OrderModel->getRealTableName($date);
             $save_data = ['three_orderid' => $ans['txid']];
             log_place_order($this->code, $return['orderid'] . "----save_data", json_encode($save_data, JSON_UNESCAPED_UNICODE));    //日志
-            $re_save = $OrderModel->table($tablename1)->where(['pay_orderid' => $return['orderid']])->save($save_data);
-
+            try{
+                $re_save = $OrderModel->table($tablename1)->where(['pay_orderid' => $return['orderid']])->save($save_data);
+            }catch (\Exception $e) {
+                 var_dump($e);
+            }
             log_place_order($this->code, $return['orderid'] . "----re_save", $re_save);    //日志
             log_place_order($this->code, $return['orderid'] . "----sql", $OrderModel->getLastSql());    //日志
 
