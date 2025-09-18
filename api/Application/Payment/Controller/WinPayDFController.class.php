@@ -84,7 +84,11 @@ class WinPayDFController extends PaymentController
                     break;
             }
         }elseif($result['code'] === '900003' || $result['code'] === '999999' || $result['code'] === '000218'){
-            $return = ['status' => 3, 'msg' => $result['msg']];
+            if (strpos('already exists', $result['msg']) !== false) {       //订单已存在
+                $return = ['status' => 1, 'msg' => $result['msg']];
+            }else{
+                $return = ['status' => 3, 'msg' => $result['msg']];
+            }
         }else{
             $return = ['status' => 0, 'msg' => $result['msg']];
         }

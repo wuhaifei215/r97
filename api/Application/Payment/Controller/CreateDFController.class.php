@@ -294,11 +294,11 @@ class CreateDFController extends Controller
         //计算手续费
 //       $sxfmoney = $tkConfig['tktype'] ? $tkConfig['sxffixed'] : bcdiv(bcmul($data['money'], $tkConfig['sxfrate'], 4), 100, 4);
 
-        if ($tkConfig['tktype'] == 1) { //按比例计算
+        if ($tkConfig['tktype'] == 1) {//按单笔计算
             $sxfmoney = $tkConfig['sxffixed'];
         } elseif ($tkConfig['tktype'] == 2) {   //按单笔加比例计算
             $sxfmoney = $tkConfig['sxffixed'] + bcdiv(bcmul($money, $tkConfig['sxfrate'], 4), 100, 4);
-        } else {    //按单笔计算
+        } else {     //按比例计算
             $sxfmoney = bcdiv(bcmul($money, $tkConfig['sxfrate'], 4), 100, 4);
         }
 

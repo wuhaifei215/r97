@@ -224,7 +224,9 @@ class PayController extends Controller
 
         // 定制成本费率
         if ($channel_account['custom_rate']) {
+            $syschannel['rate_type'] = $channel_account['rate_type'];
             $syschannel['rate'] = $channel_account['rate'];
+            $syschannel['sxffixed'] = $channel_account['sxffixed'];
         }
 
         //平台通道
@@ -254,11 +256,28 @@ class PayController extends Controller
         }
         $return["amount"] = floatval($pay_amount) * $moneyratio; // 交易金额
 
+
         //费率
-        $_userrate = M('Userrate')->field('feilv')->where(["userid" => $this->channel['userid'], "payapiid" => intval($this->channel['pid'])])->find();
-        $pay_sxfamount = $pay_amount * $_userrate['feilv']; // 手续费
+        $_userrate = M('Userrate')->field('rate_type,feilv,sxffixed')->where(["userid" => $this->channel['userid'], "payapiid" => intval($this->channel['pid'])])->find();
+        //计算手续费
+        if($_userrate['rate_type'] ==1){//按单笔计算
+            $pay_sxfamount = $_userrate['sxffixed'];
+        }elseif($_userrate['rate_type'] ==2){  //按单笔加比例计算
+            $pay_sxfamount = $_userrate['sxffixed'] + bcdiv(bcmul($pay_amount, $_userrate['feilv'], 4), 100, 4);
+        }else{    //按比例计算
+            $pay_sxfamount = bcdiv(bcmul($pay_amount, $_userrate['feilv'], 4), 100, 4); // 手续费
+        }
         $pay_shijiamount = $pay_amount - $pay_sxfamount; // 实际到账金额
-        $cost = bcmul($syschannel['rate'], $pay_amount, 4); //计算成本
+
+        //计算通道成本
+        if ($syschannel['rate_type'] == 1) { //按比例计算
+            $cost = $syschannel['sxffixed'];
+        } elseif ($syschannel['rate_type'] == 2) {   //按单笔加比例计算
+            $cost = $syschannel['sxffixed'] + bcmul($pay_amount, $syschannel['rate'], 4);
+        } else {    //按单笔计算
+            $cost = bcmul($pay_amount, $syschannel['rate'], 4); //计算成本
+        }
+
 
         //商户订单号
         $out_trade_id = $parameter['out_trade_id'];
