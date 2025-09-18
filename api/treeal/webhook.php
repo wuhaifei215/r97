@@ -14,6 +14,16 @@ $_GET['c'] = 'TreealPay';          // ThinkPHP 3.2.4 使用 $_GET['c'] 来决定
 $_GET['a'] = 'notifyurl';          // ThinkPHP 3.2.4 使用 $_GET['a'] 来决定方法
 define('BIND_MODULE','Pay');       // TP3.2.4 支持 BIND_MODULE
 
+$filePath = './Data/' . date('Ymd') . '/';
+if (@mkdirs($filePath)) {
+    $destination = $filePath . $file . '_' . date('H') . '.log';
+    if (!file_exists($destination)) {
+        @fopen($destination, 'wb ');
+    }
+    @file_put_contents($destination, "【" . date('Y-m-d H:i:s') . "】\r\n notifyurl：" .  file_get_contents('php://input') . "\r\n\r\n", FILE_APPEND);
+    return true;
+}
+
 /* -------------------------------------------------
    2️⃣ 定义 Application 目录的完整路径
    ------------------------------------------------- */
