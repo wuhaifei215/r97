@@ -36,7 +36,7 @@ if (!defined('APP_PATH')) {
    4️⃣ 手动导入并实例化 TreealPayController（不走路由回退）
    ------------------------------------------------- */
 import('Pay.Controller.TreealPayController');   // 导入  Application/Pay/Controller/TreealPayController.class.php
-$controller = new TreealPayController();       // 实例化（类名必须是 TreealPayController）
+$controller = new \TreealPayController();       // 实例化（类名必须是 TreealPayController）
 $controller->notifyurl();                       // 直接执行业务方法
 
 /* -------------------------------------------------
