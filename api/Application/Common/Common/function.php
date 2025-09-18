@@ -1541,10 +1541,10 @@ function logApiAdd($title, $method, $memberid, $orderid, $business_type, $oper_p
         'create_time' => date('Y-m-d H:i:s'),       //创建时间
     ];
     $url = C('LOG_API_URL') . '/Log_Api_addLog.html';
-     log_place_order('logApiaddLog', "----提交地址", $url);    //日志
-     log_place_order('logApiaddLog', "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApiaddLog', "----提交地址", $url);    //日志
+//     log_place_order('logApiaddLog', "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
     $res = http_post_json($url, $log);
-     log_place_order('logApiaddLog', "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApiaddLog', "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
     
     if($res && $res['status'] === 'success'){
         return true;
@@ -1573,10 +1573,10 @@ function logApiAddReceipt($title, $method, $orderid, $out_trade_id, $oper_url=''
         'create_time' => date('Y-m-d H:i:s'),       //创建时间
     ];
     $url = C('LOG_API_URL') . '/Log_Api_addReceiptLog.html';
-     log_place_order('logApi', $orderid . "----提交地址", $url);    //日志
-     log_place_order('logApi', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApi', $orderid . "----提交地址", $url);    //日志
+//     log_place_order('logApi', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
     $res = http_post_json($url, $log);
-     log_place_order('logApi', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApi', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
     
     if($res && $res['status'] === 'success'){
         return true;
@@ -1605,10 +1605,10 @@ function logApiAddPayment($title, $method, $orderid, $out_trade_id, $oper_url=''
         'create_time' => date('Y-m-d H:i:s'),       //创建时间
     ];
     $url = C('LOG_API_URL') . '/Log_Api_addPaymentLog.html';
-     log_place_order('logApiPayment', $orderid . "----提交地址", $url);    //日志
-     log_place_order('logApiPayment', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApiPayment', $orderid . "----提交地址", $url);    //日志
+//     log_place_order('logApiPayment', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
     $res = http_post_json($url, $log);
-     log_place_order('logApiPayment', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApiPayment', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
     
     if($res && $res['status'] === 'success'){
         return true;
@@ -1629,10 +1629,10 @@ function logApiAddNotify($orderid, $type, $oper_param=[], $json_result=[]){
         'create_time' => date('Y-m-d H:i:s'),       //创建时间
     ];
     $url = C('LOG_API_URL') . '/Log_Api_addNotifyLog.html';
-     log_place_order('logApiNotify', $orderid . "----提交地址", $url);    //日志
-     log_place_order('logApiNotify', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApiNotify', $orderid . "----提交地址", $url);    //日志
+//     log_place_order('logApiNotify', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
     $res = http_post_json($url, $log);
-     log_place_order('logApiNotify', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApiNotify', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
     
     if($res && $res['status'] === 'success'){
         return true;
@@ -1650,10 +1650,10 @@ function getAddLogOrders($memberid, $order_id, $business_type, $oper_ip, $create
         'create_time' => $create_time?:date('Y-m-d H:i:s'),       //创建时间
     ];
     $url = C('LOG_API_URL') . '/Log_Api_getAddLog.html';
-     log_place_order('getOrderLog', "----提交地址", $url);    //日志
-     log_place_order('getOrderLog', "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('getOrderLog', "----提交地址", $url);    //日志
+//     log_place_order('getOrderLog', "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
     $res = http_post_json($url, $log);
-     log_place_order('getOrderLog', "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('getOrderLog', "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
     return $res;
 }
 
