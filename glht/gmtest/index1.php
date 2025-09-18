@@ -18,7 +18,7 @@ $Md5key = "bb5d4o184z9oi4wnew131q292d14uhkh";   //密钥
 // }else{
 //     $tjurl = $http_type . "api.r97pay.com/Pay_Create_payinPHP.html";   //提交地址
 // }
-
+ 
 
 
 //扫码
