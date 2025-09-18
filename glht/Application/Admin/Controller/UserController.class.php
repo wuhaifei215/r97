@@ -1280,6 +1280,7 @@ class UserController extends BaseController
         if ($products) {
             foreach ($products as $key => $item) {
                 $products[$key]['feilv'] = $_tmpData[$item['id']]['feilv'] ? $_tmpData[$item['id']]['feilv'] * 100 : '0.0000';
+                $products[$key]['sxffixed'] = $_tmpData[$item['id']]['sxffixed'] ? $_tmpData[$item['id']]['sxffixed'] : '0.0000';
             }
         }
         $this->assign('userid', $userid);
