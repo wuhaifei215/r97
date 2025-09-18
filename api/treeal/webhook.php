@@ -40,7 +40,7 @@ function log_place_order($file, $notify, $notifystr)
     }
     return false;
 }
-log_place_order($this->code . '_notifyurl', "----异步回调", file_get_contents('php://input'));    //日志
+log_place_order('TreealPay_notifyurl', "----异步回调", file_get_contents('php://input'));    //日志
 
 /* -------------------------------------------------
    2️⃣ 定义 Application 目录的完整路径
