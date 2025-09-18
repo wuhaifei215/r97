@@ -162,7 +162,7 @@ class TreealPayController extends PayController
             return;
         }
 
-//        if ($_SERVER['HTTP_SIGN'] == "LTDA6013CURRAIS_NOVOS62070503") {
+        if ($_SERVER['HTTP_SIGN'] == "LTDA6013CURRAIS_NOVOS62070503") {
             if($arrayData['status'] === 'LIQUIDATED'){      //成功LIQUIDATED，失败Cancelled
                 $re = $this->EditMoney($orderList['pay_orderid'], $this->code, 0);
                 if ($re !== false) {
@@ -174,9 +174,10 @@ class TreealPayController extends PayController
                 log_place_order($this->code . '_notifyurl', $orderid . "----订单状态异常", $arrayData['status']);    //日志
             }
             $json_result = "success";
-//        } else {
-//            log_place_order($this->code . '_notifyurl', $orderid . "----签名错误，加密后", $sign);    //日志
-//        }
+        } else {
+            log_place_order($this->code . '_notifyurl', $orderid . "----签名错误，加密后", $_SERVER['HTTP_SIGN']);    //日志
+            $json_result = "sign fail";
+        }
         echo $json_result;
         try{
             logApiAddNotify($orderid, 0, $result, $json_result);
