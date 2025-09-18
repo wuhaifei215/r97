@@ -13,7 +13,7 @@ class OrderModel extends Model {
     protected $timeoptions = ['pay_applydate','pay_successdate'];
     // 数据库表达式
     protected $exp = array('eq' => '=', 'neq' => '<>', 'gt' => '>', 'egt' => '>=', 'lt' => '<', 'elt' => '<=', 'notlike' => 'NOT LIKE', 'like' => 'LIKE', 'in' => 'IN', 'notin' => 'NOT IN', 'not in' => 'NOT IN', 'between' => 'BETWEEN', 'not between' => 'NOT BETWEEN', 'notbetween' => 'NOT BETWEEN');
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -62,7 +62,7 @@ class OrderModel extends Model {
                   `pay_tjurl` varchar(1000) DEFAULT NULL,
                   `pay_sxf_type` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '手续费类型：按单笔收费0，按比例收费：1，按单笔+比例收费：2',
                   `out_trade_id` varchar(50) NOT NULL COMMENT '商户订单号',
-                  `billno` varchar(50) DEFAULT NULL COMMENT '上游交易流水号',
+                  `billno` varchar(50) NOT NULL COMMENT '上游交易流水号',
                   `paytype` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '渠道类型: 1 Gcash直连 2 Gcash扫码 3 Maya 4 VietQR',
                   `num` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '已补发次数',
                   `memberid` varchar(100) DEFAULT NULL COMMENT '支付渠道商家号',
@@ -76,6 +76,7 @@ class OrderModel extends Model {
                   `attach` text CHARACTER SET utf8mb4 COMMENT '商家附加字段,原样返回',
                   `pay_channel_account` varchar(255) DEFAULT NULL COMMENT '通道账户',
                   `cost_type` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '成本类型：按单笔收费0，按比例收费：1，按单笔+比例收费：2',
+                  `qrurl` varchar(200) DEFAULT NULL COMMENT '阿里二维码',
                   `cost` decimal(15,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '成本',
                   `cost_rate` decimal(10,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '成本费率',
                   `account_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '子账号id',
@@ -83,27 +84,23 @@ class OrderModel extends Model {
                   `t` tinyint(2) NOT NULL DEFAULT '1' COMMENT '结算周期（计算费率）',
                   `last_reissue_time` int(11) NOT NULL DEFAULT '11' COMMENT '最后补发时间',
                   `lock_status` tinyint(1) DEFAULT '0' COMMENT '是否冻结订单，1冻结，2解冻',
-                  `qrurl` varchar(200) DEFAULT NULL COMMENT '阿里二维码',
-                  `in_accountname` varchar(255) DEFAULT NULL,
-                  `in_cardnumber` varchar(255) DEFAULT NULL,
-                  `in_bankname` varchar(255) DEFAULT NULL,
-                  `three_orderid` varchar(100) DEFAULT NULL COMMENT '三方订单号',
-                  PRIMARY KEY (`id`) USING BTREE,
+                  `three_orderid` varchar(40) DEFAULT NULL COMMENT '三方订单号',
+                  PRIMARY KEY (`id`),
                   UNIQUE KEY `IND_ORD` (`pay_orderid`) USING BTREE,
                   KEY `account_id` (`account_id`) USING BTREE,
                   KEY `channel_id` (`channel_id`) USING BTREE,
                   KEY `pay_memberid` (`pay_memberid`,`out_trade_id`) USING BTREE,
                   KEY `out_trade_id` (`out_trade_id`,`pay_memberid`) USING BTREE,
-                  KEY `pay_status` (`pay_status`),
-                  KEY `applydate` (`pay_applydate`),
-                  KEY `successdate` (`pay_successdate`),
-                  KEY `lock_status` (`lock_status`),
+                  KEY `pay_status` (`pay_status`) USING BTREE,
+                  KEY `applydate` (`pay_applydate`) USING BTREE,
+                  KEY `successdate` (`pay_successdate`) USING BTREE,
+                  KEY `lock_status` (`lock_status`) USING BTREE,
                   KEY `pay_memberid_2` (`pay_memberid`,`pay_applydate`) USING BTREE
                 ) ENGINE=InnoDB AUTO_INCREMENT=" . $newId . " DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;";
             $this->execute($creatSql);
         }
     }
-        
+
     public function getTables($data=array()){
         if(!empty($data) && $data['pay_applydate']){
             //获取时间范围内的表
@@ -120,7 +117,7 @@ class OrderModel extends Model {
         }
         return $tables;
     }
-    
+
     public function getLastIds($returnAllArray = false){
         foreach ($this->orderTables as $k => $v){
             $lastIds = $this->query("SELECT id FROM " . $v . ' ORDER BY id DESC LIMIT 1');
@@ -134,7 +131,7 @@ class OrderModel extends Model {
             return $lastAllArray;
         }
     }
- 
+
     // 获取实际表名的方法
     public function getRealTableName($date) {
         if(date('Ymd', strtotime($date)) < $this->expire_date){
@@ -145,7 +142,7 @@ class OrderModel extends Model {
         return $this->tablePrefix . $this->tableName . $date_md;
     }
 
-    
+
     // 获取实际表名的方法
     public function setRealTableName($date =array()) {
         $date = isset($data['pay_applydate']) ? $data['pay_applydate'] : date('Ymd',time());
@@ -154,7 +151,7 @@ class OrderModel extends Model {
         $this->table($realTableName);
         return $this;
     }
-    
+
     public function getCount($options=array()){
         $field = 'count(id) as tp_count';
         $count_arr = $this->getOrderByDateRange($field, $options);
@@ -164,7 +161,7 @@ class OrderModel extends Model {
         }
         return $count;
     }
-    
+
     public function getSum($field='', $options=array()){
         $field_arr = explode(',' , $field);
         $field_str='';
@@ -182,7 +179,7 @@ class OrderModel extends Model {
         }
         return $sum;
     }
-    
+
     // 按时间范围查询数据表
     public function getOrderByDateRange($field=array(), $options=array(), $limit='', $orderby='' , $groupby='') {
         if(!$field){
@@ -199,7 +196,7 @@ class OrderModel extends Model {
         if($limit){
             $limit = ' LIMIT ' . $limit;
         }
-        
+
         $where = '';
         $optionstr = $this->new_parseOptions($options);
         if($optionstr){
@@ -260,8 +257,8 @@ class OrderModel extends Model {
                     $unionSql .= $where;
                 }
                 if($groupby){
-                        $unionSql .= $groupby;
-                    }
+                    $unionSql .= $groupby;
+                }
                 if($orderby){
                     $unionSql .= $orderby;
                 }
@@ -269,7 +266,7 @@ class OrderModel extends Model {
                     $unionSql .= $limit;
                 }
                 // 执行联合查询
-                
+
                 // var_dump($unionSql);
                 $result = $this->query($unionSql);
             }
@@ -286,7 +283,7 @@ class OrderModel extends Model {
         $this->table($tableName);
         return $this->addAll($data, $options);
     }
-    
+
     public function saveByDate($data, $options = array()){
         // 根据创建时间计算应该使用的分表
         $date = isset($options['pay_applydate']) ? $options['pay_applydate'] : date('Ymd',time());
@@ -296,7 +293,7 @@ class OrderModel extends Model {
         $options['table'] = $tableName;
         return $this->db->update($data, $options);
     }
-    
+
     public function new_parseDate($options){
         $startdate = $enddate = '';
         if(!isset($options['pay_applydate']) && !isset($options['pay_successdate'])){
@@ -322,7 +319,7 @@ class OrderModel extends Model {
         }
         return [$startdate,$enddate];
     }
-    
+
     //where条件转换为语句
     public function new_parseOptions($options){
         if (is_array($options) && (count($options) > 0)) {
@@ -332,15 +329,15 @@ class OrderModel extends Model {
             $options = implode(" AND ", $where);
         }
         return $options;
-    } 
-    
+    }
+
     public function new_parseField($field){
         if(is_array($field) && (count($field) > 0)) {
             $field = implode(",", $field);
         }
         return $field;
     }
-    
+
     //获取时间段内的每一天
     public function getDateRange($startdate, $enddate) {
         $stimestamp = is_numeric($startdate)?$startdate:strtotime($startdate);
@@ -354,7 +351,7 @@ class OrderModel extends Model {
         }
         return $date;
     }
-    
+
     // where子单元分析
     public function parseWhereItem($key, $val)
     {
@@ -432,7 +429,7 @@ class OrderModel extends Model {
         }
         return $whereStr;
     }
-        /**
+    /**
      * value分析
      * @access protected
      * @param mixed $value
@@ -453,7 +450,7 @@ class OrderModel extends Model {
         }
         return $value;
     }
-        /**
+    /**
      * SQL指令安全过滤
      * @access public
      * @param string $str  SQL字符串
@@ -463,7 +460,7 @@ class OrderModel extends Model {
     {
         return addslashes($str);
     }
-    
+
 }
 
 ?>
