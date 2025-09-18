@@ -1,32 +1,28 @@
 <?php
 /*-------------------------------------------------
- 1️⃣ 把模块强制为 Pay （必须在加载框架之前）
- -------------------------------------------------*/
-$_GET['g']     = 'Pay';
-$_POST['g']    = 'Pay';
-$_REQUEST['g'] = 'Pay';
-
-if (!defined('MODULE_NAME')) {
-    define('MODULE_NAME', 'Pay');   // 覆盖默认模块常量
-}
-
-/*-------------------------------------------------
- 2️⃣ 指定 Application 目录
+ 1️⃣ 定义 Application 目录（指向 /Application/）
  -------------------------------------------------*/
 if (!defined('APP_PATH')) {
-    // 此文件位于站点根目录的子目录 /api/
+    // 本文件在 /api/（或任意子目录），Application 与此目录同层
     define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
 
 /*-------------------------------------------------
- 3️⃣ 加载 ThinkPHP
+ 2️⃣ 加载 ThinkPHP 核心（让 Autoload、import 能工作）
  -------------------------------------------------*/
 require dirname(__DIR__) . '/core/ThinkPHP.php';
 
 /*-------------------------------------------------
- 4️⃣ 执行 Pay 模块下 TreealPay 的 notifyurl
+ 3️⃣ 手动导入目标 Action 类
+    import() 使用 ThinkPHP 的类映射规则把文件 include 进来
  -------------------------------------------------*/
-R('Pay/TreealPay/notifyurl');   // 完整路由调用
+import('Pay.Controller.TreealPayController');   // 对应 /Application/Pay/Action/TreealPayAction.class.php
+
+/*-------------------------------------------------
+ 4️⃣ 实例化并调用 notifyurl 方法
+ -------------------------------------------------*/
+$controller = new TreealPayAction();   // 类名必须与文件里定义的类名一致
+$controller->notifyurl();              // 直接执行业务代码
 
 /*-------------------------------------------------
  5️⃣ 结束脚本
