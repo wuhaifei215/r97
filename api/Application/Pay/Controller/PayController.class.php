@@ -286,6 +286,7 @@ class PayController extends Controller
 
         //验签
         if ($this->verify()) {
+            $data=[];
             $Order = D("Order");
             $return['bankcode'] = $this->channel['pid'];
             $return['code'] = $platform['code']; //银行英文代码
