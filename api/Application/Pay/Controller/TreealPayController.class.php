@@ -163,7 +163,7 @@ class TreealPayController extends PayController
 
         if ($_SERVER['HTTP_SIGN'] == "LTDA6013CURRAIS_NOVOS62070503") {
             if($arrayData['status'] === 'LIQUIDATED'){      //成功LIQUIDATED，失败Cancelled
-                $re_save = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->save(['billno'=>$arrayData['endToEndId']]);
+                $re_save = $OrderModel->table($tablename)->where(['three_orderid' => $orderid])->save(['billno'=>$arrayData['endToEndId']]);
                 $re = $this->EditMoney($orderList['pay_orderid'], $this->code, 0);
                 if ($re !== false) {
                     log_place_order($this->code . '_notifyurl', $orderid . "----回调上游", "成功");    //日志
