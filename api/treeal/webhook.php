@@ -4,9 +4,6 @@
 // 1. 强制模块为 Pay
 $_REQUEST['g'] = 'Pay';
 
-// 如果你担心系统已经把 DEFAULT_MODULE 改成了其它值，下面两行可以再保险一次
-C('DEFAULT_MODULE', 'Pay');   // 改掉默认模块（仅在 ThinkPHP 初始化前有效）
-define('MODULE_NAME', 'Pay'); // 防止后面再次被覆盖
 
 
 // 2. 定义 Application 路径
