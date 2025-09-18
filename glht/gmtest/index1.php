@@ -11,12 +11,12 @@ if(empty($pay_memberid)||empty($pay_amount)||empty($pay_bankcode)){
 $pay_applydate = date("Y-m-d H:i:s");  //订单时间
 $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://'; 
 $pay_notifyurl = $http_type . $_SERVER['HTTP_HOST'] . "/gmtest/server.php";   //服务端返回地址
-$pay_callbackurl = $http_type . "glht.yunpay.me/gmtest/page.php";  //页面跳转返回地址
+$pay_callbackurl = $http_type . "glht.r97pay.com/gmtest/page.php";  //页面跳转返回地址
 $Md5key = "bb5d4o184z9oi4wnew131q292d14uhkh";   //密钥
 // if($pay_bankcode=='909'){
     $tjurl = "http://api.r97pay.com/Pay_Create_payinBRL.html";   //提交地址
 // }else{
-//     $tjurl = $http_type . "api.yunpay.me/Pay_Create_payinPHP.html";   //提交地址
+//     $tjurl = $http_type . "api.r97pay.com/Pay_Create_payinPHP.html";   //提交地址
 // }
 
 
