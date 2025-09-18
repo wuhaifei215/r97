@@ -21,13 +21,10 @@ if (!defined('APP_PATH')) {
     define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
 
-// 调整 THINK_PATH 的定义
-define('THINK_PATH', realpath(dirname(__DIR__) . '/core/Library/Think/') . '/');
-
 /* -------------------------------------------------
    3️⃣ 加载 ThinkPHP 正确的入口文件
    ------------------------------------------------- */
-require dirname(__DIR__) . '/core/ThinkPHP.php';
+require dirname(__DIR__) . '/core/ThinkPHP.php';   // 官方默认路径
 
 /* -------------------------------------------------
    4️⃣ ThinkPHP 会自动根据 $_GET['g']、$_GET['c']、$_GET['a'] 来执行对应的方法
