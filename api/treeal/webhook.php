@@ -14,40 +14,13 @@ $_GET['c'] = 'TreealPay';          // ThinkPHP 3.2.4 使用 $_GET['c'] 来决定
 $_GET['a'] = 'notifyurl';          // ThinkPHP 3.2.4 使用 $_GET['a'] 来决定方法
 define('BIND_MODULE','Pay');       // TP3.2.4 支持 BIND_MODULE
 
-/**
- *递归创建多级目录
- */
-function mkdirs($dir, $mode = 0777)
-{
-    if (is_dir($dir) || @mkdir($dir, $mode)) return TRUE;
-    if (!mkdirs(dirname($dir), $mode)) return FALSE;
-
-    return @mkdir($dir, $mode);
-}
-/**
- *记录日志
- */
-function log_place_order($file, $notify, $notifystr)
-{
-    $filePath = './Data/' . date('Ymd') . '/';
-    if (@mkdirs($filePath)) {
-        $destination = $filePath . $file . '_' . date('H') . '.log';
-        if (!file_exists($destination)) {
-            @fopen($destination, 'wb ');
-        }
-        @file_put_contents($destination, "【" . date('Y-m-d H:i:s') . "】\r\n" . $notify . "：" . $notifystr . "\r\n\r\n", FILE_APPEND);
-        return true;
-    }
-    return false;
-}
-log_place_order('TreealPay_notifyurl', "----异步回调", file_get_contents('php://input'));    //日志
-
 /* -------------------------------------------------
    2️⃣ 定义 Application 目录的完整路径
    ------------------------------------------------- */
 if (!defined('APP_PATH')) {
     define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
+define('THINK_PATH', dirname(__DIR__) . '/core/Library/Think/');
 
 /* -------------------------------------------------
    3️⃣ 加载 ThinkPHP 正确的入口文件
