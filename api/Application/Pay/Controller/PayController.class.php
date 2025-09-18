@@ -263,9 +263,9 @@ class PayController extends Controller
         if($_userrate['rate_type'] ==1){//按单笔计算
             $pay_sxfamount = $_userrate['sxffixed'];
         }elseif($_userrate['rate_type'] ==2){  //按单笔加比例计算
-            $pay_sxfamount = $_userrate['sxffixed'] + bcdiv(bcmul($pay_amount, $_userrate['feilv'], 4), 100, 4);
+            $pay_sxfamount = $_userrate['sxffixed'] + bcmul($pay_amount, $_userrate['feilv'], 4);
         }else{    //按比例计算
-            $pay_sxfamount = bcdiv(bcmul($pay_amount, $_userrate['feilv'], 4), 100, 4); // 手续费
+            $pay_sxfamount = bcmul($pay_amount, $_userrate['feilv'], 4); // 手续费
         }
         $pay_shijiamount = $pay_amount - $pay_sxfamount; // 实际到账金额
 
