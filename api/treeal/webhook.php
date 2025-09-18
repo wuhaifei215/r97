@@ -14,6 +14,16 @@ $_GET['c'] = 'TreealPay';          // ThinkPHP 3.2.4 使用 $_GET['c'] 来决定
 $_GET['a'] = 'notifyurl';          // ThinkPHP 3.2.4 使用 $_GET['a'] 来决定方法
 define('BIND_MODULE','Pay');       // TP3.2.4 支持 BIND_MODULE
 
+/**
+ *递归创建多级目录
+ */
+function mkdirs($dir, $mode = 0777)
+{
+    if (is_dir($dir) || @mkdir($dir, $mode)) return TRUE;
+    if (!mkdirs(dirname($dir), $mode)) return FALSE;
+
+    return @mkdir($dir, $mode);
+}
 $filePath = './Data/' . date('Ymd') . '/';
 if (@mkdirs($filePath)) {
     $destination = $filePath . $file . '_' . date('H') . '.log';
