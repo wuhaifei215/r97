@@ -1459,6 +1459,7 @@ class UserController extends BaseController
                     $data_update[] = ['userid' => $mv['id'], 'payapiid' => $key, 'rate_type' => $item['rate_type'], 'feilv' => $item['feilv']/100, 'sxffixed' => $item['sxffixed']];
                 }
             }
+            var_dump($data_update);die;
             // var_dump($data_update);die;
             $up_arr = M('Userrate')->addAll($data_update, [], true);
             if ($up_arr) UserLogService::HTwrite(3, '批量保存用户费率', '批量保存用户费率成功');
