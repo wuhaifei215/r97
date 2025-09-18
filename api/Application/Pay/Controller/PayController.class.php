@@ -223,11 +223,11 @@ class PayController extends Controller
         $syschannel['account'] = $channel_account['title'];
 
         // 定制成本费率
-        if ($channel_account['custom_rate']) {
-            $syschannel['rate_type'] = $channel_account['rate_type'];
-            $syschannel['rate'] = $channel_account['rate'];
-            $syschannel['sxffixed'] = $channel_account['sxffixed'];
-        }
+//        if ($channel_account['custom_rate']) {
+//            $syschannel['rate_type'] = $channel_account['rate_type'];
+//            $syschannel['rate'] = $channel_account['rate'];
+//            $syschannel['sxffixed'] = $channel_account['sxffixed'];
+//        }
 
         //平台通道
         $platform = M('Product')->field('code,name')->where(['id' => $this->channel['pid']])->find();
@@ -323,6 +323,7 @@ class PayController extends Controller
             $data['channel_id'] = $this->channel['api'];
             $data['account_id'] = $channel_account['id'];
             $data['t'] = $tikuanconfig['t1zt'];
+            var_dump($data);die;
             //添加订单
             try {
                 $or_add = $Order->table($Order->getRealTableName(date('Y-m-d', $data['pay_applydate'])))->add($data);
