@@ -22,7 +22,7 @@ if (!defined('APP_PATH')) {
 /*-------------------------------------------------
   第二步：载入 ThinkPHP 核心文件
   -------------------------------------------------*/
-require dirname(__DIR__) . '/ThinkPHP/ThinkPHP.php';
+require dirname(__DIR__) . '/core/ThinkPHP.php';
 
 /*-------------------------------------------------
   第三步：调用 Pay 模块的 TreealPay 控制器
