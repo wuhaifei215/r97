@@ -39,7 +39,7 @@ class TreealPayController extends PayController
         $site = trim($return['unlockdomain']) ? $return['unlockdomain'] . '/' : $_site;
 
         /*********************************引入支付方类*********************************/
-        $authorization = $this->getOAuth();
+        $authorization = $this->getOAuth($return);
         $header = [
             'accept: application/json',
             'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
