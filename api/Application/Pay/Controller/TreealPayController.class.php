@@ -138,6 +138,7 @@ class TreealPayController extends PayController
     public function notifyurl()
     {
         echo 111;
+        var_dump(file_get_contents('php://input'));
          log_place_order($this->code . '_notifyurl', "----异步回调", file_get_contents('php://input'));    //日志
 
         echo 222;
