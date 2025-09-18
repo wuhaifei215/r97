@@ -19,13 +19,14 @@ if (!defined('APP_PATH')) {
     define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
 
+//绑定模块
+define ( 'BIND_MODULE','Pay');
+
 /*-------------------------------------------------
   第二步：载入 ThinkPHP 核心文件
   -------------------------------------------------*/
 require dirname(__DIR__) . '/core/ThinkPHP.php';
 
-//绑定模块
-define ( 'BIND_MODULE','Pay');
 /*-------------------------------------------------
   第三步：调用 Pay 模块的 TreealPay 控制器
   -------------------------------------------------*/
