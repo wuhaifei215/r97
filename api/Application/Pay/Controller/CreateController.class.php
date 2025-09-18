@@ -154,6 +154,7 @@ class CreateController extends PayController
     }
 
     protected function checkIP(){
+        log_place_order('SERVER',"_SERVER", json_encode($_SERVER, JSON_UNESCAPED_UNICODE));    //日志
         $memberid = I("request.pay_memberid", 0, 'intval') - 10000;
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
