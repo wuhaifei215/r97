@@ -121,7 +121,6 @@ class TreealPayController extends PayController
     //异步通知
     public function notifyurl()
     {
-        $this->code = 'TreealPay';
         //获取报文信息
         $result = json_decode(file_get_contents('php://input'), true);
         log_place_order($this->code . '_notifyurl', "----异步回调", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
