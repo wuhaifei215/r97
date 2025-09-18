@@ -228,4 +228,35 @@ class IndexController extends PaymentController{
             showSuccess('查询成功,请在页面刷新后查看订单状态！');
         }
     }
+    
+        
+    //凭证查询
+    public function voucher(){
+        //https://open.yunpay.me/Payment_Index_voucher.html?casOrdNo=O2024122605472902849628399
+        $orderid = I('request.casOrdNo', '', 'string');
+        if (!$orderid) {
+            $this->showmessage("缺少参数");
+        }
+        $Wttklistmodel = D('Wttklist');
+        $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
+        $tableName = $Wttklistmodel->getRealTableName($date);
+        $info = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->find();
+        if(!$info['three_orderid'] && $info['df_id'] < 8){
+            echo '请联系客服获取!';
+            return;
+        } 
+        if($info['status'] == 2 || $info['status'] == 3){
+            $where['id'] = $info['df_id'];
+            $pfa_list = M('PayForAnother')->where($where)->find();
+            
+            $voucherrData = R('Payment/'.$pfa_list['code'].'/PaymentVoucher', [$info, $pfa_list]);
+            if($voucherrData === false || $voucherrData['code'] !== '000000'){
+                echo '请联系客服获取!';
+                return;
+            }else{
+                $this->assign('list', $voucherrData['data']);
+    		    $this->display("Public/form");
+            }
+        }
+    }
 }

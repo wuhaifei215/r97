@@ -35,24 +35,24 @@ class CreateDFController extends Controller
             $this->redis->expire('siteconfig', 60);
         }
         if (!$siteconfig['df_api']) {
-            $this->showmessage('Payment API is not enabled');
+            $this->showmessage('代付API未开启！');
         }
 
         $this->memberid = I("request.mchid", 0, 'intval');
         if ($this->memberid == 0) {
-            $this->showmessage('mchid error');
+            $this->showmessage('不存在的商户编号!');
         }
     }
     
     public function index(){
-        $this->showmessage("Wrong api address");
+        $this->showmessage("请使用正确的接口地址！");
     }
     
     //菲律宾代付接口
     public function payoutBRL(){
         $this->channelIsOpen(); //判断通道是否开启
         if(getPaytypeCurrency($this->userPayForAnother['paytype']) !=='PHP'){
-            $this->showmessage("The currency type is incorrect");
+            $this->showmessage("国家货币类型不对！");
         }
         $this->doNext();
     }
@@ -60,7 +60,7 @@ class CreateDFController extends Controller
     // public function payoutINR(){
     //     $this->channelIsOpen(); //判断通道是否开启
     //     if(getPaytypeCurrency($this->userPayForAnother['paytype']) !=='INR'){
-    //         $this->showmessage("The currency type is incorrect");
+    //         $this->showmessage("国家货币类型不对！");
     //     }
     //     $this->doNext();
     // }
@@ -74,7 +74,7 @@ class CreateDFController extends Controller
         //通道编码
         $this->bankcode = I('request.bankcode', 0, 'intval');
         if ($this->bankcode == 0) {
-            $this->showmessage('bankcode error');
+            $this->showmessage('代付通道编码不能为空！');
         }
         $userid = $this->memberid - 10000;
         $userPayForAnother_redis = $this->redis->get('UserPayForAnother_'. $this->bankcode . '_' . $userid);
@@ -87,7 +87,7 @@ class CreateDFController extends Controller
         $this->userPayForAnother = $userPayForAnother;
         //用户未分配
         if (!$this->userPayForAnother) {
-            $this->showmessage('This payment channel has been closed');
+            $this->showmessage('该代付通道已关闭!');
         }
         
         //进入支付
@@ -101,11 +101,11 @@ class CreateDFController extends Controller
             }
             //是否存在通道文件
             if (!is_file(APP_PATH . 'Payment/Controller/' . $info['code'] . 'Controller.class.php')) {
-                $this->showmessage('Payment channel does not exist', ['pay_bankcode' => $this->userPayForAnother['pid']]);
+                $this->showmessage('代付通道不存在', ['pay_bankcode' => $this->userPayForAnother['pid']]);
             }
             $this->userPayForAnother['paytype'] = $info['paytype'];
         } else {
-            $this->showmessage("Sorry......Server error");
+            $this->showmessage("抱歉......服务器飞去月球了");
         }
     }
 
@@ -119,48 +119,45 @@ class CreateDFController extends Controller
         //  PaymentLogs( 'DFpay_add',json_encode($_POST) );
         $out_trade_no = I("request.out_trade_no", '', 'string,strip_tags,htmlspecialchars');
         if (!$out_trade_no) {
-            $this->showmessage('out_trade_no error');
+            $this->showmessage('订单号不能为空！');
         }
         if($this->redis->get($out_trade_no)){
-            $this->showmessage('Duplicate order number');
+            $this->showmessage('重复订单号！');
         }
         
         $postData = I('post.');
         $postData['get_time'] = microtime(TRUE);
         $redis = $this->redis_connect();
         $redis->set('userdfpost_' . $out_trade_no, json_encode($postData, JSON_UNESCAPED_UNICODE), 300);
-
-        $postData = I('post.');
-        $postData['get_time'] = microtime(TRUE);
-        $user_id = $this->memberid - 10000;
-        // logApiAdd('商户代付提交YunPay', __METHOD__, $user_id, $out_trade_no, 2, $postData, getRealIp());
         
         $sign = I('request.pay_md5sign', '', 'string,strip_tags,htmlspecialchars');
         if (!$sign) {
-            $this->showmessage("pay_md5sign error");
+            $this->showmessage("签名参数不能为空！");
         }
 
+        
+        $user_id = $this->memberid - 10000;
 //        PaymentLogs( 'DFpay_add_server', $this->memberid.':'.json_encode($_SERVER) );
         //用户信息
         $this->merchants = D('Member')->where(array('id' => $user_id))->find();
         if (empty($this->merchants)) {
-            $this->showmessage('Merchant does not exist');
+            $this->showmessage('商户不存在！');
         }
         if ($this->merchants['status'] !=1 ) {
-            $this->showmessage('Invalid merchant, please contact operations!');
+            $this->showmessage('无效商户，请联系运营！');
         }
         if (!$this->merchants['df_api']) {
-            $this->showmessage('The merchant has not enabled the payment function');
+            $this->showmessage('商户未开启此功能！');
         }
         $referer = getHttpReferer();//请求来源URL
 
         if ($this->merchants['df_domain'] != '') {
             if (!checkDfDomain($referer, $this->merchants['df_domain'])) {
-                $this->showmessage('The request source domain name is inconsistent with the reported domain name');
+                $this->showmessage('请求来源域名与报备域名不一致！');
             }
         }
         if ($this->merchants['df_ip'] == '') {
-            $this->showmessage('The submitted IP address has not been reported!');
+            $this->showmessage('提交IP地址未报备！');
         } elseif ($this->merchants['df_ip'] != '') {
             
             // if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
@@ -170,33 +167,30 @@ class CreateDFController extends Controller
             // } else {
             //     $ip = get_client_ip();
             // }
-
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
-                $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
-                $ip = $ip_arr[0];
-            } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+        
+            if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
                 $ip = $_SERVER['REMOTE_ADDR'];
             } else {
                 $ip = getRealIp();
             }
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
-                PaymentLogs( 'DFpay_add_server', $user_id.'::'.json_encode($_SERVER, JSON_UNESCAPED_UNICODE));
+                
                 PaymentLogs( 'DFpay_add_server', $user_id.'::'.$ip.'=='. $this->merchants['df_ip']);
-                $this->showmessage('The IP address is inconsistent with the reported IP!=='.$ip);
+                $this->showmessage('IP地址与报备IP不一致！');
             }
         }
         
         $type = I("request.type", '');
         if (!$type || $type==null) {
-            $this->showmessage('type error');
+            $this->showmessage('代付类型错误！');
         }
         $bankname = I("request.bankname", '', 'string,strip_tags,htmlspecialchars');
         // if ($type==2 && !$bankname) {
-        //     $this->showmessage('bankname error');
+        //     $this->showmessage('银行名称不能为空！');
         // }
         $ifsc = I("request.subbranch", '', 'string,strip_tags,htmlspecialchars');
         // if (!$ifsc) {
-        //     $this->showmessage('subbranch error');
+        //     $this->showmessage('银行IFSC不能为空！');
         // }
 
         //结算方式：
@@ -204,7 +198,7 @@ class CreateDFController extends Controller
         $defaultConfig = $Tikuanconfig->where(['issystem' => 1, 'tkzt' => 1])->find();      //平台规则
         //判断是否开启提款设置
         if (!$defaultConfig) {
-            return ['status' => 0, 'msg' => 'Withdrawals Closed'];
+            return ['status' => 0, 'msg' => '提款已关闭！'];
         }
         
         $tkConfig = $Tikuanconfig->where(['userid' => $user_id, 'tkzt' => 1])->find();       //个人规则
@@ -233,36 +227,35 @@ class CreateDFController extends Controller
         //判断提现时间是否合法
         if ($tkConfig['allowend'] != 0) {
             if ($tkConfig['allowstart'] > $hour || $tkConfig['allowend'] <= $hour) {
-                $this->showmessage('It is not during the withdrawal time, please come back at another time!');
+                $this->showmessage('不在提现时间，请换个时间再来!');
             }
         }
         $money = I("request.money",'0');
         $money = sprintf("%.2f", $money);
         if (!is_numeric($money) || $money <= 0) {
-            $this->showmessage('money error');
+            $this->showmessage('金额错误！');
         }
         //单笔最小提款金额
         if ($tkConfig['tkzxmoney'] > $money) {
-            $this->showmessage('The minimum withdrawal amount for a single transaction is ：' . $tkConfig['tkzxmoney']);
+            $this->showmessage('单笔最低提款额度：' . $tkConfig['tkzxmoney']);
         }
         //单笔最大提款金额
         if ($tkConfig['tkzdmoney'] < $money) {
-            $this->showmessage('The maximum withdrawal amount for a single transaction is ：' . $tkConfig['tkzdmoney']);
+            $this->showmessage('单笔最大提款额度：' . $tkConfig['tkzdmoney']);
         }
 
         $accountname = I("request.accountname", '', 'string,strip_tags,htmlspecialchars');
-        if (!$accountname ) {
-            // if (!$accountname || !preg_match('/^[a-zA-Z0-9]+$/', $accountname)) {
-            $this->showmessage('accountname error'); 
+        if (!$accountname) {
+            $this->showmessage('开户名不能为空！');
         }
         $cardnumber = I("request.cardnumber", '', 'string,strip_tags,htmlspecialchars');
         if (!$cardnumber) {
-            $this->showmessage('cardnumber error');
+            $this->showmessage('银行卡号不能为空！');
         }
         
         $notifyurl = I("request.notifyurl", '');
         if (!$notifyurl) {
-            $this->showmessage('notifyurl error');
+            $this->showmessage('回调地址不能为空！');
         }
 
         $Wttklist = D('Wttklist');
@@ -277,28 +270,28 @@ class CreateDFController extends Controller
         $wttkNum = $Wttklist->getCount($where);
         $dayzdnum = $wttkNum + 1;
         if ($dayzdnum >= $tkConfig['dayzdnum']) {
-            $this->showmessage("Exceeding the merchant's daily withdrawal times");
+            $this->showmessage('超出商户当日提款次数！');
         }
         //判断提款额度
         $dayzdmoney = $Wttklist->getSum('tkmoney',$where)['tkmoney'];
         if ($dayzdmoney >= $tkConfig['dayzdmoney']) {
-            $this->showmessage("Exceeding the merchant's daily withdrawal limit");
+            $this->showmessage('超出商户当日提款额度！');
         }
         if ($money < $tkConfig['tkzxmoney'] || $money > $tkConfig['tkzdmoney']) {
-            $this->showmessage('The withdrawal amount does not meet the withdrawal limit requirements');
+            $this->showmessage('提款金额不符合提款额度要求!');
         }
         $dayzdmoney = bcadd($money, $dayzdmoney, 4);
         if ($dayzdmoney >= $tkConfig['dayzdmoney']) {
-            $this->showmessage('Exceeding the withdrawal limit for the day');
+            $this->showmessage('超出当日提款额度!');
         }
         //计算手续费
 //       $sxfmoney = $tkConfig['tktype'] ? $tkConfig['sxffixed'] : bcdiv(bcmul($data['money'], $tkConfig['sxfrate'], 4), 100, 4);
 
-        if ($tkConfig['tktype'] == 1) {//按单笔计算
+        if ($tkConfig['tktype'] == 1) { //按比例计算
             $sxfmoney = $tkConfig['sxffixed'];
         } elseif ($tkConfig['tktype'] == 2) {   //按单笔加比例计算
             $sxfmoney = $tkConfig['sxffixed'] + bcdiv(bcmul($money, $tkConfig['sxfrate'], 4), 100, 4);
-        } else {     //按比例计算
+        } else {    //按单笔计算
             $sxfmoney = bcdiv(bcmul($money, $tkConfig['sxfrate'], 4), 100, 4);
         }
 
@@ -312,7 +305,7 @@ class CreateDFController extends Controller
         
         $extends = I("request.extends", '');
         if (!$extends) {
-            $this->showmessage('extends error');
+            $this->showmessage('备注不能为空！');
         }
         //验签
         if ($this->verify($_POST)) {
@@ -327,7 +320,7 @@ class CreateDFController extends Controller
             }
             
             if ($balance < $money2) {
-                $this->showmessage('Wrong amount, insufficient available balance');
+                $this->showmessage('金额错误，可用余额不足!');
             }
             $time = date("Y-m-d H:i:s");
             $orderid = $this->getOrderId();
@@ -335,9 +328,9 @@ class CreateDFController extends Controller
             //$cost = $channel['rate_type'] ? bcmul($data['money'], $channel['cost_rate'], 4) : $channel['cost_rate'];
             //计算成本
             if ($channel['rate_type'] == 1) { //按比例
-                $cost = round($money*($channel['cost_rate']/100),4);
+                $cost = round($data['money']*($channel['cost_rate']/100),4);
             } elseif($channel['rate_type'] == 2) { //按单笔加比例计算
-                $cost = $channel['dan_bi'] + bcdiv(bcmul($money, $channel['cost_rate'], 4), 100, 4);
+                $cost = $channel['dan_bi'] + bcdiv(bcmul($data['money'], $channel['cost_rate'], 4), 100, 4);
             } else { //按单笔
                 $cost =  $channel['dan_bi'];
             }
@@ -406,7 +399,7 @@ class CreateDFController extends Controller
                 $balance = bcsub($balance, $sxfmoney, 4);
                 if ($balance < 0) {
                     M()->rollback();
-                    $this->showmessage('The balance is insufficient to deduct the handling fee');
+                    $this->showmessage('余额不足以扣除手续费！');
                 }
                 $chargeData = [
                     "userid" => $user_id,
@@ -475,26 +468,19 @@ class CreateDFController extends Controller
                 $this->redis->set($out_trade_no,$orderid,3600 * 2);
             }else{
                 M()->rollback();
-                $this->showmessage('System error');
+                $this->showmessage('系统错误');
             }
 
             /**************************************2024年09月10日 自动向上游提交*************************************************/
-            // sleep(1);
+            sleep(1);
                 // log_place_order( 'DFadd_NoSubmit', $orderid,   'id' . $res2);    //日志
             if($res2){
-                //提现风控提醒
-                $this->sendWaring($user_id, $wttkData['banknumber']);
-
-                //提现超额订单审核
                 if(isset($info['auto_tkmoney']) && $info['auto_tkmoney']!=0){
                     $auto_tkmoney = $info['auto_tkmoney'];
                 }else{
                     $auto_tkmoney = 5000;
                 }
                 if($wttkData['money'] < $auto_tkmoney && $user_id!=3){
-                    // //塞进 代付队列，等待任务处理
-                    // $this->redis->rPush('PaymentExec_List', $orderid);
-                    
                     $id = $res2;
     
                     //加锁防止重复提交
@@ -564,7 +550,7 @@ class CreateDFController extends Controller
             /**************************************2024年09月10日 自动向上游提交*************************************************/
 
             header('Content-Type:application/json; charset=utf-8');
-            $data = array('status' => 'success', 'msg' => 'Payment application successful', 'transaction_id' => $orderid, 'datetime' => date('Y-m-d', strtotime($wttkData['sqdatetime'])));
+            $data = array('status' => 'success', 'msg' => '代付申请成功', 'transaction_id' => $orderid, 'datetime' => date('Y-m-d', strtotime($wttkData['sqdatetime'])));
             echo json_encode($data);
             exit;
         } else {
@@ -575,63 +561,14 @@ class CreateDFController extends Controller
                     $md5str = $md5str . $key . "=" . $val . "&";
                 }
             }
-            // $sign = strtoupper(md5($md5str . "key=" . $this->merchants['apikey']));
+            $sign = strtoupper(md5($md5str . "key=" . $this->merchants['apikey']));
             $result = [
-                'mgs' => 'Please compare the splicing order and signature',
-                'POST Data' => $_POST,
-                'Field concatenation order' => substr($md5str, 0, strlen($md5str) - 1),
-                // 'sign' => $sign,
+                '提醒' => '请比对拼接顺序及签名',
+                'POST数据' => $_POST,
+                '拼接顺序' => substr($md5str, 0, strlen($md5str) - 1),
+                // '签名' => $sign,
             ];
-            $this->showmessage('sign error', $result);
-        }
-    }
-
-    //验证该用户统一卡号提交了几次订单
-    protected function getAllWttklist($user_id, $cardnumber){
-        $datetime = date('Y-m-d',time());
-        $where = [
-            'userid' => $user_id,
-            'banknumber' => $cardnumber,
-            'sqdatetime'=>['between',[date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00')),date('Y-m-d H:i:s',strtotime($datetime . ' 23:59:59') + 86400)]],
-        ];
-
-        $WttklistModel = D('Wttklist');
-        $order = $WttklistModel->where($where)->select();
-        return $order;
-    }
-    protected function sendWaring($user_id, $cardnumber){
-        $member_list = M('Member')->field('telegram_id')->where(['id'=>$user_id])->find();
-        if($member_list['telegram_id']){
-            $datetime = date('Y-m-d',time());
-            $where = [
-                'userid' => $user_id,
-                'banknumber' => $cardnumber,
-                'sqdatetime'=>['between',[date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00') - 86400),date('Y-m-d H:i:s',strtotime($datetime . ' 23:59:59'))]],
-            ];
-
-            $WttklistModel = D('Wttklist');
-            $wttkData = $WttklistModel->where($where)->select();
-            $orderList=[];
-            $alltkmoney=0;
-            foreach($wttkData as $k =>$v){
-                $orderList[] = $v['orderid'] . "|\r\n" .  $v['out_trade_no'];
-                $alltkmoney = $alltkmoney + $v['tkmoney'];
-            }
-            $orderOrder = explode(',',$orderList);
-
-            $message = '';
-            $message .= "\r\n*【账户提现次数和金额风控提醒】*\r\n\r\n";
-            $message .= ".*商户名称*：" . $member_list['username'] . "`\r\n";
-            $message .= ".*提现钱包账号*：`" . $wttkData[0]['banknumber'] . "`\r\n";
-            $message .= "· *包含订单号*：" . $orderOrder . "\r\n";
-            $message .= "· *总提现次数*：" . count($wttkData) . "\r\n";
-            $message .= "· *总提现总金额*：" . $alltkmoney . "\r\n";
-
-            // if($user_id==3){
-            //     $result = R('Telegram/Api2/send', [$member_list['telegram_id'], $message, '', 'Markdown']);
-            //     return;
-            // }
-            $result = R('Telegram/Api/send', [$member_list['telegram_id'], $message, '', 'Markdown']);
+            $this->showmessage('签名验证失败', $result);
         }
     }
 
@@ -645,8 +582,7 @@ class CreateDFController extends Controller
         $year_code = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
         $i = intval(date('Y')) - 2010;
 
-        return $year_code[$i] . date('YmdHis') . substr(time(), -5) . str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT) . rand(1000,9999) . rand(1000,9999);
-        // return $year_code[$i] . date('Ymd') . substr(microtime(), 2, 5) . str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT) . rand(1000,9999) . rand(1000,9999);
+        return $year_code[$i] . date('YmdHis') . substr(time(), -5) . str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT) . rand(1000,9999);
     }
 
     /**
@@ -811,7 +747,7 @@ class CreateDFController extends Controller
 				 //订单状态不改变
 				 $sta = $Wttklist->table($table)->where(['id' => $id])->getField('status');
 				 $data['status'] = $sta;
-				 $data['memo']  = 'Status does not change！ - '. $return['memo']. date('Y-m-d H:i:s').' - '.$memo;
+				 $data['memo']  = '状态不改变！ - '. $return['memo']. date('Y-m-d H:i:s').' - '.$memo;
 				 break;
 		}
         $where = ['id'=>$id, 'status'=>['in', '0,1']];

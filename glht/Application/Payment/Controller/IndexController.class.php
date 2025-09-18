@@ -31,7 +31,7 @@ class IndexController extends PaymentController{
 		
         //根据操作查询不同状态的订单
         if ($post_data['opt'] == 'exec') {
-            $status = '0';
+            $status = 0;
         } else {
             $status = ['in', '1, 4'];
         }
@@ -47,9 +47,6 @@ class IndexController extends PaymentController{
                 break;
             }
         }
-        if(empty($wttk_lists) || count($wttk_lists) == 0){
-            showError('未找到订单信息');
-        }
         // $wttk_lists = $this->selectOrder($where);
 		
 		$post_data['code'] = $post_data['opt'] == 'exec'?$post_data['code']:$wttk_lists[0]['df_id'];
@@ -61,17 +58,17 @@ class IndexController extends PaymentController{
 		
         //判断代付通道的文件是否存在
         $code = $pfa_list['code'];
-        // echo $code;die;
+        echo $code;die;
         $code || showError('代付渠道不存在！');
         $file = APP_PATH . 'Payment/Controller/' . $code . 'Controller.class.php';
         is_file($file) || showError('代付渠道不存在！');
-        //循环存在代付通道的文件限制一次只能操作50条数据
+        //循环存在代付通道的文件限制一次只能操作15条数据
         $opt = ucfirst( $post_data['opt']);
         //解锁锁定时间超过5分钟的代付（提交失败导致不解锁的）
         $expire_time = time()-300;
         
-        $Wttklistmodel->table($tableName)->where('`df_lock`=1 AND `status`="0" AND `lock_time`>0 AND `lock_time`<'.$expire_time)->setField('df_lock', 0);
-        if( count($wttk_lists)<= 50){
+        $Wttklistmodel->table($tableName)->where('`df_lock`=1 AND `status`=0 AND `lock_time`>0 AND `lock_time`<'.$expire_time)->setField('df_lock', 0);
+        if( count($wttk_lists)<= 15){
             $fp = fopen($file, "r");
             foreach($wttk_lists as $k => $v){
                 try {
@@ -105,7 +102,7 @@ class IndexController extends PaymentController{
                                 'cost' => $cost,
                                 'rate_type' => $pfa_list['rate_type'],
                             ];
-                            $this->changeStatus($v['id'], $result['status'], $data, $tableName);
+                            $this->handle($v['id'], $result['status'], $data, $tableName);
                         } else {
                             Log::record("ID：".$v['id']."返回值异常：".$result, Log::INFO);
                         }
@@ -132,12 +129,12 @@ class IndexController extends PaymentController{
         if($opt == 'Exec') {
             session('admin_submit_df', null);
         }
-        showError('只能同时请求50条代付数据！');
+        showError('只能同时请求15条代付数据！');
     }
 
     //定时任务-查询上游代付订单
     public function evenQuery(){
-        $where = ['status'=>'1'];
+        $where = ['status'=>1];
         $tableName ='';
         $Wttklistmodel = D('Wttklist');
         $tables = $Wttklistmodel->getTables();
@@ -162,7 +159,7 @@ class IndexController extends PaymentController{
                         'code'      => $pfa_list['code'],
                         'df_name'   => $pfa_list['title'],
                     ];
-                    $this->changeStatus($v['id'], $result['status'], $data, $tableName);
+                    $this->handle($v['id'], $result['status'], $data, $tableName);
                 }
             }
             sleep(3);
@@ -194,7 +191,7 @@ class IndexController extends PaymentController{
         // $wttk_lists = M('Wttklist')->where($where)->select();
         $success = 0;
         foreach($wttk_lists as $k => $v){
-            if($v['status'] != '1' && $v['status'] != '4') {
+            if($v['status'] != 1 && $v['status'] != 4) {
                 continue;
             }
             $file = APP_PATH . 'Payment/Controller/' . $v['code'] . 'Controller.class.php';
@@ -218,7 +215,7 @@ class IndexController extends PaymentController{
                             'code'      => $pfa_list['code'],
                             'df_name'   => $pfa_list['title'],
                         ];
-                        $this->changeStatus($v['id'], $result['status'], $data, $tableName);
+                        $this->handle($v['id'], $result['status'], $data, $tableName);
                     }
                 }
             } else {
@@ -231,6 +228,7 @@ class IndexController extends PaymentController{
             showSuccess('查询成功,请在页面刷新后查看订单状态！');
         }
     }
+    
         
     //凭证查询
     public function voucher(){
@@ -243,7 +241,7 @@ class IndexController extends PaymentController{
         $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
         $tableName = $Wttklistmodel->getRealTableName($date);
         $info = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->find();
-        if(!$info['three_orderid']){
+        if(!$info['three_orderid'] && $info['df_id'] < 8){
             echo '请联系客服获取!';
             return;
         } 
@@ -252,12 +250,13 @@ class IndexController extends PaymentController{
             $pfa_list = M('PayForAnother')->where($where)->find();
             
             $voucherrData = R('Payment/'.$pfa_list['code'].'/PaymentVoucher', [$info, $pfa_list]);
-            if($voucherrData === false){
+            if($voucherrData === false || $voucherrData['code'] !== '000000'){
                 echo '请联系客服获取!';
                 return;
-            } 
-            $this->assign('list', $voucherrData['data']);
-		    $this->display("Public/form");
+            }else{
+                $this->assign('list', $voucherrData['data']);
+    		    $this->display("Public/form");
+            }
         }
     }
 }

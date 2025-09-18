@@ -229,6 +229,7 @@ class IndexController extends PaymentController{
         }
     }
     
+        
     //凭证查询
     public function voucher(){
         //https://open.yunpay.me/Payment_Index_voucher.html?casOrdNo=O2024122605472902849628399

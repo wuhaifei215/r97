@@ -18,7 +18,7 @@ class PayController extends Controller
         parent::__construct();
         $this->_site = ((is_https()) ? 'https' : 'http') . '://' . C("NOTIFY_DOMAIN") . '/';
         $deny = ['exp', 'delete', 'update', 'insert'];
-        foreach ($_REQUEST as $k => $v) { 
+        foreach ($_REQUEST as $k => $v) {
             if (in_array(strtolower($k), $deny)) {
                 die;
             }
@@ -118,7 +118,7 @@ class PayController extends Controller
             }
         }
         if (empty($channel_account_item)) {
-            $this->showmessage('账户:' . $error_msg);
+            $this->showmessage('account :' . $error_msg);
         }
         //-------------------------子账号风控end-----------------------------------------
 
@@ -224,7 +224,9 @@ class PayController extends Controller
 
         // 定制成本费率
         if ($channel_account['custom_rate']) {
+            $syschannel['rate_type'] = $channel_account['rate_type'];
             $syschannel['rate'] = $channel_account['rate'];
+            $syschannel['sxffixed'] = $channel_account['sxffixed'];
         }
 
         //平台通道
@@ -250,15 +252,32 @@ class PayController extends Controller
 
         //金额格式化
         if (!$pay_amount || !is_numeric($pay_amount) || $pay_amount <= 0) {
-            $this->showmessage('金额错误');
+            $this->showmessage('pay_amount error');
         }
         $return["amount"] = floatval($pay_amount) * $moneyratio; // 交易金额
 
+
         //费率
-        $_userrate = M('Userrate')->field('feilv')->where(["userid" => $this->channel['userid'], "payapiid" => intval($this->channel['pid'])])->find();
-        $pay_sxfamount = $pay_amount * $_userrate['feilv']; // 手续费
+        $_userrate = M('Userrate')->field('rate_type,feilv,sxffixed')->where(["userid" => $this->channel['userid'], "payapiid" => intval($this->channel['pid'])])->find();
+        //计算手续费
+        if($_userrate['rate_type'] ==1){//按单笔计算
+            $pay_sxfamount = $_userrate['sxffixed'];
+        }elseif($_userrate['rate_type'] ==2){  //按单笔加比例计算
+            $pay_sxfamount = $_userrate['sxffixed'] + bcdiv(bcmul($pay_amount, $_userrate['feilv'], 4), 100, 4);
+        }else{    //按比例计算
+            $pay_sxfamount = bcdiv(bcmul($pay_amount, $_userrate['feilv'], 4), 100, 4); // 手续费
+        }
         $pay_shijiamount = $pay_amount - $pay_sxfamount; // 实际到账金额
-        $cost = bcmul($syschannel['rate'], $pay_amount, 4); //计算成本
+
+        //计算通道成本
+        if ($syschannel['rate_type'] == 1) { //按比例计算
+            $cost = $syschannel['sxffixed'];
+        } elseif ($syschannel['rate_type'] == 2) {   //按单笔加比例计算
+            $cost = $syschannel['sxffixed'] + bcmul($pay_amount, $syschannel['rate'], 4);
+        } else {    //按单笔计算
+            $cost = bcmul($pay_amount, $syschannel['rate'], 4); //计算成本
+        }
+
 
         //商户订单号
         $out_trade_id = $parameter['out_trade_id'];
@@ -305,20 +324,20 @@ class PayController extends Controller
             //添加订单
             try {
                 $or_add = $Order->table($Order->getRealTableName(date('Y-m-d', $data['pay_applydate'])))->add($data);
-                
-                //下游单号存入缓存，防止重复提交
-                $redis = $this->redis_connect();
-                $redis->set($out_trade_id, $userid ,7200);
-                
             } catch (\Exception $e) {
-                $this->showmessage('重复订单号');
+                $this->showmessage('system error');
             }
+
+            //下游单号存入缓存，防止重复提交
+            $redis = $this->redis_connect();
+            $redis->set($out_trade_id, $userid ,7200);
+
             if ($or_add) {
                 $return['datetime'] = date('Y-m-d H:i:s', $data['pay_applydate']);
                 $return["status"] = "success";
                 return $return;
             } else {
-                $this->showmessage('系统错误');
+                $this->showmessage('System error');
             }
         } else {
             $requestarray = array(
@@ -337,12 +356,12 @@ class PayController extends Controller
             }
             $sign = strtoupper(md5($md5str . "key=" . $this->merchants['apikey']));
             $result = [
-                '提醒' => '请比对拼接顺序及签名',
-                'POST数据' => $requestarray,
-                '拼接顺序' => substr($md5str, 0, strlen($md5str) - 1),
-                '签名' => $sign,
+                'mgs' => 'Please compare the splicing order and signature',
+                'POST Data' => $requestarray,
+                'Field concatenation order' => substr($md5str, 0, strlen($md5str) - 1),
+                // 'sign' => $sign,
             ];
-            $this->showmessage('签名验证失败', $result);
+            $this->showmessage('sign error', $result);
         }
     }
 
@@ -360,7 +379,7 @@ class PayController extends Controller
             return false;
         }
         $redis->set('EditMoney' . $trans_id,'1',120);
-        
+
         $m_Order = D("Order");
         $date = date('Ymd', strtotime(substr($trans_id, 0, 8)));  //获取订单日期
 
@@ -541,7 +560,7 @@ class PayController extends Controller
 //            }
 
             //-----------------------------------------修改子账号风控支付数据end----------------------------------------------
-            
+
             //订单信息存入缓存
             $order_info['pay_status'] = 1;
             $redis->set($order_info['pay_orderid'],json_encode($order_info),3600 * 2);
@@ -568,7 +587,7 @@ class PayController extends Controller
         // $return_array["attach"] = $order_info["attach"];
         switch ($returntype) {
             case '0':
-                
+
                 // 在列表尾部插入元素
                 $redis->rPush('notifyList', $order_info['pay_orderid']);
                 // $notifystr = "";
@@ -601,9 +620,9 @@ class PayController extends Controller
                 //     ];
 
                 //     $order_result = $m_Order->table($m_Order->getRealTableName($date))->where($order_where)->setField("pay_status", 2);
-                    //订单信息存入缓存
-                    // $order_info['pay_status'] = 2;
-                    // $redis->set($order_info['pay_orderid'],json_encode($order_info),3600 * 2);
+                //订单信息存入缓存
+                // $order_info['pay_status'] = 2;
+                // $redis->set($order_info['pay_orderid'],json_encode($order_info),3600 * 2);
 //                 } else {
 // //                    $this->jiankong($order_info['pay_orderid']);
 //                 }
@@ -904,22 +923,19 @@ class PayController extends Controller
 
     public function bufa()
     {
-        $TransID = I("get.TransID", '', 'string,strip_tags,htmlspecialchars');
-        $redis = redis_connect();
-        $redis->rPush('notifyList', $TransID);
         header('Content-type:text/html;charset=utf-8');
-        
-        echo("订单号：" . $TransID . "|" . $PayName . "已补发服务器点对点通知，请稍后刷新查看结果");
-        // $PayName = I("get.tongdao", '', 'string,strip_tags,htmlspecialchars');
-        // $Order = D("Order");
-        // $date = date('Ymd', strtotime(substr($TransID, 0, 8)));  //获取订单日期
-        // $pay_status = $Order->table($Order->getRealTableName($date))->where(array("pay_orderid" => $TransID))->getField("pay_status");
-        // if (intval($pay_status) == 1) {
-        //     echo("订单号：" . $TransID . "|" . $PayName . "已补发服务器点对点通知，请稍后刷新查看结果！<a href='javascript:window.close();'>关闭</a>");
-        //     $this->EditMoney($TransID, $PayName, 0);
-        // } else {
-        //     echo "补发失败";
-        // }
+        $TransID = I("get.TransID", '', 'string,strip_tags,htmlspecialchars');
+        $PayName = I("get.tongdao", '', 'string,strip_tags,htmlspecialchars');
+        $Order = D("Order");
+        $date = date('Ymd', strtotime(substr($TransID, 0, 8)));  //获取订单日期
+        $pay_status = $Order->table($Order->getRealTableName($date))->where(array("pay_orderid" => $TransID))->getField("pay_status");
+        if (intval($pay_status) == 1) {
+            echo("订单号：" . $TransID . "|" . $PayName . "已补发服务器点对点通知，请稍后刷新查看结果！<a href='javascript:window.close();'>关闭</a>");
+            $this->EditMoney($TransID, $PayName, 0);
+        } else {
+            echo "补发失败";
+        }
+
     }
 
     /**
@@ -1015,23 +1031,23 @@ class PayController extends Controller
         }
         return $complaintsDepositRule ? $complaintsDepositRule : [];
     }
-    
-        
+
+
     /**
      * 发送回调信息
      * $orderList 订单信息
      */
     public function sendTelegram($orderid){
-        
+
         if(!$orderid) return;
         $redis = $this->redis_connect();
         $redis->rPush('sendTelegramList', $orderid);
-        
+
         // $OrderModel = D('Order');
         // $date = date('Ymd',strtotime(substr($orderid, 0, 8)));  //获取订单日期
         // $tablename = $OrderModel->getRealTableName($date);
         // $orderList = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->find();
-        
+
         // if(!$orderList['pay_memberid'] || !$orderList['pay_orderid'])return;
         // $TelegramApi_where = [
         //     'member_id'=>$orderList['pay_memberid'],
@@ -1050,7 +1066,7 @@ class PayController extends Controller
         // }
         // return;
     }
-    
+
     protected function redis_connect(){
         //创建一个redis对象
         $redis = new \Redis();
@@ -1060,7 +1076,7 @@ class PayController extends Controller
         $redis->auth(C('REDIS_PWD'));
         return $redis;
     }
-    
+
     protected function getOrder($orderid){
         $OrderModel = D('Order');
         $date = date('Ymd',strtotime(substr($orderid, 0, 8)));  //获取订单日期

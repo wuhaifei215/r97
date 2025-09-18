@@ -19,26 +19,30 @@ class TradeController extends CreateDFController
     {
         $out_trade_no = I('request.out_trade_no', '', 'string,strip_tags,htmlspecialchars');
         if (!$out_trade_no) {
-            $this->showmessage("缺少订单号");
+            $this->showmessage("out_trade_no error");
         }
         $datetime = I('request.datetime', '', 'string,strip_tags,htmlspecialchars');
         if (!$datetime) {
-            $this->showmessage("缺少订单交易时间");
+            $this->showmessage("datetime error");
         }
         $sign = I('request.pay_md5sign', '', 'string');
         if (!$sign) {
-            $this->showmessage("缺少签名参数");
+            $this->showmessage("pay_md5sign error");
         }
         $user_id = $this->memberid - 10000;
         //用户信息
         $this->merchants = D('Member')->where(array('id' => $user_id))->find();
         if (empty($this->merchants)) {
-            $this->showmessage('商户不存在！');
+            $this->showmessage('Merchant does not exist');
         }
         if (!$this->merchants['df_api']) {
-            $this->showmessage('商户未开启此功能！');
+            $this->showmessage('The merchant has not enabled the payment function');
         }
-        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = $ip_arr[0];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
             $ip = $_SERVER['REMOTE_ADDR'];
         } else {
             $ip = get_client_ip();
@@ -46,17 +50,19 @@ class TradeController extends CreateDFController
         $referer = getHttpReferer();
         if ($this->merchants['df_domain'] != '') {
             if (!checkDfDomain($referer, $this->merchants['df_domain'])) {
-                $this->showmessage('请求来源域名与报备域名不一致！');
+                $this->showmessage('The request source domain name is inconsistent with the reported domain name');
             }
         }
-        if ($this->merchants['df_ip'] != '') {
+        if ($this->merchants['df_ip'] == '') {
+            $this->showmessage('The submitted IP address has not been reported!');
+        } elseif ($this->merchants['df_ip'] != '') {
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
-                $this->showmessage('IP地址与报备IP不一致！');
+            $this->showmessage('The submitted IP address has not been reported!');
             }
             $hostname = getHost($referer);//请求来源域名
             $domainIp = gethostbyname($hostname);//域名IP
             if (!checkDfIp($domainIp, $this->merchants['df_ip'])) {
-                $this->showmessage('来源域名IP地址与报备IP不一致！');
+                $this->showmessage('The IP address is inconsistent with the reported IP!');
             }
         }
         $request = [
@@ -75,13 +81,14 @@ class TradeController extends CreateDFController
                 }
             }
             // $sign = strtoupper(md5($md5str . "key=" . $this->merchants['apikey']));
+            
             $result = [
-                '提醒' => '请比对拼接顺序及签名',
-                'POST数据' => $_POST,
-                '拼接顺序' => substr($md5str, 0, strlen($md5str) - 1),
-                // '签名' => $sign,
+                'mgs' => 'Please compare the splicing order and signature',
+                'PostData' => $request,
+                'Field concatenation order' => substr($md5str, 0, strlen($md5str) - 1),
+                // 'sign' => $sign,
             ];
-            $this->showmessage('签名验证失败', $result);
+            $this->showmessage('sign error', $result);
         }
         $where = [
             'userid' => $user_id,
@@ -90,38 +97,52 @@ class TradeController extends CreateDFController
         ];
         $Wttklist = D('Wttklist');
         $order = $Wttklist->table($Wttklist->getRealTableName($datetime))->where($where)->find();
+        if(!$order || empty($order)){
+            $where = [
+                'userid' => $user_id,
+                'out_trade_no' => $out_trade_no,
+                'sqdatetime'=>['between',[date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00')),date('Y-m-d H:i:s',strtotime($datetime . ' 23:59:59') + 86400)]],
+            ];
+            $t_date = date('Y-m-d',strtotime($datetime . ' 23:59:59') + 86400);
+            $Wttklist = D('Wttklist');
+            try {
+                $order = $Wttklist->table($Wttklist->getRealTableName($t_date))->where($where)->find();
+            } catch (\Exception $e) {
+                
+            }
+        }
         // echo $Wttklist->table($Wttklist->getRealTableName($datetime))->getLastSql();
         // var_dump($order);
         if (!$order) {
             $return = [
                 'status' => 'error',
-                'msg' => '请求成功',
+                'msg' => 'Error',
                 'refCode' => '7',
-                'refMsg' => '交易不存在',
+                'refMsg' => 'Transaction does not exist',
             ];
         }else {
             if ($order['status'] == 0) {
                 $refCode = '4';
-                $refMsg = "待处理";
+                $refMsg = "Pending";
             } elseif ($order['status'] == 1) {
                 $refCode = '3';
-                $refMsg = "处理中";
+                $refMsg = "Processing";
             } elseif ($order['status'] == 2 || $order['status'] == 3) {
                 $refCode = '1';
-                $refMsg = "成功";
+                $refMsg = "Success";
             } elseif ($order['status'] == 4 || $order['status'] == 5) {
                 $refCode = '2';
-                $refMsg = "失败";
+                $refMsg = "Fail";
             } elseif ($order['status'] == 6) {
                 $refCode = '5';
-                $refMsg = "驳回";
+                $refMsg = "reject";
             } else {
                 $refCode = '8';
-                $refMsg = "未知状态";
+                $refMsg = "unknown status";
             }
             $return = [
                 'status' => 'success',
-                'msg' => '请求成功',
+                'msg' => 'Success',
                 'orderType' => 'df',
                 'mchid' => $this->memberid,
                 'out_trade_no' => $order['out_trade_no'],
@@ -144,18 +165,21 @@ class TradeController extends CreateDFController
     {
         $sign = I('request.pay_md5sign', '', 'string');
         if (!$sign) {
-            $this->showmessage("缺少签名参数");
+            $this->showmessage("pay_md5sign error");
         }
         $user_id = $this->memberid - 10000;
         //用户信息
         $this->merchants = D('Member')->where(array('id' => $user_id))->find();
         if (empty($this->merchants)) {
-            $this->showmessage('商户不存在！');
+            $this->showmessage('Merchant does not exist');
         }
         if (!$this->merchants['df_api']) {
-            $this->showmessage('商户未开启此功能！');
+            $this->showmessage('The merchant has not enabled the payment function');
         }
-        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = $ip_arr[0];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
             $ip = $_SERVER['REMOTE_ADDR'];
         } else {
             $ip = get_client_ip();
@@ -163,17 +187,19 @@ class TradeController extends CreateDFController
         $referer = getHttpReferer();
         if ($this->merchants['df_domain'] != '') {
             if (!checkDfDomain($referer, $this->merchants['df_domain'])) {
-                $this->showmessage('请求来源域名与报备域名不一致！');
+                $this->showmessage('The request source domain name is inconsistent with the reported domain name');
             }
         }
-        if ($this->merchants['df_ip'] != '') {
+        if ($this->merchants['df_ip'] == '') {
+            $this->showmessage('The submitted IP address has not been reported!');
+        } elseif ($this->merchants['df_ip'] != '') {
             if (!checkDfIp($ip, $this->merchants['df_ip'])) {
-                $this->showmessage('IP地址与报备IP不一致！');
+                $this->showmessage('The submitted IP address has not been reported!');
             }
             $hostname = getHost($referer);//请求来源域名
             $domainIp = gethostbyname($hostname);//域名IP
             if (!checkDfIp($domainIp, $this->merchants['df_ip'])) {
-                $this->showmessage('来源域名IP地址与报备IP不一致！');
+                $this->showmessage('The IP address is inconsistent with the reported IP!');
             }
         }
 
@@ -191,17 +217,18 @@ class TradeController extends CreateDFController
                 }
             }
             // $sign = strtoupper(md5($md5str . "key=" . $this->merchants['apikey']));
+            
             $result = [
-                '提醒' => '请比对拼接顺序及签名',
-                'POST数据' => $_POST,
-                '拼接顺序' => substr($md5str, 0, strlen($md5str) - 1),
-                // '签名' => $sign,
+                'mgs' => 'Please compare the splicing order and signature',
+                'POST Data' => $_POST,
+                'Field concatenation order' => substr($md5str, 0, strlen($md5str) - 1),
+                // 'sign' => $sign,
             ];
-            $this->showmessage('签名验证失败', $result);
+            $this->showmessage('sign error', $result);
         }
         $return = [
             'status' => 'success',
-            'msg' => '请求成功',
+            'msg' => 'Successed',
             'mchid' => $this->memberid,
             'data' => [
                 [
@@ -219,6 +246,133 @@ class TradeController extends CreateDFController
         $return['sign'] = $this->createSign($this->merchants['apikey'], $return);
         echo json_encode($return);
     }
+    
+    //获取凭证
+    public function voucher(){
+        $out_trade_no = I('request.out_trade_no', '', 'string,strip_tags,htmlspecialchars');
+        if (!$out_trade_no) {
+            $this->showmessage("out_trade_no error");
+        }
+        $datetime = I('request.datetime', '', 'string,strip_tags,htmlspecialchars');
+        if (!$datetime) {
+            $this->showmessage("datetime error");
+        }
+        $sign = I('request.pay_md5sign', '', 'string');
+        if (!$sign) {
+            $this->showmessage("pay_md5sign error");
+        }
+        $user_id = $this->memberid - 10000;
+        //用户信息
+        $this->merchants = D('Member')->where(array('id' => $user_id))->find();
+        if (empty($this->merchants)) {
+            $this->showmessage('Merchant does not exist');
+        }
+        if (!$this->merchants['df_api']) {
+            $this->showmessage('The merchant has not enabled the payment function');
+        }
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip_arr = explode(':', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = $ip_arr[0];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = get_client_ip();
+        }
+        $referer = getHttpReferer();
+        if ($this->merchants['df_domain'] != '') {
+            if (!checkDfDomain($referer, $this->merchants['df_domain'])) {
+                $this->showmessage('The request source domain name is inconsistent with the reported domain name');
+            }
+        }
+        if ($this->merchants['df_ip'] == '') {
+            $this->showmessage('The submitted IP address has not been reported!');
+        } elseif ($this->merchants['df_ip'] != '') {
+            if (!checkDfIp($ip, $this->merchants['df_ip'])) {
+                $this->showmessage('The submitted IP address has not been reported!');
+            }
+            $hostname = getHost($referer);//请求来源域名
+            $domainIp = gethostbyname($hostname);//域名IP
+            if (!checkDfIp($domainIp, $this->merchants['df_ip'])) {
+                $this->showmessage('The IP address is inconsistent with the reported IP!');
+            }
+        }
+        $request = [
+            'mchid' => $this->memberid,
+            'out_trade_no' => $out_trade_no,
+            'datetime' => $datetime
+        ];
 
+        $signature = $this->createSign($this->merchants['apikey'], $request);
+        if ($signature != $sign) {
+            ksort($_POST);
+            $md5str = "";
+            foreach ($_POST as $key => $val) {
+                if (!empty($val) && $key != 'pay_md5sign') {
+                    $md5str = $md5str . $key . "=" . $val . "&";
+                }
+            }
+            // $sign = strtoupper(md5($md5str . "key=" . $this->merchants['apikey']));
+            
+            $result = [
+                'mgs' => 'Please compare the splicing order and signature',
+                'POST Data' => $_POST,
+                'Field concatenation order' => substr($md5str, 0, strlen($md5str) - 1),
+                // 'sign' => $sign,
+            ];
+            $this->showmessage('sign error', $result);
+        }
+        $where = [
+            'userid' => $user_id,
+            'out_trade_no' => $out_trade_no,
+            'sqdatetime'=>['between',[date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00')),date('Y-m-d H:i:s',strtotime($datetime . ' 23:59:59'))]],
+        ];
+        $Wttklist = D('Wttklist');
+        $order = $Wttklist->table($Wttklist->getRealTableName($datetime))->where($where)->find();
+        if(!$order || empty($order)){
+            $where = [
+                'userid' => $user_id,
+                'out_trade_no' => $out_trade_no,
+                'sqdatetime'=>['between',[date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00')),date('Y-m-d H:i:s',strtotime($datetime . ' 23:59:59') + 86400)]],
+            ];
+            $t_date = date('Y-m-d',strtotime($datetime . ' 23:59:59') + 86400);
+            $Wttklist = D('Wttklist');
+            try {
+                $order = $Wttklist->table($Wttklist->getRealTableName($t_date))->where($where)->find();
+            } catch (\Exception $e) {
+                
+            }
+        }
+        if (!$order) {
+            $return = [
+                'status' => 'error',
+                'msg' => 'Error',
+                'refCode' => '7',
+                'refMsg' => 'Transaction does not exist',
+            ];
+        }else {
+            if ($order['status'] == 2 || $order['status'] == 3) {
+                $return = [
+                    'status' => 'success',
+                    'msg' => 'Successed',
+                    'mchid' => $this->memberid,
+                    'out_trade_no' => $order['out_trade_no'],
+                    'transaction_id' => $order['orderid'],
+                    'refCode' => '1',
+                    'refMsg' => 'Payment successful',
+                    'voucherUrl' => 'https://' . C('DOMAIN') . '/Payment_Index_voucher.html?casOrdNo=' . $order['orderid'],
+                ];
+            }else{
+                $return = [
+                    'status' => 'error',
+                    'msg' => 'Error',
+                    'refCode' => '8',
+                    'refMsg' => 'Unknown status',
+                ];
+            }
+            $return['sign'] = $this->createSign($this->merchants['apikey'], $return);
+        }
+        echo json_encode($return);
+        exit;
+    }
 
 }

@@ -25,10 +25,10 @@ class PaymentController extends Controller
     public function __construct(){
         parent::__construct();
         if(PHP_SAPI !== 'cli' && isset($_REQUEST['opt']) && $_REQUEST['opt'] == 'exec' && !session('admin_submit_df')) {
-            showError('没有权限');
+            showError('Permission denied');
         }
         if(PHP_SAPI !== 'cli' && ACTION_NAME == 'PaymentExec' && !session('admin_submit_df')) {
-            showError('没有权限');
+            showError('Permission denied');
         }
         
     }
@@ -41,7 +41,7 @@ class PaymentController extends Controller
             $where['id'] = $code;
         }
         $list = M('PayForAnother')->where($where)->find();
-        $list || showError('支付方式错误');
+        $list || showError('Wrong payment method');
 
 
 // 		//---------------------------子账号风控start------------------------------------
@@ -175,7 +175,7 @@ class PaymentController extends Controller
             $lists = $Wttklistmodel->table($tableName)->where($where)->find();
         }
         
-        $lists || showError('无该代付订单或订单当前状态不允许该操作！');
+        $lists || showError('There is no such payment order or the current order status does not allow this operation！');
         foreach($lists as $k => $v){
             $lists[$k]['additional'] = json_decode($v['additional'],true);
         }
@@ -187,7 +187,7 @@ class PaymentController extends Controller
     protected function checkMoney($uid,$money){
         $where = ['id' => $uid];
         $balance = M('Member')->where($where)->getField('balance');
-        $balance < $money && showError('支付金额错误');
+        $balance < $money && showError('Wrong payment amount');
     }
 
     protected function changeStatus($id, $status = 1, $return,$table='Wttklist'){
@@ -210,7 +210,7 @@ class PaymentController extends Controller
 			case 1:
 				//提交代付成功
 			   $data['status'] = 1;
-			   $data['memo']  = '申请成功！ - '. $return['memo']. date('Y-m-d H:i:s').'<br>'.$memo;
+			   $data['memo']  = '申请成功！ - '. $return['memo']. date('Y-m-d H:i:s');
 			   break;
 			case 2:
 				 //支付成功
@@ -307,14 +307,15 @@ class PaymentController extends Controller
 				 //订单状态不改变
 				 $sta = $Wttklist->table($table)->where(['id' => $id])->getField('status');
 				 $data['status'] = $sta;
-				 $data['memo']  = '状态不改变！ - '. $return['memo']. date('Y-m-d H:i:s').'<br>'.$memo;
+				 $data['memo']  = '状态不改变！ - '. $return['memo']. date('Y-m-d H:i:s');
 				 break;
 		}
         $ad = $Wttklist->table($table)->where($where)->save($data);
         if($status == 2 || $status == 3){
+            $withdraw['memo'] = $data['memo'];
             $withdraw['status'] = $data['status'];
             $redis->set($withdraw['orderid'],json_encode($withdraw),3600 * 2);
-            $redis->rPush('notifyList_DF', $withdraw['orderid']);
+            // $redis->rPush('notifyList_DF', $withdraw['orderid']);
             Automatic_Notify($withdraw['orderid']);
         }
         return;
@@ -346,20 +347,20 @@ class PaymentController extends Controller
     //         case 1:
     //             //提交代付成功
     //             $data['status'] = 1;
-    //             $data['memo']  = '申请成功！ - '. $return['memo']. date('Y-m-d H:i:s').'<br>'.$memo;
+    //             $data['memo']  = '申请成功！ - '. $return['memo']. date('Y-m-d H:i:s').' - '.$memo;
     //             break;
     //         case 2:
     //             //支付成功
     //             //  if($Wttklist["status"] != 0 && $Wttklist["status"] != 1){return;}
     //             $data['status'] = 2;
     //             $data['cldatetime'] = date('Y-m-d H:i:s', time());
-    //             $data['memo']  = '代付成功！ - '. $return['memo']. date('Y-m-d H:i:s').'<br>'.$memo;
+    //             $data['memo']  = '代付成功！ - '. $return['memo']. date('Y-m-d H:i:s').' - '.$memo;
     //             break;
     //         case 3:
     //             // if($Wttklist["status"] != 0 && $Wttklist["status"] != 1){return;}
     //             //各种失败未返回 并退回金额
     //             $message = isset($return['memo'])?$return['memo']:'代付失败！';
-    //             $message = $message .' - '.date('Y-m-d H:i:s').'<br>'.$memo;
+    //             $message = $message .' - '.date('Y-m-d H:i:s').' - '.$memo;
     //             M()->startTrans();
 				// $Reject_re = Reject(['id' => $id, 'status' => '4','message'=> $message],$return);
 				// if($Reject_re ===false){
@@ -374,7 +375,7 @@ class PaymentController extends Controller
     //             //订单状态不改变
     //             $sta = $Wttklistmodel->table($tableName)->where(['id' => $id])->getField('status');
     //             $data['status'] = $sta;
-    //             $data['memo']  = '状态不改变！ - '. $return['memo']. date('Y-m-d H:i:s').'<br>'.$memo;
+    //             $data['memo']  = '状态不改变！ - '. $return['memo']. date('Y-m-d H:i:s').' - '.$memo;
     //     }
     //     if(in_array($status, [0,1,2])){
     //         $data = array_merge($data, $return);
