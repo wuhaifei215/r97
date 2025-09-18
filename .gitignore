@@ -5,6 +5,7 @@
 /api/Runtime/
 /api/Uploads/
 /api/Application/Common/Conf/db.php
+/api/notifyurl.log
 /glht/.well-known
 /glht/.user.ini
 /glht/Data/
