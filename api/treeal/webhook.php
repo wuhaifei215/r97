@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL); ini_set('display_errors',1);
 /**
  *  /api/notify.php   （或放在任意可直接访问的目录下）
  *
