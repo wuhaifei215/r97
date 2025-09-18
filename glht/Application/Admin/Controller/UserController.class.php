@@ -1316,10 +1316,10 @@ class UserController extends BaseController
 //                                }
 //                            } else {
                                 if ($item['feilv'] < $channel['rate']) {
-                                    $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+0运营费率不得低于渠道成本费率：' . ($channel['rate'] * 100) . '%']);
+                                    $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+0运营费率不得低于渠道的成本费率：' . ($channel['rate'] * 100) . '%']);
                                 }
                                 if ($item['sxffixed'] < $channel['sxffixed']) {
-                                    $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+0运营单笔不得低于渠道【' . $channel['title'] . '】的成本单笔：' . $channel['sxffixed']]);
+                                    $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+0运营单笔不得低于渠道的成本单笔：' . $channel['sxffixed']]);
                                 }
 //                            }
 //                        }
