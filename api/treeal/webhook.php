@@ -20,6 +20,11 @@ define('BIND_MODULE','Pay');       // TP3.2.4 支持 BIND_MODULE
 if (!defined('APP_PATH')) {
     define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
+/* -------------------------------------------------
+   3️⃣ 加载 ThinkPHP 正确的入口文件
+   ------------------------------------------------- */
+require dirname(__DIR__) . '/core/ThinkPHP.php';   // 官方默认路径
+
 /**
  *递归创建多级目录
  */
@@ -32,11 +37,6 @@ function mkdirs($dir, $mode = 0777)
 }
 @mkdirs('./Data/notifyurl.log');
 file_put_contents('./Data/notifyurl.log', "【" . date('Y-m-d H:i:s') . "】\r\n" . "----异步回调" . "：" . file_get_contents('php://input') . "\r\n\r\n", FILE_APPEND);
-/* -------------------------------------------------
-   3️⃣ 加载 ThinkPHP 正确的入口文件
-   ------------------------------------------------- */
-require dirname(__DIR__) . '/core/ThinkPHP.php';   // 官方默认路径
-
 /* -------------------------------------------------
    4️⃣ ThinkPHP 会自动根据 $_GET['g']、$_GET['c']、$_GET['a'] 来执行对应的方法
    ------------------------------------------------- */
