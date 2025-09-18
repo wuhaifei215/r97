@@ -77,6 +77,12 @@ class OrderController extends BaseController
         }
         $this->assign('billno', $billno);
 
+        $three_orderid = I("request.three_orderid", '', 'trim,string,strip_tags,htmlspecialchars');
+        if ($three_orderid) {
+            $where['three_orderid'] = $three_orderid;
+        }
+        $this->assign('three_orderid', $three_orderid);
+
         $ddlx = I("request.ddlx", '', 'trim,string,strip_tags,htmlspecialchars');
         if ($ddlx != "") {
             $where['ddlx'] = array('eq', $ddlx);
