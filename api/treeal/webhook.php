@@ -24,15 +24,23 @@ function mkdirs($dir, $mode = 0777)
 
     return @mkdir($dir, $mode);
 }
-$filePath = './Data/' . date('Ymd') . '/';
-if (@mkdirs($filePath)) {
-    $destination = $filePath . $file . '_' . date('H') . '.log';
-    if (!file_exists($destination)) {
-        @fopen($destination, 'wb ');
+/**
+ *记录日志
+ */
+function log_place_order($file, $notify, $notifystr)
+{
+    $filePath = './Data/' . date('Ymd') . '/';
+    if (@mkdirs($filePath)) {
+        $destination = $filePath . $file . '_' . date('H') . '.log';
+        if (!file_exists($destination)) {
+            @fopen($destination, 'wb ');
+        }
+        @file_put_contents($destination, "【" . date('Y-m-d H:i:s') . "】\r\n" . $notify . "：" . $notifystr . "\r\n\r\n", FILE_APPEND);
+        return true;
     }
-    @file_put_contents($destination, "【" . date('Y-m-d H:i:s') . "】\r\n notifyurl：" .  file_get_contents('php://input') . "\r\n\r\n", FILE_APPEND);
-    return true;
+    return false;
 }
+log_place_order($this->code . '_notifyurl', "----异步回调", file_get_contents('php://input'));    //日志
 
 /* -------------------------------------------------
    2️⃣ 定义 Application 目录的完整路径
