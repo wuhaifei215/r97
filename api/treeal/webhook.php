@@ -16,13 +16,13 @@
   -------------------------------------------------*/
 if (!defined('APP_PATH')) {
     // Application 目录的完整路径（与 index.php 中保持一致）
-    define('APP_PATH', __DIR__ . '/Application/');
+    define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
 
 /*-------------------------------------------------
   第二步：载入 ThinkPHP 核心文件
   -------------------------------------------------*/
-require __DIR__ . '/ThinkPHP/ThinkPHP.php';
+require dirname(__DIR__) . '/ThinkPHP/ThinkPHP.php';
 
 /*-------------------------------------------------
   第三步：调用 Pay 模块的 TreealPay 控制器
