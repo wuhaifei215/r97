@@ -329,6 +329,7 @@ class PayController extends Controller
                 $or_add = $Order->table($Order->getRealTableName(date('Y-m-d', $data['pay_applydate'])))->add($data);
 
             } catch (\Exception $e) {
+                var_dump($e);
                 $this->showmessage('system error');
             }
 
