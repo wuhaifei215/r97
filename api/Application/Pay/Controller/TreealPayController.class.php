@@ -77,6 +77,9 @@ class TreealPayController extends PayController
             log_place_order($this->code, $return['orderid'] . "----sql", $OrderModel->getLastSql());    //日志
 
             $payurl = $site . 'PayPage.html?sid=' . $return['orderid'] . '&amount=' . $return['amount']. '&qrcode=' .$ans['pixCopiaECola'];
+
+
+            log_place_order($this->code, $return['orderid'] . "----payurl", $payurl);    //日志
             $return_arr = [
                 'status' => 'success',
                 'H5_url' => $payurl,
