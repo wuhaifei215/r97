@@ -378,13 +378,14 @@ class ApiController extends Controller
 
             $btn['text'] = 'YunPay官方频道，点击进入';
             $btn['url'] = 'https://t.me/Yun_Pay0';
-            $markup = [
+//            $markup = [
 //                'inline_keyboard'=>[[
 //                    $btn
 //                ]],
-            ];
+//            ];
 
-            $this->sendMessage($chat_id, $message, $message_id, 'Markdown',$markup);
+//            $this->sendMessage($chat_id, $message, $message_id, 'Markdown',$markup);
+            $this->sendMessage($chat_id, $message, $message_id, 'Markdown');
             return;
         }
 
