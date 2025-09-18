@@ -68,6 +68,14 @@ class TreealPayController extends PayController
         log_place_order($this->code, $return['orderid'] . "----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
 
         if($ans['status'] ==='ATIVA'){
+            //保存第三方订单号
+            $OrderModel = D('Order');
+            $date = date('Ymd',strtotime(substr($return['orderid'], 0, 8)));  //获取订单日期
+            $tablename = $OrderModel->getRealTableName($date);
+            $re_save = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->save(['three_orderid'=>$ans['txid']]);
+
+            $return = ['status' => 2, 'msg' => '代付成功'];
+
             $payurl = $site . 'PayPage.html?sid=' . $return['orderid'] . '&amount=' . $return['amount']. '&qrcode=' .$ans['pixCopiaECola'];
             $return_arr = [
                 'status' => 'success',
@@ -118,8 +126,8 @@ class TreealPayController extends PayController
         $result = json_decode(file_get_contents('php://input'), true);
         log_place_order($this->code . '_notifyurl', "----异步回调", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
         var_dump($result);
-        $arrayData = json_decode($result['data'], true);
-        $orderid = $arrayData['reference'];
+        $arrayData = $result['data'];
+        $orderid = $arrayData['txId'];
         //log_place_order($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
         log_place_order($this->code . '_notifyurl', $orderid . "----异步回调", file_get_contents('php://input'));    //日志
         if (!$orderid) return;
@@ -128,14 +136,16 @@ class TreealPayController extends PayController
         // $check_data = sqlInj($arrayData);
         // if ($check_data === false) return;
         $OrderModel = D('Order');
-        $date = date('Ymd',strtotime(substr($orderid, 0, 8)));  //获取订单日期
+        $date = date('Ymd',strtotime(substr($arrayData['createdAt'], 0, 10)));  //获取订单日期
         $tablename = $OrderModel->getRealTableName($date);
 
-        $orderList = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->find();
+        $orderList = $OrderModel->table($tablename)->where(['three_orderid' => $orderid])->find();
         if (!$orderList) return;
 
         //验证IP白名单
-        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
             $ip = $_SERVER['REMOTE_ADDR'];
         } else {
             $ip = getRealIp();
@@ -153,9 +163,9 @@ class TreealPayController extends PayController
             return;
         }
 
-        $sign = sha1(md5($result['data'] . $result['timestamp']) . $orderList['key']);
-        if ($sign == $result["sign"]) {
-            if($arrayData['status'] === 'SUCCESS' || $arrayData['status'] === 'SETTLED'){     //订单状态 PENDING,SUCCESS,FAIL（进行中，成功，失败）SETTLED 结算的成功
+//        $sign = sha1(md5($result['data'] . $result['timestamp']) . $orderList['key']);
+//        if ($sign == $result["sign"]) {
+            if($arrayData['status'] === 'LIQUIDATED'){      //成功LIQUIDATED，失败Cancelled
                 $re = $this->EditMoney($orderList['pay_orderid'], $this->code, 0);
                 if ($re !== false) {
                     log_place_order($this->code . '_notifyurl', $orderid . "----回调上游", "成功");    //日志
@@ -166,9 +176,9 @@ class TreealPayController extends PayController
                 log_place_order($this->code . '_notifyurl', $orderid . "----订单状态异常", $arrayData['status']);    //日志
             }
             $json_result = "SUCCESS";
-        } else {
-            log_place_order($this->code . '_notifyurl', $orderid . "----签名错误，加密后", $sign);    //日志
-        }
+//        } else {
+//            log_place_order($this->code . '_notifyurl', $orderid . "----签名错误，加密后", $sign);    //日志
+//        }
         echo $json_result;
         try{
             logApiAddNotify($orderid, 0, $result, $json_result);
