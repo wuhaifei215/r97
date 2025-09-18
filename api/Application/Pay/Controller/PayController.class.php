@@ -326,6 +326,7 @@ class PayController extends Controller
             //添加订单
             try {
                 $or_add = $Order->table($Order->getRealTableName(date('Y-m-d', $data['pay_applydate'])))->add($data);
+                echo $Order->getLastSql();die;
             } catch (\Exception $e) {
                 $this->showmessage('system error');
             }
@@ -356,7 +357,7 @@ class PayController extends Controller
             foreach ($requestarray as $key => $val) {
                 $md5str = $md5str . $key . "=" . $val . "&";
             }
-            $sign = strtoupper(md5($md5str . "key=" . $this->merchants['apikey']));
+//            $sign = strtoupper(md5($md5str . "key=" . $this->merchants['apikey']));
             $result = [
                 'mgs' => 'Please compare the splicing order and signature',
                 'POST Data' => $requestarray,
