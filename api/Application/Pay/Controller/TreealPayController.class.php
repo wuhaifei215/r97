@@ -71,9 +71,9 @@ class TreealPayController extends PayController
             //保存第三方订单号
             $OrderModel = D('Order');
             $date = date('Ymd',strtotime(substr($return['orderid'], 0, 8)));  //获取订单日期
-            $tablename = $OrderModel->getRealTableName($date);
-            $orderList = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->find();
-            $re_save = $OrderModel->table($tablename)->where(['pay_orderid' => $return['orderid']])->save(['three_orderid' => $ans['txid']]);
+            $tablename1 = $OrderModel->getRealTableName($date);
+            $orderList = $OrderModel->table($tablename1)->where(['pay_orderid' => $orderid])->find();
+            $re_save = $OrderModel->table($tablename1)->where(['pay_orderid' => $return['orderid']])->save(['three_orderid' => $ans['txid']]);
 
             log_place_order($this->code, $return['orderid'] . "----sql", $OrderModel->getLastSql());    //日志
 
