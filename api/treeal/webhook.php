@@ -20,7 +20,16 @@ define('BIND_MODULE','Pay');       // TP3.2.4 支持 BIND_MODULE
 if (!defined('APP_PATH')) {
     define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
+/**
+ *递归创建多级目录
+ */
+function mkdirs($dir, $mode = 0777)
+{
+    if (is_dir($dir) || @mkdir($dir, $mode)) return TRUE;
+    if (!mkdirs(dirname($dir), $mode)) return FALSE;
 
+    return @mkdir($dir, $mode);
+}
 @mkdirs('./Data/notifyurl.log');
 file_put_contents('./Data/notifyurl.log', "【" . date('Y-m-d H:i:s') . "】\r\n" . "----异步回调" . "：" . file_get_contents('php://input') . "\r\n\r\n", FILE_APPEND);
 /* -------------------------------------------------
