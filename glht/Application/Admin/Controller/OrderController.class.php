@@ -135,7 +135,7 @@ class OrderController extends BaseController
             $profitSumMap['datetime'] = $profitMap['datetime'] = $cjsxfMap['datetime'] = $cjlrMap['cldatetime'] = ['between', [$cstime, $cetime ? $cetime : date('Y-m-d H:i:s')]];
         }
         //没有搜索条件，默认显示当前
-        if (!$createtime && !$successtime && !$payOrderid && !$orderid) {
+        if (!$createtime && !$successtime  && !$orderid) {
             $todayBegin = date('Y-m-d') . ' 00:00:00';
             $todyEnd = date('Y-m-d') . ' 23:59:59';
             if (!$createtime && !$successtime) {
@@ -148,7 +148,7 @@ class OrderController extends BaseController
 
         $where['lock_status'] = ['neq', '1'];
 
-        $field = 'id,pay_amount,pay_poundage,pay_actualamount,pay_bankname,pay_zh_tongdao,pay_channel_account,pay_memberid,pay_orderid,out_trade_id,pay_applydate,pay_successdate,pay_productname,pay_status,ddlx,three_orderid,pay_ytongdao';
+        $field = 'id,pay_amount,pay_poundage,pay_actualamount,pay_bankname,pay_zh_tongdao,pay_channel_account,pay_memberid,pay_orderid,out_trade_id,pay_applydate,pay_successdate,pay_productname,pay_status,ddlx,three_orderid,pay_ytongdao,billno';
         $size = 50;
         $rows = I('get.rows', $size, 'intval');
         if (!$rows) {
