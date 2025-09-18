@@ -125,7 +125,6 @@ class TreealPayController extends PayController
         //获取报文信息
         $result = json_decode(file_get_contents('php://input'), true);
         log_place_order($this->code . '_notifyurl', "----异步回调", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
-        var_dump($result);
         $arrayData = $result['data'];
         $orderid = $arrayData['txId'];
         //log_place_order($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
@@ -163,8 +162,7 @@ class TreealPayController extends PayController
             return;
         }
 
-//        $sign = sha1(md5($result['data'] . $result['timestamp']) . $orderList['key']);
-//        if ($sign == $result["sign"]) {
+//        if ($_SERVER['HTTP_SIGN'] == "LTDA6013CURRAIS_NOVOS62070503") {
             if($arrayData['status'] === 'LIQUIDATED'){      //成功LIQUIDATED，失败Cancelled
                 $re = $this->EditMoney($orderList['pay_orderid'], $this->code, 0);
                 if ($re !== false) {
