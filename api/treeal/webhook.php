@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL); ini_set('display_errors',1);
 /**
  *  /api/notify.php   （或放在任意可直接访问的目录下）
  *
@@ -10,11 +9,9 @@ error_reporting(E_ALL); ini_set('display_errors',1);
 /* -------------------------------------------------
    1️⃣ 先把模块锁定为 Pay（必须在加载框架之前执行）
    ------------------------------------------------- */
-if (!defined('MODULE_NAME')) {
-    define('MODULE_NAME', 'Pay');   // 防止入口文件把默认模块改回 Home
-}
 $_GET['g']     = 'Pay';             // 让入口代码看到请求的模块是 Pay
 $_REQUEST['g'] = 'Pay';
+define('BIND_MODULE','Pay');        // TP3.2.4 支持 BIND_MODULE
 
 /* -------------------------------------------------
    2️⃣ 定义 Application 目录的完整路径
@@ -36,7 +33,7 @@ if (!defined('APP_PATH')) {
    4️⃣ 手动导入并实例化 TreealPayController（不走路由回退）
    ------------------------------------------------- */
 import('Pay.Controller.TreealPayController');   // 导入  Application/Pay/Controller/TreealPayController.class.php
-$controller = new \TreealPayController();       // 实例化（类名必须是 TreealPayController）
+$controller = new TreealPayController();       // 实例化（类名必须是 TreealPayController）
 $controller->notifyurl();                       // 直接执行业务方法
 
 /* -------------------------------------------------
