@@ -70,6 +70,13 @@ class OrderController extends BaseController
             $where['out_trade_id'] = $out_trade_id;
         }
         $this->assign('out_trade_id', $out_trade_id);
+
+        $billno = I("request.billno", '', 'trim,string,strip_tags,htmlspecialchars');
+        if ($billno) {
+            $where['billno'] = $billno;
+        }
+        $this->assign('billno', $billno);
+
         $ddlx = I("request.ddlx", '', 'trim,string,strip_tags,htmlspecialchars');
         if ($ddlx != "") {
             $where['ddlx'] = array('eq', $ddlx);
