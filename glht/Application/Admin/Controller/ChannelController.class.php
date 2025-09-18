@@ -72,6 +72,8 @@ class ChannelController extends BaseController
             $_request['paytype']      = $papiacc['paytype'];
             $_request['status']       = $papiacc['status'];
             $_request['notifyIP']     = trim($papiacc['notifyIP']);
+
+            var_dump($_request);die;
             if ($id) {
                 //更新
                 $res = M('Channel')->where(array('id' => $id))->save($_request);
@@ -318,7 +320,6 @@ class ChannelController extends BaseController
                     }
                 }
             }
-            var_dump($rows);die;
             //保存
             if ($id) {
                 $res = M('Product')->where(['id' => $id])->save($rows);
