@@ -318,6 +318,7 @@ class ChannelController extends BaseController
                     }
                 }
             }
+            var_dump($rows);die;
             //保存
             if ($id) {
                 $res = M('Product')->where(['id' => $id])->save($rows);
