@@ -72,7 +72,6 @@ class TreealPayController extends PayController
             $OrderModel = D('Order');
             $date = date('Ymd',strtotime(substr($return['orderid'], 0, 8)));  //获取订单日期
             $tablename = $OrderModel->getRealTableName($date);
-            var_dump($tablename);die;
             $re_save = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->save(['three_orderid'=>$ans['txid']]);
             log_place_order($this->code, $return['orderid'] . "----sql", $OrderModel->getLastSql());    //日志
 
