@@ -35,7 +35,7 @@ class TreealPayController extends PayController
         //如果生成错误，自动跳转错误页面
         $return["status"] == "error" && $this->showmessage($return["errorcontent"]);
         //跳转页面，优先取数据库中的跳转页面
-        $_site = ((is_https()) ? 'https' : 'http') . '://' . C("DOMAIN") . '/';
+        $_site = 'http://' . C("DOMAIN") . '/';
         $site = trim($return['unlockdomain']) ? $return['unlockdomain'] . '/' : $_site;
 
         /*********************************引入支付方类*********************************/
@@ -72,6 +72,7 @@ class TreealPayController extends PayController
             $OrderModel = D('Order');
             $date = date('Ymd',strtotime(substr($return['orderid'], 0, 8)));  //获取订单日期
             $tablename = $OrderModel->getRealTableName($date);
+            var_dump($tablename);die;
             $re_save = $OrderModel->table($tablename)->where(['pay_orderid' => $orderid])->save(['three_orderid'=>$ans['txid']]);
             log_place_order($this->code, $return['orderid'] . "----sql", $OrderModel->getLastSql());    //日志
 
