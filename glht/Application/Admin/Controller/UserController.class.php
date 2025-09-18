@@ -1279,6 +1279,7 @@ class UserController extends BaseController
         $list = [];
         if ($products) {
             foreach ($products as $key => $item) {
+                $products[$key]['rate_type'] = $_tmpData[$item['id']]['rate_type'] ? $_tmpData[$item['id']]['rate_type'] : '0';
                 $products[$key]['feilv'] = $_tmpData[$item['id']]['feilv'] ? $_tmpData[$item['id']]['feilv'] * 100 : '0.0000';
                 $products[$key]['sxffixed'] = $_tmpData[$item['id']]['sxffixed'] ? $_tmpData[$item['id']]['sxffixed'] : '0.0000';
             }
