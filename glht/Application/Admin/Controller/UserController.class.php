@@ -1284,7 +1284,6 @@ class UserController extends BaseController
                 $products[$key]['sxffixed'] = $_tmpData[$item['id']]['sxffixed'] ? $_tmpData[$item['id']]['sxffixed'] : '0.0000';
             }
         }
-        var_dump($products);
         $this->assign('userid', $userid);
         $this->assign('products', $products);
         $this->display();
