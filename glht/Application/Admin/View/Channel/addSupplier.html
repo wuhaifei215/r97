@@ -64,19 +64,19 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">费率类型：</label>
 					<div class="layui-input-block">
-						<input type="radio" name="rate_type" value="0" title="单笔" <if condition="$pa[rate_type] eq 0">checked</if> checked="" >
-						<input type="radio" name="rate_type" value="1" title="比例" <if condition="$pa[rate_type] eq 1">checked</if> >
-						<input type="radio" name="rate_type" value="2" title="比例+单笔" <if condition="$pa[rate_type] eq 2">checked</if> >
+						<input type="radio" name="pa[rate_type]" value="0" title="单笔" <if condition="$pa[rate_type] eq 0">checked</if> checked="" >
+						<input type="radio" name="pa[rate_type]" value="1" title="比例" <if condition="$pa[rate_type] eq 1">checked</if> >
+						<input type="radio" name="pa[rate_type]" value="2" title="比例+单笔" <if condition="$pa[rate_type] eq 2">checked</if> >
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">成本费率(%)：</label>
 					<div class="layui-input-inline">
-						<input type="text" name="rate" value="<{$pa.rate}>" placeholder="0.000" value="" autocomplete="off" class="layui-input">
+						<input type="text" name="pa[rate]" value="<{$pa.rate}>" placeholder="0.000" value="" autocomplete="off" class="layui-input">
 					</div>
 					<label class="layui-form-label">单笔：</label>
 					<div class="layui-input-inline">
-						<input type="text" name="sxffixed" value="<{$pa.sxffixed}>" placeholder="0.000" value="" autocomplete="off" class="layui-input">
+						<input type="text" name="pa[sxffixed]" value="<{$pa.sxffixed}>" placeholder="0.000" value="" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 
