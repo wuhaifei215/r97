@@ -30,11 +30,11 @@ require dirname(__DIR__) . '/core/ThinkPHP.php';
 
 // 方法一：使用 A()（返回控制器实例）
 // -------------------------------------------------
-$controller = A('Pay/TreealPay');   // Pay 为模块名，TreealPay 为控制器名（不需要加 Action）
-$controller->notifyurl();           // 直接执行方法
-// 结束脚本，防止 ThinkPHP 后续自动输出模板
-exit;
+//$controller = A('Pay/TreealPay');   // Pay 为模块名，TreealPay 为控制器名（不需要加 Action）
+//$controller->notifyurl();           // 直接执行方法
+//// 结束脚本，防止 ThinkPHP 后续自动输出模板
+//exit;
 
 
 // 方法二：如果你只想“一行代码”触发（不需要实例化），可以改为下面的 R()，记得把上面的代码改为注释掉
-// R('Pay/TreealPay/notifyurl');  // 同样会执行 notifyurl 方法
+ R('Pay/TreealPay/notifyurl');  // 同样会执行 notifyurl 方法
