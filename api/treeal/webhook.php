@@ -19,8 +19,8 @@ if (!defined('APP_PATH')) {
     define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
 
-//绑定模块
-define ( 'BIND_MODULE','Pay');
+// 1. 强制模块为 Pay
+$_GET['g'] = 'Pay';
 
 /*-------------------------------------------------
   第二步：载入 ThinkPHP 核心文件
