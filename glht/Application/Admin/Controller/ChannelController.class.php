@@ -61,7 +61,9 @@ class ChannelController extends BaseController
             $_request['serverreturn'] = $papiacc['serverreturn'];
             $_request['defaultrate']  = $papiacc['defaultrate'] ? $papiacc['defaultrate']/100 : 0;
             $_request['fengding']     = $papiacc['fengding'] ? $papiacc['fengding'] : 0;
+            $_request['rate_type']    = $papiacc['rate_type'] ? $papiacc['rate_type'] : 0;
             $_request['rate']         = $papiacc['rate'] ? $papiacc['rate']/100 : 0;
+            $_request['sxffixed']         = $papiacc['sxffixed'] ? $papiacc['sxffixed'] : 0;
             $_request['t0defaultrate']  = $papiacc['t0defaultrate'] ? $papiacc['t0defaultrate']/100 : 0;
             $_request['t0fengding']     = $papiacc['t0fengding'] ? $papiacc['t0fengding']/100 : 0;
             $_request['t0rate']         = $papiacc['t0rate'] ? $papiacc['t0rate']/100 : 0;

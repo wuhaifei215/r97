@@ -1306,49 +1306,55 @@ class UserController extends BaseController
                         $channel = M('Channel')
                             ->where(['id' => $productUser['channel'], 'status' => 1])
                             ->find();
-                        $channel_account_list = M('channel_account')->where(['channel_id' => $productUser['channel'], 'status' => '1', 'custom_rate' => 1])->select();
-                        if (!empty($channel)) {
-                            if (!empty($channel_account_list)) {
-                                foreach ($channel_account_list as $k => $v) {
-                                    if ($item['feilv'] < $v['rate']) {
-                                        $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道子账号【' . $v['title'] . '】成本费率：' . ($v['rate'] * 100) . '%']);
-                                    }
-                                }
-                            } else {
+//                        $channel_account_list = M('channel_account')->where(['channel_id' => $productUser['channel'], 'status' => '1', 'custom_rate' => 1])->select();
+//                        if (!empty($channel)) {
+//                            if (!empty($channel_account_list)) {
+//                                foreach ($channel_account_list as $k => $v) {
+//                                    if ($item['feilv'] < $v['rate']) {
+//                                        $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道子账号【' . $v['title'] . '】成本费率：' . ($v['rate'] * 100) . '%']);
+//                                    }
+//                                }
+//                            } else {
                                 if ($item['feilv'] < $channel['rate']) {
                                     $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+0运营费率不得低于渠道成本费率：' . ($channel['rate'] * 100) . '%']);
                                 }
-                            }
-                        }
-                    }
-                    if ($productUser['polling'] == 1 && $productUser['weight'] != '') {//渠道轮询的情况
-                        $temp_weights = explode('|', $productUser['weight']);
-                        if (!empty($temp_weights)) {
-                            foreach ($temp_weights as $k => $v) {
-                                list($pid, $weight) = explode(':', $v);
-                                $channel = M('channel')->where(['id' => $pid, 'status' => 1])->find();
-                                $channel_account_list = M('channel_account')->where(['channel_id' => $pid, 'status' => '1', 'custom_rate' => 1])->select();
-                                if (!empty($channel)) {
-                                    if (!empty($channel_account_list)) {
-                                        foreach ($channel_account_list as $k => $v) {
-                                            if ($item['feilv'] > 0 && $item['feilv'] < $v['rate']) {
-                                                $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道子账号【' . $v['title'] . '】成本费率：' . ($v['rate'] * 100) . '%']);
-                                            }
-                                        }
-                                    } else {
-                                        if ($item['feilv'] > 0 && $item['feilv'] < $channel['rate']) {
-                                            $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道成本费率：' . ($channel['rate'] * 100) . '%']);
-                                        }
-                                    }
+                                if ($item['sxffixed'] < $channel['sxffixed']) {
+                                    $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+0运营单笔不得低于渠道【' . $channel['title'] . '】的成本单笔：' . $channel['sxffixed']]);
                                 }
-                            }
-                        }
+//                            }
+//                        }
                     }
+//                    if ($productUser['polling'] == 1 && $productUser['weight'] != '') {//渠道轮询的情况
+//                        $temp_weights = explode('|', $productUser['weight']);
+//                        if (!empty($temp_weights)) {
+//                            foreach ($temp_weights as $k => $v) {
+//                                list($pid, $weight) = explode(':', $v);
+//                                $channel = M('channel')->where(['id' => $pid, 'status' => 1])->find();
+//                                $channel_account_list = M('channel_account')->where(['channel_id' => $pid, 'status' => '1', 'custom_rate' => 1])->select();
+//                                if (!empty($channel)) {
+//                                    if (!empty($channel_account_list)) {
+//                                        foreach ($channel_account_list as $k => $v) {
+//                                            if ($item['feilv'] > 0 && $item['feilv'] < $v['rate']) {
+//                                                $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道子账号【' . $v['title'] . '】成本费率：' . ($v['rate'] * 100) . '%']);
+//                                            }
+//                                        }
+//                                    } else {
+//                                        if ($item['feilv'] > 0 && $item['feilv'] < $channel['rate']) {
+//                                            $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道成本费率：' . ($channel['rate'] * 100) . '%']);
+//                                        }
+//                                        if ($item['sxffixed'] < $channel['sxffixed']) {
+//                                            $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+0运营单笔不得低于渠道成本单笔【' . $channel['title'] . '】成本单笔：' . $channel['sxffixed']);
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
                 }
                 if ($rates) {
-                    $data_insert[] = ['id' => $rates['id'], 'userid' => $userid, 'payapiid' => $key, 'feilv' => $item['feilv']/100];
+                    $data_insert[] = ['id' => $rates['id'], 'userid' => $userid, 'payapiid' => $key, 'rate_type' => $item['rate_type'], 'feilv' => $item['feilv']/100, 'sxffixed' => $item['sxffixed']];
                 } else {
-                    $data_update[] = ['userid' => $userid, 'payapiid' => $key, 'feilv' => $item['feilv']/100];
+                    $data_update[] = ['userid' => $userid, 'payapiid' => $key, 'rate_type' => $item['rate_type'], 'feilv' => $item['feilv']/100, 'sxffixed' => $item['sxffixed']];
                 }
             }
             $ins_arr = M('Userrate')->addAll($data_insert, [], true);
@@ -1408,46 +1414,49 @@ class UserController extends BaseController
                     if (!empty($productUser)) {
                         if ($productUser['polling'] == 0 && $productUser['channel'] > 0) {//单独渠道的情况
                             $channel = M('Channel') ->where(['id' => $productUser['channel'], 'status' => 1]) ->find();
-                            $channel_account_list = M('channel_account')->where(['channel_id' => $productUser['channel'], 'status' => '1', 'custom_rate' => 1])->select();
-                            if (!empty($channel)) {
-                                if (!empty($channel_account_list)) {
-                                    foreach ($channel_account_list as $k => $v) {
-                                        if ($item['feilv'] < $v['rate']) {
-                                            $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道子账号【' . $v['title'] . '】成本费率：' . ($v['rate'] * 100) . '%']);
-                                        }
-                                    }
-                                } else {
+//                            $channel_account_list = M('channel_account')->where(['channel_id' => $productUser['channel'], 'status' => '1', 'custom_rate' => 1])->select();
+//                            if (!empty($channel)) {
+//                                if (!empty($channel_account_list)) {
+//                                    foreach ($channel_account_list as $k => $v) {
+//                                        if ($item['feilv'] < $v['rate']) {
+//                                            $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道子账号【' . $v['title'] . '】成本费率：' . ($v['rate'] * 100) . '%']);
+//                                        }
+//                                    }
+//                                } else {
                                     if ($item['feilv'] < $channel['rate']) {
                                         $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+0运营费率不得低于渠道成本费率：' . ($channel['rate'] * 100) . '%']);
                                     }
-                                }
-                            }
-                        }
-                        if ($productUser['polling'] == 1 && $productUser['weight'] != '') {//渠道轮询的情况
-                            $temp_weights = explode('|', $productUser['weight']);
-                            if (!empty($temp_weights)) {
-                                foreach ($temp_weights as $k => $v) {
-                                    list($pid, $weight) = explode(':', $v);
-                                    $channel = M('channel')->where(['id' => $pid, 'status' => 1])->find();
-                                    $channel_account_list = M('channel_account')->where(['channel_id' => $pid, 'status' => '1', 'custom_rate' => 1])->select();
-                                    if (!empty($channel)) {
-                                        if (!empty($channel_account_list)) {
-                                            foreach ($channel_account_list as $k => $v) {
-                                                if ($item['feilv'] > 0 && $item['feilv'] < $v['rate']) {
-                                                    $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道子账号【' . $v['title'] . '】成本费率：' . ($v['rate'] * 100) . '%']);
-                                                }
-                                            }
-                                        } else {
-                                            if ($item['feilv'] > 0 && $item['feilv'] < $channel['rate']) {
-                                                $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道成本费率：' . ($channel['rate'] * 100) . '%']);
-                                            }
-                                        }
+                                    if ($item['sxffixed'] < $channel['sxffixed']) {
+                                        $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+0运营单笔不得低于渠道【' . $channel['title'] . '】的成本单笔：' . $channel['sxffixed']]);
                                     }
-                                }
-                            }
+//                                }
+//                            }
                         }
+//                        if ($productUser['polling'] == 1 && $productUser['weight'] != '') {//渠道轮询的情况
+//                            $temp_weights = explode('|', $productUser['weight']);
+//                            if (!empty($temp_weights)) {
+//                                foreach ($temp_weights as $k => $v) {
+//                                    list($pid, $weight) = explode(':', $v);
+//                                    $channel = M('channel')->where(['id' => $pid, 'status' => 1])->find();
+//                                    $channel_account_list = M('channel_account')->where(['channel_id' => $pid, 'status' => '1', 'custom_rate' => 1])->select();
+//                                    if (!empty($channel)) {
+//                                        if (!empty($channel_account_list)) {
+//                                            foreach ($channel_account_list as $k => $v) {
+//                                                if ($item['feilv'] > 0 && $item['feilv'] < $v['rate']) {
+//                                                    $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道子账号【' . $v['title'] . '】成本费率：' . ($v['rate'] * 100) . '%']);
+//                                                }
+//                                            }
+//                                        } else {
+//                                            if ($item['feilv'] > 0 && $item['feilv'] < $channel['rate']) {
+//                                                $this->ajaxReturn(['status' => 0, 'msg' => '【' . $channel['title'] . '】T+1运营费率不得低于渠道成本费率：' . ($channel['rate'] * 100) . '%']);
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
                     }
-                    $data_update[] = ['userid' => $mv['id'], 'payapiid' => $key, 'feilv' => $item['feilv']/100];
+                    $data_update[] = ['userid' => $mv['id'], 'payapiid' => $key, 'rate_type' => $item['rate_type'], 'feilv' => $item['feilv']/100, 'sxffixed' => $item['sxffixed']];
                 }
             }
             // var_dump($data_update);die;
