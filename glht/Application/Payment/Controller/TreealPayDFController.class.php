@@ -279,7 +279,7 @@ AAA;
         $authorization_redis = $redis->get('getOAuth');
         $authorization = json_decode($authorization_redis,true);
         if(!$authorization_redis || empty($authorization)) {
-            $url = 'https://api.pix.treeal.com/oauth/token';
+            $url = 'https://secureapi.treeal-prod.onz.software';
             $header = [
                 'accept: application/json',
                 'content-type: application/x-www-form-urlencoded'
@@ -290,9 +290,9 @@ AAA;
                 'grant_type' => 'client_credentials',
             ];
             log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
-//        log_place_order($this->code, "OAuth----url", $url);    //日志
+            log_place_order($this->code, "OAuth----url", $url);    //日志
             $authorization = $this->http_post_json($url, $params, $header);
-//        log_place_order($this->code, "OAuth----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
+            log_place_order($this->code, "OAuth----return", json_encode($authorization, JSON_UNESCAPED_UNICODE));    //日志
             $redis->set('getOAuth', json_encode($authorization, JSON_UNESCAPED_UNICODE));
             $redis->expire('getOAuth' , 60);
         };
