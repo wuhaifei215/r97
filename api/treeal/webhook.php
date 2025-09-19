@@ -20,8 +20,7 @@ define('BIND_MODULE','Pay');       // TP3.2.4 支持 BIND_MODULE
 if (!defined('APP_PATH')) {
     define('APP_PATH', dirname(__DIR__) . '/Application/');
 }
-//$destination = '/www/wwwroot/r97/api/Data/' . date('Ymd') . '/TreealPay_notifyurl_' . date('H') . '.log';
-//file_put_contents($destination, "【" . date('Y-m-d H:i:s') . "】\r\n" . file_get_contents('php://input') . "\r\n\r\n", FILE_APPEND);
+
 /* -------------------------------------------------
    3️⃣ 加载 ThinkPHP 正确的入口文件
    ------------------------------------------------- */

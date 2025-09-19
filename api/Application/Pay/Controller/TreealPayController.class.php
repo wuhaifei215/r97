@@ -123,10 +123,9 @@ class TreealPayController extends PayController
     {
         //获取报文信息
         $result = json_decode(file_get_contents('php://input'), true);
-        self::log_place_orderNotify($this->code . '_notifyurl', "----异步回调", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
         $arrayData = $result['data'];
         $orderid = $arrayData['txId'];
-        //self::log_place_orderNotify($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
+        self::log_place_orderNotify($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
         self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----异步回调", file_get_contents('php://input'));    //日志
         if (!$orderid) return;
 
@@ -141,25 +140,25 @@ class TreealPayController extends PayController
         if (!$orderList) return;
 
         //验证IP白名单
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        } else {
-            $ip = getRealIp();
-        }
-
-        $check_re = check_IP($orderList['channel_id'], $ip, $orderid);
-        if ($check_re !== true) {
-            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----IP异常", $ip);    //日志
-            $json_result = "IP异常:" . $ip;
-            try{
-                logApiAddNotify($orderid, 1, $result, $json_result);
-            }catch (\Exception $e) {
-                // var_dump($e);
-            }
-            return;
-        }
+//        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+//            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+//        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+//            $ip = $_SERVER['REMOTE_ADDR'];
+//        } else {
+//            $ip = getRealIp();
+//        }
+//
+//        $check_re = check_IP($orderList['channel_id'], $ip, $orderid);
+//        if ($check_re !== true) {
+//            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----IP异常", $ip);    //日志
+//            $json_result = "IP异常:" . $ip;
+//            try{
+//                logApiAddNotify($orderid, 1, $result, $json_result);
+//            }catch (\Exception $e) {
+//                // var_dump($e);
+//            }
+//            return;
+//        }
 
         if ($_SERVER['HTTP_SIGN'] == "LTDA6013CURRAIS_NOVOS62070503") {
             if($arrayData['status'] === 'LIQUIDATED'){      //成功LIQUIDATED，失败Cancelled
