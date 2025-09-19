@@ -610,6 +610,10 @@ class CreateDFController extends Controller
 
             $WttklistModel = D('Wttklist');
             $wttkData = $WttklistModel->where($where)->select();
+            log_place_order( 'sendWaring', 'where',  json_encode($where, JSON_UNESCAPED_UNICODE));    //日志
+            log_place_order( 'sendWaring', 'sql',  $WttklistModel->getLastSql());    //日志
+            log_place_order( 'sendWaring', $wttkData['orderid'],  json_encode($wttkData, JSON_UNESCAPED_UNICODE));    //日志
+
             $orderList=[];
             $alltkmoney=0;
             foreach($wttkData as $k =>$v){
