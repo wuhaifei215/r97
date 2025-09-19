@@ -279,7 +279,7 @@ AAA;
         $authorization_redis = $redis->get('getOAuthDF');
         $authorization = json_decode($authorization_redis,true);
         if(!$authorization_redis || empty($authorization)) {
-            $url = 'https://secureapi.treeal-prod.onz.software';
+            $url = 'https://secureapi.treeal-prod.onz.software/api/v2/oauth/token';
             $header = [
                 'accept: application/json',
                 'content-type: application/x-www-form-urlencoded'
