@@ -226,7 +226,7 @@ class AutodfTelController extends Controller
             		    M()->rollback();
             		}
 			    } catch (\Exception $e) {
-                    log_place_order( 'autodfTEL_error', $withdraw['orderid'] . '$e',  $e);    //日志
+                    log_place_order( 'autodfTEL_error', $withdraw['orderid'] . 'e',  $e);    //日志
                 }
 			    break;
 			default:
@@ -239,10 +239,11 @@ class AutodfTelController extends Controller
         $where = ['id'=>$id, 'status'=>['in', '0,1']];
         $ad = $Wttklist->table($table)->where($where)->save($data);
         if($status == 2 || $status == 3){
+            $withdraw['memo'] = $data['memo'];
             $withdraw['status'] = $data['status'];
             $this->redis->set($withdraw['orderid'],json_encode($withdraw),3600 * 2);
             $this->redis->rPush('notifyList_DF', $withdraw['orderid']);
-            Automatic_Notify($withdraw['orderid']);
+//            Automatic_Notify($withdraw['orderid']);
         }
         return;
 	}

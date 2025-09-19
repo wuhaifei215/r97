@@ -22,8 +22,8 @@ class TreealPayDFController extends PaymentController
             return $return;
         }
         $post_data = array(
-            'pixKey' => $config['appid'],
-            'creditorDocument' => 'string',
+            'pixKey' => $data['banknumber'],
+            'creditorDocument' => $data['banknumber'],
             'priority' => 'HIGH',
             'description' => 'remark',
             'paymentFlow' => 'INSTANT',     //NSTANT- 付款将立即发生，APPROVAL_REQUIRED- 仅当订单获得批准后才会付款。

@@ -609,13 +609,20 @@ class CreateDFController extends Controller
             ];
 
             $WttklistModel = D('Wttklist');
-            $table = $WttklistModel->getRealTableName($time);
-            $wttkData = $WttklistModel->where($where)->select();
+            $table = $WttklistModel->getRealTableName(date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00')));
+            $wttkData = $WttklistModel->table($table)->where($where)->select();
             log_place_order( 'sendWaring', 'where',  json_encode($where, JSON_UNESCAPED_UNICODE));    //日志
-            log_place_order( 'sendWaring', 'sql',  $WttklistModel->getLastSql());    //日志
+            log_place_order( 'sendWaring', 'sql',  $WttklistModel->table($table)->getLastSql());    //日志
             log_place_order( 'sendWaring', $wttkData['orderid'],  json_encode($wttkData, JSON_UNESCAPED_UNICODE));    //日志
+            if(empty($wttkData)){
+                $table = $WttklistModel->getRealTableName(date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00')- 86400));
+                $wttkData = $WttklistModel->table($table)->where($where)->select();
 
-            if($wttkData){
+                log_place_order( 'sendWaring', 'where2',  json_encode($where, JSON_UNESCAPED_UNICODE));    //日志
+                log_place_order( 'sendWaring', 'sql2',  $WttklistModel->table($table)->getLastSql());    //日志
+                log_place_order( 'sendWaring', $wttkData['orderid'],  json_encode($wttkData, JSON_UNESCAPED_UNICODE));    //日志
+            }
+            if(!empty($wttkData)){
                 $orderList=[];
                 $alltkmoney=0;
                 foreach($wttkData as $k =>$v){
@@ -638,6 +645,7 @@ class CreateDFController extends Controller
                 $result = R('Telegram/Api/send', [$member_list['telegram_id'], $message, '', 'Markdown']);
             }
         }
+        return;
     }
 
     /**
