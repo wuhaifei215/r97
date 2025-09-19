@@ -153,7 +153,7 @@ class TreealPayController extends PayController
 //            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----IP异常", $ip);    //日志
 //            $json_result = "IP异常:" . $ip;
 //            try{
-//                logApiAddNotify($orderid, 1, $result, $json_result);
+//                self::logApiAddNotify($orderid, 1, $result, $json_result);
 //            }catch (\Exception $e) {
 //                // var_dump($e);
 //            }
@@ -161,7 +161,7 @@ class TreealPayController extends PayController
 //        }
 
         if ($_SERVER['HTTP_SIGN'] == "LTDA6013CURRAIS_NOVOS62070503") {
-            if($arrayData['status'] === 'LIQUIDATED'){      //成功LIQUIDATED，失败Cancelled
+            if($arrayData['status'] === 'LIQUIDATED'){      //成功LIQUIDATED，失败CANCELED
                 $re_save = $OrderModel->table($tablename)->where(['three_orderid' => $orderid])->save(['billno'=>$arrayData['endToEndId']]);
                 $re = $this->EditMoney($orderList['pay_orderid'], $this->code, 0);
                 if ($re !== false) {
@@ -179,7 +179,7 @@ class TreealPayController extends PayController
         }
         echo $json_result;
         try{
-            logApiAddNotify($orderid, 0, $result, $json_result);
+            self::logApiAddNotify($orderid, 0, $result, $json_result);
         }catch (\Exception $e) {
             // var_dump($e);
         }
@@ -330,5 +330,28 @@ class TreealPayController extends PayController
             return true;
         }
         return false;
+    }
+
+    function logApiAddNotify($orderid, $type, $oper_param=[], $json_result=[]){
+        $log = [
+            'memberid' => 2,   //用户id
+            'order_id' => $orderid,   //订单号
+            'out_trade_id' => $orderid,  //下游订单号
+            'oper_param' => $oper_param,      //请求参数
+            'json_result' => $json_result,    //返回参数
+            'type' => $type,      //业务类型（0入款 1出款）
+            'create_time' => date('Y-m-d H:i:s'),       //创建时间
+        ];
+        $url = 'http://r97pay.com/Log_Api_addNotifyLog.html';
+        log_place_order('logApiNotify', $orderid . "----提交地址", $url);    //日志
+        log_place_order('logApiNotify', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
+        $res = http_post_json($url, $log);
+        log_place_order('logApiNotify', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
+
+        if($res && $res['status'] === 'success'){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

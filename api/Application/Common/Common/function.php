@@ -1629,10 +1629,10 @@ function logApiAddNotify($orderid, $type, $oper_param=[], $json_result=[]){
         'create_time' => date('Y-m-d H:i:s'),       //创建时间
     ];
     $url = C('LOG_API_URL') . '/Log_Api_addNotifyLog.html';
-     log_place_order('logApiNotify', $orderid . "----提交地址", $url);    //日志
-     log_place_order('logApiNotify', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApiNotify', $orderid . "----提交地址", $url);    //日志
+//     log_place_order('logApiNotify', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
     $res = http_post_json($url, $log);
-     log_place_order('logApiNotify', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
+//     log_place_order('logApiNotify', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
     
     if($res && $res['status'] === 'success'){
         return true;
