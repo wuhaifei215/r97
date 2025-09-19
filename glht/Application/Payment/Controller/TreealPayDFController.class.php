@@ -22,16 +22,14 @@ class TreealPayDFController extends PaymentController
             return $return;
         }
         $post_data = array(
-            'priority' => 'HIGH',           //立即处理
-            'description' => 'remark',      //描述
-            'paymentFlow' => 'INSTANT',     //INSTANT- 付款将立即发生，PPROVAL_REQUIRED- 仅当订单获得批准后才会付款。
-            'expiration' => 600,            //等待处理的最长时间（秒）
-            'creditorAccount' => [          //债权人账户
-                'ispb' => 'string',
-                'issuer' => 'string',
-                'number' => $data['banknumber'],
-                'accountType' => $data['type'],
-                'name' => $data['bankfullname'],
+            'pixKey' => $config['appid'],
+            'priority' => 'HIGH',
+            'description' => 'remark',
+            'paymentFlow' => 'INSTANT',
+            'expiration' => 600,
+            'payment' => [
+                'currency' => 'BRL',
+                'amount' => sprintf("%.2f", $data['money'])
             ],
             'payment' => [
                 'currency' => 'BRL',
@@ -63,12 +61,12 @@ class TreealPayDFController extends PaymentController
             $userdfpost = $redis->get('userdfpost_' . $data['out_trade_no']);
             $userdfpost = json_decode($userdfpost,true);
 
-            logApiAddPayment('下游商户提交YunPay', __METHOD__, $data['orderid'], $data['out_trade_no'], '/', $userdfpost, [], '0', '0', '1', '2');
+            logApiAddPayment('下游商户提交', __METHOD__, $data['orderid'], $data['out_trade_no'], '/', $userdfpost, [], '0', '0', '1', '2');
 
             // 结束并输出执行时间
             $endTime = microtime(TRUE);
             $doTime = floor(($endTime-$beginTime)*1000);
-            logApiAddPayment('YunPay订单提交上游WinPay', __METHOD__, $data['orderid'], $data['out_trade_no'], $config['exec_gateway'], $post_data, $result, $doTime, '0', '1', '2');
+            logApiAddPayment('订单提交上游' . $this->code, __METHOD__, $data['orderid'], $data['out_trade_no'], $config['exec_gateway'], $post_data, $result, $doTime, '0', '1', '2');
         }catch (\Exception $e) {
             // var_dump($e);
         }
@@ -76,32 +74,33 @@ class TreealPayDFController extends PaymentController
         log_place_order($this->code, $data['orderid'] . "----返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
 
         // log_place_order($this->code, $data['orderid'] . "----状态：", $result['status']);    //日志
-        if($result['code'] === '000000'){
-            //保存第三方订单号
-            $orderid = $data['orderid'];
-            $Wttklistmodel = D('Wttklist');
-            $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
-            $tableName = $Wttklistmodel->getRealTableName($date);
-            $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['three_orderid'=>$result['order']]);
+//        if($result['code'] === '000000'){
+        //保存第三方订单号
+        $orderid = $data['orderid'];
+        $Wttklistmodel = D('Wttklist');
+        $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
+        $tableName = $Wttklistmodel->getRealTableName($date);
+        $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['billno'=>$result['endToEndId']]);
 
-            switch ($result['ordStatus']) {      //订单状态 01:待结算06:清算中07:清算完成08:清算失败09:清算撤销
-                case '01':
-                case '06':
-                    $return = ['status' => 1, 'msg' => '申请正常'];
-                    break;
-                case '07':
-                    $return = ['status' => 2, 'msg' => '代付成功'];
-                    break;
-                case '08':
-                case '09':
-                    $return = ['status' => 3, 'msg' => '申请失败'];
-                    break;
-            }
-        }elseif($result['code'] === '900003' || $result['code'] === '999999' || $result['code'] === '000218'){
-            $return = ['status' => 3, 'msg' => $result['msg']];
-        }else{
-            $return = ['status' => 0, 'msg' => $result['msg']];
-        }
+        $return = ['status' => 1, 'msg' => '申请正常'];
+//            switch ($result['ordStatus']) {      //订单状态 01:待结算06:清算中07:清算完成08:清算失败09:清算撤销
+//                case '01':
+//                case '06':
+//                    $return = ['status' => 1, 'msg' => '申请正常'];
+//                    break;
+//                case '07':
+//                    $return = ['status' => 2, 'msg' => '代付成功'];
+//                    break;
+//                case '08':
+//                case '09':
+//                    $return = ['status' => 3, 'msg' => '申请失败'];
+//                    break;
+//            }
+//        }elseif($result['code'] === '900003' || $result['code'] === '999999' || $result['code'] === '000218'){
+//            $return = ['status' => 3, 'msg' => $result['msg']];
+//        }else{
+//            $return = ['status' => 0, 'msg' => $result['msg']];
+//        }
         return $return;
     }
 
