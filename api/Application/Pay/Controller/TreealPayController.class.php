@@ -342,7 +342,7 @@ class TreealPayController extends PayController
             'type' => $type,      //业务类型（0入款 1出款）
             'create_time' => date('Y-m-d H:i:s'),       //创建时间
         ];
-        $url = 'http://r97pay.com/Log_Api_addNotifyLog.html';
+        $url = 'http://log.r97pay.com/Log_Api_addNotifyLog.html';
         self::log_place_orderNotify('logApiNotify', $orderid . "----提交地址", $url);    //日志
         self::log_place_orderNotify('logApiNotify', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
         $res = http_post_json($url, $log);
