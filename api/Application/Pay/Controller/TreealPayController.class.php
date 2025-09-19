@@ -181,7 +181,7 @@ class TreealPayController extends PayController
         try{
             self::logApiAddNotify($orderid, 0, $result, $json_result);
         }catch (\Exception $e) {
-            // var_dump($e);
+             var_dump($e);
         }
     }
 
