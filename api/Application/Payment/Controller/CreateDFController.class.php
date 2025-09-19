@@ -607,6 +607,7 @@ class CreateDFController extends Controller
                 'userid' => $user_id,
                 'banknumber' => $cardnumber,
                 'sqdatetime'=>['between',[date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00') - 86400),date('Y-m-d H:i:s',strtotime($datetime . ' 23:59:59'))]],
+                'status'=>['between', ['2', '3']]
             ];
 
             $WttklistModel = D('Wttklist');
