@@ -277,11 +277,10 @@ AAA;
 
     public function getOAuth($client){
         $redis = $this->redis_connect();
-//        $authorization_redis = $redis->get('getOAuthDF');
-//        $authorization = json_decode($authorization_redis,true);
-//        if(!$authorization_redis || empty($authorization)) {
-
-            log_place_order($this->code, "OAuth----config", json_encode($client, JSON_UNESCAPED_UNICODE));    //日志
+        $authorization_redis = $redis->get('getOAuthDF');
+        $authorization = json_decode($authorization_redis,true);
+        if(!$authorization_redis || empty($authorization)) {
+//            log_place_order($this->code, "OAuth----config", json_encode($client, JSON_UNESCAPED_UNICODE));    //日志
             $url = 'https://secureapi.treeal-prod.onz.software/api/v2/oauth/token';
             $header = [
                 'accept: application/json',
@@ -298,7 +297,7 @@ AAA;
             log_place_order($this->code, "OAuth----return", json_encode($authorization, JSON_UNESCAPED_UNICODE));    //日志
             $redis->set('getOAuthDF', json_encode($authorization, JSON_UNESCAPED_UNICODE));
             $redis->expire('getOAuthDF' , 290);
-//        };
+        };
 
         return $authorization;
     }
