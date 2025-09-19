@@ -136,14 +136,14 @@ class TreealPayDFController extends PaymentController
 //            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----IP异常", $ip.'==='.$config['notifyip']);    //日志
 //            $json_result = "IP异常:" . $ip.'==='.$config['notifyip'];
 //            try{
-//                self::logApiAddNotify($orderid, 1, $re_data, $json_result);
+//                self::logApiAddNotify($orderid, 1, $result, $json_result);
 //            }catch (\Exception $e) {
 //                // var_dump($e);
 //            }
 //            return;
 //        }
 
-        if ($_SERVER['HTTP_SIGN'] == "LTDA6013CURRAIS_NOVOS62070503") {
+        if ($_SERVER['HTTP_SIGN'] == "DF_LTDA6013CURRAIS_NOVOS62070503") {
             if ($re_data['status'] === "LIQUIDATED") {       //成功LIQUIDATED，失败CANCELED
                 //代付成功 更改代付状态 完善代付逻辑
                 $data = [
@@ -167,7 +167,7 @@ class TreealPayDFController extends PaymentController
         }
         echo $json_result;
         try{
-            self::logApiAddNotify($Order['orderid'], 1, $re_data, $json_result);
+            self::logApiAddNotify($Order['orderid'], 1, $result, $json_result);
         }catch (\Exception $e) {
             // var_dump($e);
         }

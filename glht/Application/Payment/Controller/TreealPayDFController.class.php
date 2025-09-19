@@ -16,32 +16,46 @@ class TreealPayDFController extends PaymentController
     //代付提交
     public function PaymentExec($data, $config)
     {
+        $type_arr = ['EMAIL','CPF','CNPJ','PHONE'];
+        if(!in_array($data['type'],$type_arr)){
+            $return = ['status' => 0, 'msg' => '支付类型错误'];
+            return $return;
+        }
         $post_data = array(
-            "amount" => intval(sprintf("%.2f", $data['money']) * 100),  //提现金额（单位分）
-            "appId" => $config['appid'], //appId
-            "backUrl" => 'https://' . C('NOTIFY_DOMAIN') . "/Payment_" . $this->code . "_notifyurl.html",      //异步通知地址
-            'countryCode' =>'BR',
-            'currencyCode' =>'BRL',
-            "merchantOrderId" => $data['orderid']?$data['orderid']:$data['out_trade_no'], //订单号
-            "custId" => $config['mch_id'], //商户号
-            "remark" => $data['extends']?$data['extends']:'remark',
-            "email" => '123456789@gmail.com',
-            "cpf" => '12345678901',
-            "phone" => '12345678901',
-            "type" => 'PIX',
-            "cardType" => $data['type'],
-            "userName" => $data['bankfullname'],  //户名
-            "walletId" => $data['banknumber'],    //账号
+            'priority' => 'HIGH',           //立即处理
+            'description' => 'remark',      //描述
+            'paymentFlow' => 'INSTANT',     //INSTANT- 付款将立即发生，PPROVAL_REQUIRED- 仅当订单获得批准后才会付款。
+            'expiration' => 600,            //等待处理的最长时间（秒）
+            'creditorAccount' => [          //债权人账户
+                'ispb' => 'string',
+                'issuer' => 'string',
+                'number' => $data['banknumber'],
+                'accountType' => $data['type'],
+                'name' => $data['bankfullname'],
+            ],
+            'payment' => [
+                'currency' => 'BRL',
+                'amount' => sprintf("%.2f", $data['money'])
+            ],
+//            'ispbDeny' => [       //不允许付款的 ISPB（巴西付款系统标识符）代码列表。
+//                'string'
+//            ]
         );
-        $post_data["sign"] = $this->get_sign($post_data, $config['signkey']);
+
         log_place_order($this->code, $data['orderid'] . "----提交", json_encode($post_data, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, $data['orderid'] . "----提交地址", $config['exec_gateway']);    //日志
+
+        $authorization = $this->getOAuth($config);
+        $header = [
+            'accept: application/json',
+            'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
+            'content-type: application/json',
+        ];
 
         // 记录初始执行时间
         $beginTime = microtime(TRUE);
 
-        $returnContent = $this->http_post_json($config['exec_gateway'], $post_data);
-        $result = json_decode($returnContent, true);
+        $result = $this->request($config['exec_gateway'], $post_data, $header);
         // if($data['userid'] == 2){
         try{
 
@@ -93,77 +107,67 @@ class TreealPayDFController extends PaymentController
 
     public function notifyurl()
     {
-        $re_data = $_REQUEST;
-        //获取报文信息
-        $orderid = $re_data['merchantOrderId'];
-        //log_place_order($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
-        log_place_order($this->code . '_notifyurl', $orderid . "----异步回调", json_encode($_REQUEST, JSON_UNESCAPED_UNICODE));    //日志
+        $result = json_decode(file_get_contents('php://input'), true);
+        $re_data = $result['data'];
+        $orderid = $re_data['txId'];
+        //self::log_place_orderNotify($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
+        self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----异步回调", file_get_contents('php://input'));    //日志
 
         $tableName ='';
         $Wttklistmodel = D('Wttklist');
-        $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
+        $date = date('Ymd',strtotime(substr($re_data['createdAt'], 0, 10)));  //获取订单日期
         $tableName = $Wttklistmodel->getRealTableName($date);
-        $Order = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->find();
+        $Order = $Wttklistmodel->table($tableName)->where(['three_orderid' => $orderid])->find();
 
-        // $Order = $this->selectOrder(['orderid' => $orderid]);
         if (!$Order) {
-            log_place_order($this->code . '_notifyurl', $orderid . '----没有查询到Order！ ', $orderid);
+            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . '----没有查询到Order！ ', $orderid);
             exit;
         }
 
-        $config = M('pay_for_another')->where(['code' => $this->code,'id'=>$Order['df_id']])->find();
-        //验证IP白名单
-        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        } else {
-            $ip = getRealIp();
-        }
-        $check_re = checkNotifyurlIp($ip, $config['notifyip']);
-        if ($check_re !== true) {
-            log_place_order($this->code . '_notifyurl', $orderid . "----IP异常", $ip.'==='.$config['notifyip']);    //日志
-            $json_result = "IP异常:" . $ip.'==='.$config['notifyip'];
-            try{
-                logApiAddNotify($orderid, 1, $re_data, $json_result);
-            }catch (\Exception $e) {
-                // var_dump($e);
-            }
-            return;
-        }
+//        $config = M('pay_for_another')->where(['code' => $this->code,'id'=>$Order['df_id']])->find();
+//        //验证IP白名单
+//        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+//            $ip = $_SERVER['REMOTE_ADDR'];
+//        } else {
+//            $ip = getRealIp();
+//        }
+//        $check_re = checkNotifyurlIp($ip, $config['notifyip']);
+//        if ($check_re !== true) {
+//            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----IP异常", $ip.'==='.$config['notifyip']);    //日志
+//            $json_result = "IP异常:" . $ip.'==='.$config['notifyip'];
+//            try{
+//                self::logApiAddNotify($orderid, 1, $result, $json_result);
+//            }catch (\Exception $e) {
+//                // var_dump($e);
+//            }
+//            return;
+//        }
 
-        $sign = $this->get_sign($re_data, $config['signkey']);
-        if ($sign === $re_data["sign"]) {
-            if ($re_data['orderStatus'] === "07") {     //订单状态 01:待结算06:清算中07:清算完成08:清算失败09:清算撤销
+        if ($_SERVER['HTTP_SIGN'] == "DF_LTDA6013CURRAIS_NOVOS62070503") {
+            if ($re_data['status'] === "LIQUIDATED") {       //成功LIQUIDATED，失败CANCELED
                 //代付成功 更改代付状态 完善代付逻辑
                 $data = [
                     'memo' => '代付成功',
                 ];
                 $this->changeStatus($Order['id'], 2, $data, $tableName);
-                // $this->handle($Order['id'], 2, $data, $tableName);
-                log_place_order($this->code . '_notifyurl', $orderid, "----代付成功");    //日志
-                $json_result = "000000";
-            } elseif ($re_data['orderStatus'] === "08" || $re_data['orderStatus'] === "09") {
+                self::log_place_orderNotify($this->code . '_notifyurl', $orderid, "----代付成功");    //日志
+                $json_result = "success";
+            } elseif ($re_data['status'] === "CANCELED") {
                 //代付失败
                 $data = [
-                    'memo' => '代付失败-' . $re_data['casDesc'],
+                    'memo' => '代付失败',
                 ];
                 $this->changeStatus($Order['id'], 3, $data, $tableName);
-                // $this->handle($Order['id'], 3, $data, $tableName);
-                log_place_order($this->code . '_notifyurl', $orderid, "----代付失败");    //日志
-                $json_result = "000000";
+                self::log_place_orderNotify($this->code . '_notifyurl', $orderid, "----代付失败");    //日志
+                $json_result = "success";
             }
         } else {
-            log_place_order($this->code . '_notifyurl', $orderid . '----签名错误: ', $sign);
-            // $data = [
-            //     'memo' => '签名错误',
-            // ];
-
-            // $this->changeStatus($Order['id'], 0, $data, $tableName);
-            // $this->handle($Order['id'], 0, $data, $tableName);
-            $json_result = "fail";
+            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . '----签名错误: ', $_SERVER['HTTP_SIGN']);
+            $json_result = "sign fail";
         }
         echo $json_result;
         try{
-            logApiAddNotify($orderid, 1, $_REQUEST, $json_result);
+            self::logApiAddNotify($Order['orderid'], 1, $result, $json_result);
         }catch (\Exception $e) {
             // var_dump($e);
         }
@@ -173,21 +177,19 @@ class TreealPayDFController extends PaymentController
     public function queryBalance()
     {
         if (IS_AJAX) {
-            $config = M('pay_for_another')->where(['code' => $this->code])->find();
-            $post_data = array(
-                "custId" => $config['mch_id'], //商户号
-                "appId" => $config['appid'], //商户号
-                "currencyCode" => 'BRL',
-            );
-            $post_data["sign"] = $this->get_sign($post_data, $config['signkey']);
-            log_place_order($this->code . '_queryBalance', "提交", json_encode($post_data));    //日志
-            $returnContent = $this->http_post_json($config['serverreturn'], $post_data);
-            log_place_order($this->code . '_queryBalance', "返回", $returnContent);    //日志
-            $result = json_decode($returnContent, true);
-            $acBal = $result['acBal'] / 100;  //总金额
-            $available = $result['available'] / 100;  //可用金额
-            $frozen = $result['frozen'] / 100;  //不可用金额
-            $acT0Froz = $result['acT0Froz'] / 100;  //冻结金额
+            $id = I('post.id', 1);
+            $config = M('pay_for_another')->where(['id' => $id])->find();
+
+            $authorization = $this->getOAuth($config);
+            $header = [
+                'accept: application/json',
+                'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
+            ];
+            $result = $this->http_get_json($config['serverreturn'], $header);
+            log_place_order($this->code . '_queryBalance', "返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
+            $available = $result['data']['balanceAmount']['available'];  //可用金额
+            $blocked = $result['data']['balanceAmount']['blocked'];  //冻结金额
+            $overdraft = $result['data']['balanceAmount']['overdraft'];  //冻结金额
             $html = <<<AAA
 <!-- CSS goes in the document HEAD or added to your external stylesheet -->
 <style type="text/css">
@@ -198,10 +200,9 @@ table.hovertable td {border-width: 1px;padding: 8px;border-style: solid;border-c
 </style>
 <table class="hovertable">
 <tr><th>说明</th><th>值</th></tr>
-<tr onmouseout="this.style.backgroundColor='#f5f5f5';" onmouseover="this.style.backgroundColor='#009688';"><td>总金额</td><td><b>$acBal </b></td></tr>
 <tr onmouseout="this.style.backgroundColor='#f5f5f5';" onmouseover="this.style.backgroundColor='#009688';"><td>可用金额</td><td><b>$available </b></td></tr>
-<tr onmouseout="this.style.backgroundColor='#f5f5f5';" onmouseover="this.style.backgroundColor='#009688';"><td>不可用金额</td><td><b>$frozen </b></td></tr>
-<tr onmouseout="this.style.backgroundColor='#f5f5f5';" onmouseover="this.style.backgroundColor='#009688';"><td>冻结金额</td><td><b>$acT0Froz </b></td></tr>
+<tr onmouseout="this.style.backgroundColor='#f5f5f5';" onmouseover="this.style.backgroundColor='#009688';"><td>冻结金额</td><td><b>$blocked </b></td></tr>
+<tr onmouseout="this.style.backgroundColor='#f5f5f5';" onmouseover="this.style.backgroundColor='#009688';"><td>透支金额</td><td><b>$overdraft </b></td></tr>
 </table>
 AAA;
             $this->ajaxReturn(['status' => 1, 'msg' => '成功', 'data' => $html]);
@@ -211,19 +212,16 @@ AAA;
     //账户余额查询
     public function queryBalance2($config)
     {
-        $post_data = array(
-            "custId" => $config['mch_id'], //商户号
-            "appId" => $config['appid'], //商户号
-            "currencyCode" => 'BRL',
-        );
-        $post_data["sign"] = $this->get_sign($post_data, $config['signkey']);
-        log_place_order($this->code . '_queryBalance2', "提交", json_encode($post_data));    //日志
-        $returnContent = $this->http_post_json($config['serverreturn'], $post_data);
-        log_place_order($this->code . '_queryBalance2', "返回", $returnContent);    //日志
-        $result = json_decode($returnContent, true);
+        $authorization = $this->getOAuth($config);
+        $header = [
+            'accept: application/json',
+            'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
+        ];
+        $result = $this->http_get_json($config['serverreturn'], $header);
+        log_place_order($this->code . '_queryBalance2', "返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
         // if($result['code']==="0"){
         $result_data['resultCode'] = "0";
-        $result_data['balance'] = $result['acBal'] / 100;
+        $result_data['balance'] = $result['data']['balanceAmount']['available'];
         // }
         return $result_data;
     }
@@ -231,52 +229,39 @@ AAA;
     //代付订单查询
     public function PaymentQuery($data, $config)
     {
-        $post_data = [
-            'custId' => $config['mch_id'],
-            'appId' => $config['appid'],
-            'order' => $data['three_orderid'],
-            'merchantOrderId' => $data['orderid'],
+        $authorization = $this->getOAuth($config);
+        $header = [
+            'accept: application/json',
+            'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
         ];
-        $post_data["sign"] = $this->get_sign($post_data, $config['signkey']);
-        log_place_order($this->code . '_PaymentQuery', $data['orderid'] . "----提交", json_encode($post_data, JSON_UNESCAPED_UNICODE));    //日志
-        $returnContent = $this->http_post_json($config['query_gateway'], $post_data);
-        log_place_order($this->code . '_PaymentQuery', $data['orderid'] . "----返回", $returnContent);    //日志
-        $result = json_decode($returnContent, true);
-        if ($result['code'] === "000000") {
-            switch ($result['orderStatus']) {       //01:待结算06:清算中07:清算完成08:清算失败09:清算撤销
-                case '01':
-                case '06':
-                    $return = ['status' => 1, 'msg' => '处理中'];
-                    break;
-                case '07':
-                    $return = ['status' => 2, 'msg' => '成功'];
-                    break;
-                case '08':
-                case '09':
-                    $return = ['status' => 3, 'msg' => '失败','remark' => $result['remark']];
-                    break;
-            }
-        } else {
-            $return = ['status' => 7, 'msg' => "查询接口失败:".$result['code']];
+        $url = $config['query_gateway'] .  $data['three_orderid'] . '/details';
+        $result = $this->http_get_json($url, $header);
+
+        log_place_order($this->code . '_PaymentQuery', $data['orderid'] . "----返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
+
+        switch ($result['status']) {       //CANCELED, PROCESSING, LIQUIDATED, REFUNDED, PARTIALLY_REFUNDED,
+            case 'PROCESSING':
+                $return = ['status' => 1, 'msg' => '处理中'];
+                break;
+            case 'LIQUIDATED':
+                $return = ['status' => 2, 'msg' => '成功'];
+                break;
+            case 'CANCELED ':
+                $return = ['status' => 3, 'msg' => '失败'];
+                break;
         }
         return $return;
     }
 
     public function PaymentVoucher($data, $config){
         if(isset($data['three_orderid'])){
-            $post_data = [
-                'custId' => $config['mch_id'],
-                'appId' => $config['appid'],
-                // 'order' => $data['three_orderid'],
-                'order' => $data['orderid'],
+            $authorization = $this->getOAuth($config);
+            $header = [
+                'accept: application/json',
+                'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             ];
-            $post_data["sign"] = $this->get_sign($post_data, $config['signkey']);
-            log_place_order($this->code . '_PaymentVoucher', $data['orderid'] . "----提交", json_encode($post_data, JSON_UNESCAPED_UNICODE));    //日志
-            $returnContent = $this->http_post_json('https://api.winpay.site/br/voucherData.json', $post_data);
-            log_place_order($this->code . '_PaymentVoucher', $data['orderid'] . "----返回", $returnContent);    //日志
-            $result = json_decode($returnContent, true);
-
-            // $redata = json_decode(file_get_contents('https://api.winpay.site/payment/br/voucherData.webapp?casOrdNo=' . $data['three_orderid']),true);
+            $url = $config['query_gateway'] .  $data['three_orderid'] . '/details';
+            $result = $this->http_get_json($url, $header);
             log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
             if(!empty($result)){
                 return  $result;
@@ -289,51 +274,217 @@ AAA;
 
     }
 
-    //发送post请求，提交json字符串
-    private function http_post_json($url, $postData, $options = array())
-    {
+    public function getOAuth($client){
+        $redis = $this->redis_connect();
+        $authorization_redis = $redis->get('getOAuth');
+        $authorization = json_decode($authorization_redis,true);
+        if(!$authorization_redis || empty($authorization)) {
+            $url = 'https://api.pix.treeal.com/oauth/token';
+            $header = [
+                'accept: application/json',
+                'content-type: application/x-www-form-urlencoded'
+            ];
+            $params = [
+                'client_id'=> $client['mch_id'],
+                'client_secret' => $client['signkey'],
+                'grant_type' => 'client_credentials',
+            ];
+            log_place_order($this->code, "OAuth----body", json_encode($params, JSON_UNESCAPED_UNICODE));    //日志
+//        log_place_order($this->code, "OAuth----url", $url);    //日志
+            $authorization = $this->http_post_json($url, $params, $header);
+//        log_place_order($this->code, "OAuth----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
+            $redis->set('getOAuth', json_encode($authorization, JSON_UNESCAPED_UNICODE));
+            $redis->expire('getOAuth' , 60);
+        };
 
-        $json = json_encode($postData, JSON_UNESCAPED_UNICODE);
+        return $authorization;
+    }
+
+    //发送post请求
+    private function http_get_json($url, $options = array())
+    {
         $curl = curl_init();
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 0,
-            CURLOPT_TIMEOUT => 10,
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,  // 增加超时时间
             CURLOPT_FOLLOWLOCATION => true,
+
+            // 关键：客户端证书配置
+            CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.crt',
+            CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.key',
+
+            // SSL验证设置
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => 0,
+
+            // HTTP设置
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => $options,
+
+            // 推荐添加的选项
+            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => $json,
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/json',
-                'Content-Length:'.strlen($json)
-            ),
-        ));
+        ]);
+
         $response = curl_exec($curl);
+        $result = [];
+
+        if ($response === false) {
+            $result['code'] = curl_errno($curl);
+            $result['message'] = curl_error($curl);
+            $result['curl_info'] = curl_getinfo($curl);
+        } else {
+            $result = json_decode($response, true);
+        }
+
         curl_close($curl);
-        return $response;
+        return $result;
     }
 
+    //发送post请求
+    private function http_post_json($url, $postData, $options = array())
+    {
+        if (is_array($postData)) {
+            $postData = http_build_query($postData);
+        }
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,  // 增加超时时间
+            CURLOPT_FOLLOWLOCATION => true,
+
+            // 关键：客户端证书配置
+            CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.crt',
+            CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.key',
+
+            // SSL验证设置
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => 0,
+
+            // HTTP设置
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => $options,
+
+            // 推荐添加的选项
+            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        ]);
+
+        $response = curl_exec($curl);
+        $result = [];
+
+        if ($response === false) {
+            $result['code'] = curl_errno($curl);
+            $result['message'] = curl_error($curl);
+            $result['curl_info'] = curl_getinfo($curl);
+        } else {
+            $result = json_decode($response, true);
+        }
+
+        curl_close($curl);
+        return $result;
+    }
 
     /**
-     * 签名算法
-     * @param $data         请求数据
-     * @param $md5Key       md5秘钥
+     * 执行请求，http header验证
+     *
+     * @param string $url
+     * @param array $params
+     * @return Ambigous <mixed, multitype:NULL >
      */
-    private function get_sign($param, $key)
+    private function request($url, $params, $header)
     {
-        $signPars = "";
-        ksort($param);
-        $param['key'] = $key;
-        foreach ($param as $k => $v) {
-            if ("" != $v && "sign" != $k && "pay_md5sign" != $k) {
-                $signPars .= $k . "=" . $v . "&";
-            }
-        }
-        $sign =strtoupper(md5(rtrim($signPars,'&')));
-        // log_place_order($this->code, $orderid . "----签名", rtrim($signPars,'&'));    //日志
-        return $sign; //最终的签名
+        try {
+            $json = json_encode($params, JSON_UNESCAPED_UNICODE);
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 10,  // 增加超时时间
+                CURLOPT_FOLLOWLOCATION => true,
 
+                // 关键：客户端证书配置
+                CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.crt',
+                CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/in/TREEAL_23.key',
+
+                // SSL验证设置
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => 0,
+
+                // HTTP设置
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => $json,
+                CURLOPT_HTTPHEADER => $header,
+
+                // 推荐添加的选项
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            ]);
+
+            $response = curl_exec($curl);
+            $result = [];
+
+            if ($response === false) {
+                $result['code'] = curl_errno($curl);
+                $result['message'] = curl_error($curl);
+                $result['curl_info'] = curl_getinfo($curl);
+            } else {
+                $result = json_decode($response, true);
+            }
+
+            curl_close($curl);
+            return $result;
+        } catch (\Exception $e) {
+            log_place_order($this->code. '_request', $params["reference"] . "----body错误", $e->getMessage());    //日志
+        }
+    }
+
+    /**
+     *记录日志
+     */
+    function log_place_orderNotify($file, $notify, $notifystr)
+    {
+        $filePath = '/www/wwwroot/r97/api/Data/' . date('Ymd') . '/';
+        if (@mkdirs($filePath)) {
+            $destination = $filePath . $file . '_' . date('H') . '.log';
+            if (!file_exists($destination)) {
+                @fopen($destination, 'wb ');
+            }
+            @file_put_contents($destination, "【" . date('Y-m-d H:i:s') . "】\r\n" . $notify . "：" . $notifystr . "\r\n\r\n", FILE_APPEND);
+            return true;
+        }
+        return false;
+    }
+
+    function logApiAddNotify($orderid, $type, $oper_param=[], $json_result=[]){
+        $log = [
+            'memberid' => 2,   //用户id
+            'order_id' => $orderid,   //订单号
+            'out_trade_id' => $orderid,  //下游订单号
+            'oper_param' => $oper_param,      //请求参数
+            'json_result' => $json_result,    //返回参数
+            'type' => $type,      //业务类型（0入款 1出款）
+            'create_time' => date('Y-m-d H:i:s'),       //创建时间
+        ];
+        $url = 'http://log.r97pay.com/Log_Api_addNotifyLog.html';
+        self::log_place_orderNotify('logApiNotify', $orderid . "----提交地址", $url);    //日志
+        self::log_place_orderNotify('logApiNotify', $orderid . "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
+        $res = http_post_json($url, $log);
+        self::log_place_orderNotify('logApiNotify', $orderid . "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
+
+        if($res && $res['status'] === 'success'){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
