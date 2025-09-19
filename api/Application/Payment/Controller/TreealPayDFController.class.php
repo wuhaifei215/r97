@@ -167,7 +167,7 @@ class TreealPayDFController extends PaymentController
         }
         echo $json_result;
         try{
-            self::logApiAddNotify($orderid, 1, $re_data, $json_result);
+            self::logApiAddNotify($Order['orderid'], 1, $re_data, $json_result);
         }catch (\Exception $e) {
             // var_dump($e);
         }
