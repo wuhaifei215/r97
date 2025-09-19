@@ -188,9 +188,9 @@ class TreealPayDFController extends PaymentController
             $result = $this->http_get_json($config['serverreturn'], $header);
             log_place_order($this->code . '_queryBalance', "header", json_encode($header, JSON_UNESCAPED_UNICODE));    //日志
             log_place_order($this->code . '_queryBalance', "返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
-            $available = $result['data']['balanceAmount']['available'];  //可用金额
-            $blocked = $result['data']['balanceAmount']['blocked'];  //冻结金额
-            $overdraft = $result['data']['balanceAmount']['overdraft'];  //冻结金额
+            $available = $result['data'][0]['balanceAmount']['available'];  //可用金额
+            $blocked = $result['data'][0]['balanceAmount']['blocked'];  //冻结金额
+            $overdraft = $result['data'][0]['balanceAmount']['overdraft'];  //冻结金额
             $html = <<<AAA
 <!-- CSS goes in the document HEAD or added to your external stylesheet -->
 <style type="text/css">
@@ -222,7 +222,7 @@ AAA;
         log_place_order($this->code . '_queryBalance2', "返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
         // if($result['code']==="0"){
         $result_data['resultCode'] = "0";
-        $result_data['balance'] = $result['data']['balanceAmount']['available'];
+        $result_data['balance'] = $result['data'][0]['balanceAmount']['available'];
         // }
         return $result_data;
     }
