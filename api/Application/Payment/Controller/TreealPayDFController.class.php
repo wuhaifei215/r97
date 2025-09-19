@@ -97,7 +97,7 @@ class TreealPayDFController extends PaymentController
         //获取报文信息
         $orderid = $re_data['merchantOrderId'];
         //self::log_place_orderNotify($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
-        self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----异步回调", json_encode($_REQUEST, JSON_UNESCAPED_UNICODE));    //日志
+        self::log_place_orderNotify('TreealPayDF_notifyurl', $orderid . "----异步回调", json_encode($_REQUEST, JSON_UNESCAPED_UNICODE));    //日志
 
         $tableName ='';
         $Wttklistmodel = D('Wttklist');
@@ -107,7 +107,7 @@ class TreealPayDFController extends PaymentController
 
         // $Order = $this->selectOrder(['orderid' => $orderid]);
         if (!$Order) {
-            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . '----没有查询到Order！ ', $orderid);
+            self::log_place_orderNotify('TreealPayDF_notifyurl', $orderid . '----没有查询到Order！ ', $orderid);
             exit;
         }
 
@@ -120,7 +120,7 @@ class TreealPayDFController extends PaymentController
         }
         $check_re = checkNotifyurlIp($ip, $config['notifyip']);
         if ($check_re !== true) {
-            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----IP异常", $ip.'==='.$config['notifyip']);    //日志
+            self::log_place_orderNotify('TreealPayDF_notifyurl', $orderid . "----IP异常", $ip.'==='.$config['notifyip']);    //日志
             $json_result = "IP异常:" . $ip.'==='.$config['notifyip'];
             try{
                 logApiAddNotify($orderid, 1, $re_data, $json_result);
@@ -139,7 +139,7 @@ class TreealPayDFController extends PaymentController
                 ];
                 $this->changeStatus($Order['id'], 2, $data, $tableName);
                 // $this->handle($Order['id'], 2, $data, $tableName);
-                self::log_place_orderNotify($this->code . '_notifyurl', $orderid, "----代付成功");    //日志
+                self::log_place_orderNotify('TreealPayDF_notifyurl', $orderid, "----代付成功");    //日志
                 $json_result = "000000";
             } elseif ($re_data['orderStatus'] === "08" || $re_data['orderStatus'] === "09") {
                 //代付失败
@@ -148,11 +148,11 @@ class TreealPayDFController extends PaymentController
                 ];
                 $this->changeStatus($Order['id'], 3, $data, $tableName);
                 // $this->handle($Order['id'], 3, $data, $tableName);
-                self::log_place_orderNotify($this->code . '_notifyurl', $orderid, "----代付失败");    //日志
+                self::log_place_orderNotify('TreealPayDF_notifyurl', $orderid, "----代付失败");    //日志
                 $json_result = "000000";
             }
         } else {
-            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . '----签名错误: ', $sign);
+            self::log_place_orderNotify('TreealPayDF_notifyurl', $orderid . '----签名错误: ', $sign);
             // $data = [
             //     'memo' => '签名错误',
             // ];
