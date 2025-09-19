@@ -188,7 +188,6 @@ class TreealPayDFController extends PaymentController
             $result = $this->http_get_json($config['serverreturn'], $header);
             log_place_order($this->code . '_queryBalance', "header", json_encode($header, JSON_UNESCAPED_UNICODE));    //日志
             log_place_order($this->code . '_queryBalance', "返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
-            var_dump( $result['data'][0]);
             $available = $result['data'][0]['balanceAmount']['available'];  //可用金额
             $blocked = $result['data'][0]['balanceAmount']['blocked'];  //冻结金额
             $overdraft = $result['data'][0]['balanceAmount']['overdraft'];  //冻结金额
