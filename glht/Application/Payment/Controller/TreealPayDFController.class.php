@@ -25,12 +25,8 @@ class TreealPayDFController extends PaymentController
             'pixKey' => $config['appid'],
             'priority' => 'HIGH',
             'description' => 'remark',
-            'paymentFlow' => 'INSTANT',
-            'expiration' => 600,
-            'payment' => [
-                'currency' => 'BRL',
-                'amount' => sprintf("%.2f", $data['money'])
-            ],
+            'paymentFlow' => 'INSTANT',     //NSTANT- 付款将立即发生，APPROVAL_REQUIRED- 仅当订单获得批准后才会付款。
+            'expiration' => 600,            //等待处理的最长时间（秒）
             'payment' => [
                 'currency' => 'BRL',
                 'amount' => sprintf("%.2f", $data['money'])
