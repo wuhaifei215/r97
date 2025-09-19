@@ -294,7 +294,7 @@ AAA;
             $authorization = $this->http_post_json($url, $params, $header);
             log_place_order($this->code, "OAuth----return", json_encode($authorization, JSON_UNESCAPED_UNICODE));    //日志
             $redis->set('getOAuthDF', json_encode($authorization, JSON_UNESCAPED_UNICODE));
-            $redis->expire('getOAuthDF' , 60);
+            $redis->expire('getOAuthDF' , 290);
         };
 
         return $authorization;

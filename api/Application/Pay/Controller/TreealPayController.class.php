@@ -205,7 +205,7 @@ class TreealPayController extends PayController
             $authorization = $this->http_post_json($url, $params, $header);
 //        log_place_order($this->code, "OAuth----return", json_encode($ans, JSON_UNESCAPED_UNICODE));    //日志
             $redis->set('getOAuth', json_encode($authorization, JSON_UNESCAPED_UNICODE));
-            $redis->expire('getOAuth' , 60);
+            $redis->expire('getOAuth' , 290);
         };
 
         return $authorization;
