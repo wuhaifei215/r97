@@ -186,6 +186,7 @@ class TreealPayDFController extends PaymentController
                 'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             ];
             $result = $this->http_get_json($config['serverreturn'], $header);
+            log_place_order($this->code . '_queryBalance', "header", json_encode($header, JSON_UNESCAPED_UNICODE));    //日志
             log_place_order($this->code . '_queryBalance', "返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
             $available = $result['data']['balanceAmount']['available'];  //可用金额
             $blocked = $result['data']['balanceAmount']['blocked'];  //冻结金额
