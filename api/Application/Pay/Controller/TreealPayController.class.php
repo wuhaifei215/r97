@@ -123,11 +123,11 @@ class TreealPayController extends PayController
     {
         //获取报文信息
         $result = json_decode(file_get_contents('php://input'), true);
-        log_place_order($this->code . '_notifyurl', "----异步回调", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
+        self::log_place_orderNotify($this->code . '_notifyurl', "----异步回调", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
         $arrayData = $result['data'];
         $orderid = $arrayData['txId'];
-        //log_place_order($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
-        log_place_order($this->code . '_notifyurl', $orderid . "----异步回调", file_get_contents('php://input'));    //日志
+        //self::log_place_orderNotify($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
+        self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----异步回调", file_get_contents('php://input'));    //日志
         if (!$orderid) return;
 
         //过滤数据，防SQL注入
@@ -151,7 +151,7 @@ class TreealPayController extends PayController
 
         $check_re = check_IP($orderList['channel_id'], $ip, $orderid);
         if ($check_re !== true) {
-            log_place_order($this->code . '_notifyurl', $orderid . "----IP异常", $ip);    //日志
+            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----IP异常", $ip);    //日志
             $json_result = "IP异常:" . $ip;
             try{
                 logApiAddNotify($orderid, 1, $result, $json_result);
@@ -166,16 +166,16 @@ class TreealPayController extends PayController
                 $re_save = $OrderModel->table($tablename)->where(['three_orderid' => $orderid])->save(['billno'=>$arrayData['endToEndId']]);
                 $re = $this->EditMoney($orderList['pay_orderid'], $this->code, 0);
                 if ($re !== false) {
-                    log_place_order($this->code . '_notifyurl', $orderid . "----回调上游", "成功");    //日志
+                    self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----回调上游", "成功");    //日志
                 }else{
-                    log_place_order($this->code . '_notifyurl', $orderid . "----回调上游", "失败");    //日志
+                    self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----回调上游", "失败");    //日志
                 }
             }else{
-                log_place_order($this->code . '_notifyurl', $orderid . "----订单状态异常", $arrayData['status']);    //日志
+                self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----订单状态异常", $arrayData['status']);    //日志
             }
             $json_result = "success";
         } else {
-            log_place_order($this->code . '_notifyurl', $orderid . "----签名错误，加密后", $_SERVER['HTTP_SIGN']);    //日志
+            self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----签名错误，加密后", $_SERVER['HTTP_SIGN']);    //日志
             $json_result = "sign fail";
         }
         echo $json_result;
@@ -314,5 +314,22 @@ class TreealPayController extends PayController
         } catch (\Exception $e) {
             log_place_order($this->code. '_request', $params["reference"] . "----body错误", $e->getMessage());    //日志
         }
+    }
+
+    /**
+     *记录日志
+     */
+    function log_place_orderNotify($file, $notify, $notifystr)
+    {
+        $filePath = '/www/wwwroot/r97/api/Data/' . date('Ymd') . '/';
+        if (@mkdirs($filePath)) {
+            $destination = $filePath . $file . '_' . date('H') . '.log';
+            if (!file_exists($destination)) {
+                @fopen($destination, 'wb ');
+            }
+            @file_put_contents($destination, "【" . date('Y-m-d H:i:s') . "】\r\n" . $notify . "：" . $notifystr . "\r\n\r\n", FILE_APPEND);
+            return true;
+        }
+        return false;
     }
 }
