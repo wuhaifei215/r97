@@ -415,8 +415,8 @@ AAA;
                 CURLOPT_FOLLOWLOCATION => true,
 
                 // 关键：客户端证书配置
-                CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/out/TREEAL_23.crt',
-                CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/out/TREEAL_23.key',
+                CURLOPT_SSLCERT => '/www/wwwroot/r97/api/cert/Treeal/out/TREEAL_24.crt',
+                CURLOPT_SSLKEY => '/www/wwwroot/r97/api/cert/Treeal/out/TREEAL_24.key',
 
                 // SSL验证设置
                 CURLOPT_SSL_VERIFYPEER => false,
