@@ -1023,7 +1023,7 @@ class WithdrawalController extends BaseController
             }
             
             //设置redis标签，防止重复执行
-            $redis = $redis_connect();
+            $redis = redis_connect();
             if($redis->get('handle' . $id . $status)){
                 $this->ajaxReturn(['status' => 0, 'msg' => '重复操作']);
             }
@@ -1199,7 +1199,7 @@ class WithdrawalController extends BaseController
             
             
             //设置redis标签，防止重复执行
-            $redis = $redis_connect();
+            $redis = redis_connect();
             if($redis->get('refund_' . $orderid)){
                 UserLogService::HTwrite(3, '退款操作失败', '退款操作重复操作');
                 $this->ajaxReturn(['status' => 0, 'msg' => '重复操作']);
@@ -1607,7 +1607,7 @@ class WithdrawalController extends BaseController
                         }
                         
                         //设置redis标签，防止重复执行
-                        $redis = $redis_connect();
+                        $redis = redis_connect();
                         if($redis->get('refund_' . $orderid)){
                             UserLogService::HTwrite(3, '批量驳回代付', $iv . '-驳回操作，重复操作');
                             $fail++;
