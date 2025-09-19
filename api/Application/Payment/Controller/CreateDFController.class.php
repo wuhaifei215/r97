@@ -630,6 +630,7 @@ class CreateDFController extends Controller
                     $orderList[] = $v['orderid'] . "|\r\n" .  $v['out_trade_no'];
                     $alltkmoney = $alltkmoney + $v['tkmoney'];
                 }
+                var_dump($orderList);
                 $orderOrder = explode(',',$orderList);
 
                 $message = '';
