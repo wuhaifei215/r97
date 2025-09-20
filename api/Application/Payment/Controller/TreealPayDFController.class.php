@@ -37,6 +37,8 @@ class TreealPayDFController extends PaymentController
         );
         if($data['type'] === 'CPF'){
             $post_data['creditorDocument'] = $data['banknumber'];
+        }else{
+            $post_data['creditorDocument'] = '';
         }
 
         log_place_order($this->code, $data['orderid'] . "----提交", json_encode($post_data, JSON_UNESCAPED_UNICODE));    //日志
