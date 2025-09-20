@@ -190,7 +190,7 @@
                             <td><input type="checkbox"  title="" value="<{$vo.id}>" class='checkIds' lay-skin="primary"></td>
                             <td><{$vo.id}></td>
                             <td><{$vo["userid"]+10000}><br><{$vo.bankcode}></td>
-                            <td><{$vo.orderid}><br><{$vo.out_trade_no}><br><{$vo.billno?:'===='}></td>
+                            <td><{$vo.orderid}><br><{$vo.out_trade_no}><br><{$vo.billno?$vo.billno:'===='}></td>
                             <td><{$vo["tkmoney"]}></td>
                             <td><{$vo["sxfmoney"]}></td>
                             <td><{$vo["money"]}></td>
