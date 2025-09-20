@@ -633,6 +633,7 @@ class CreateDFController extends Controller
                 }
                 var_dump($orderList);
                 $orderOrder = explode(',',$orderList);
+                var_dump($orderOrder);
 
                 $message = '';
                 $message .= "\r\n*【账户提现次数和金额风控提醒】*\r\n\r\n";
