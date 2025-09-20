@@ -2,16 +2,16 @@
 <style>
     .layui-table-cell {height: inherit!important;}
     .layui-table-view .layui-table[lay-size=sm] .layui-table-cell{height: inherit!important;}
-      
-  .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: none; /* 默认隐藏遮罩 */
-      z-index: 10;
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none; /* 默认隐藏遮罩 */
+        z-index: 10;
     }
 </style>
 <div class="row">
@@ -53,7 +53,7 @@
                         <div class="layui-input-inline" style="width:270px;">
                             <input type="text" class="layui-input" name="createtime" id="createtime"
                                    placeholder="申请起始时间" value="<{$createtime}>" autocomplete="off">
-                        </div> 
+                        </div>
                         <a href="javascript:;" class="layui-btn layui-btn-danger week">7天内</a>
                     </div>
                     <div class="layui-form-item layui-inline">
@@ -64,16 +64,16 @@
                         </div>
                     </div>
                     <eq name="type" value="2">
-                    <div class="layui-form-item layui-inline">
-                        <label class="layui-form-label">国家</label>
-                        <div class="layui-input-inline">
-                            <select name="bankcode">
-                                <option value="">全部</option>
-                                <option <if condition="$bankcode eq '906'">selected</if> value="906">国家(1)</option>
-                                <option <if condition="$bankcode eq '909'">selected</if> value="909">国家(2)</option>
-                            </select>
+                        <div class="layui-form-item layui-inline">
+                            <label class="layui-form-label">国家</label>
+                            <div class="layui-input-inline">
+                                <select name="bankcode">
+                                    <option value="">全部</option>
+                                    <option <if condition="$bankcode eq '906'">selected</if> value="906">国家(1)</option>
+                                    <option <if condition="$bankcode eq '909'">selected</if> value="909">国家(2)</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
                     </eq>
                     <div class="layui-form-item layui-inline">
                         <label class="layui-form-label">状态</label>
@@ -100,19 +100,20 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <button type="submit" class="layui-btn"><span class="glyphicon glyphicon-search"></span> 搜索 </button>
+                        <button type="submit" class="layui-btn"><span
+                                class="glyphicon glyphicon-search"></span> 搜索
+                        </button>
                         <a href="javascript:;" id="export" class="layui-btn layui-btn-danger"><span class="glyphicon glyphicon-export"></span> 导出数据</a>
                         <!--<div id="rate_div" style="display: inline;padding-left:10px;"></div>-->
                     </div>
                     <blockquote class="layui-elem-quote" style="height:48px;font-size:18px;padding:8px;">
                         <!--<a href="javascript:;" class="layui-btn layui-btn-warm" onclick="queryRate('<{:U("Payment/P2pPayDF/queryRate")}>')">查询U汇率</a><span class="stat_success" id="rate_div" style="padding-left:15px;"></span>-->
                         <div class="layui-form-item layui-inline">
-                            <div class="layui-input-inline">
+                            <div class="layui-input-inline" style="width:100px;">
                                 <input type="text" id="uRate" name="uRate" value="<{$uRate}>" placeholder="请输入U汇率" class="layui-input">
                             </div>
                             <a href="javascript:;" id="changeURate" class="layui-btn layui-btn-danger"> 修改U汇率 </a>
                         </div>
-
                     </blockquote>
                 </form>
                 <!--交易列表-->
@@ -168,7 +169,7 @@
                                                 <option value="<{$v.id}>" <if condition="$v[id] eq $vo[df_id]">selected</if> ><{$v.title}></option>
                                             </foreach>
                                         </select>
-                                    <else / >
+                                        <else / >
                                         <select lay-ignore=''  style="height: 30px;">
                                             <option>请选择</option>
                                             <foreach name="pfa_lists" item="v">
@@ -176,7 +177,7 @@
                                             </foreach>
                                         </select>
                                     </if>
-                                <else / >
+                                    <else / >
                                     <{$vo.df_name}>
                                 </if>
                             </td>
@@ -227,7 +228,7 @@
             success:function(res){
                 if(res['status'] == 1){
                     $('#rate_div').html(res['data']);
-                    
+
                     // layer.open({
                     //     type: 1,
                     //     title: false,
@@ -255,20 +256,20 @@
         , month = d.getMonth() + 1
         , day = d.getDate()
         , today = year + '-' + Appendzero(month) + '-' + Appendzero(day) + ' 00:00:00';
-      $('.week').click(function (e) {
+    $('.week').click(function (e) {
         let n = new Date(d.getTime() - 86400000*7)
-        , endyear = n.getFullYear()
-        , endmonth = n.getMonth() + 1
-        , endday = n.getDate();
+            , endyear = n.getFullYear()
+            , endmonth = n.getMonth() + 1
+            , endday = n.getDate();
         let enddate = endyear + '-' + Appendzero(endmonth) + '-' + Appendzero(endday) + ' 00:00:00';
-        
+
         $('#createtime').val(enddate+' | '+today);
-      });
-      
-      // 日期自动补零
-      function Appendzero (obj) {
+    });
+
+    // 日期自动补零
+    function Appendzero (obj) {
         if (obj < 10) return "0" + obj; else return obj;
-      }
+    }
     layui.use(['laydate', 'laypage', 'layer', 'table', 'form'], function() {
         var laydate = layui.laydate //日期
             , laypage = layui.laypage //分页
@@ -289,7 +290,6 @@
             ,theme: 'molv'
             , range: '|'
         });
-
         $('#changeURate').on('click', function(){
             var loading = '';
             var rate = $('#uRate').val($(this).val());
@@ -322,7 +322,7 @@
             });
         });
     });
-    
+
     document.getElementById("withdrawalform").onsubmit = function(event){
         // event.preventDefault(); // 阻止表单提交
         $('#overlay').show();
@@ -331,7 +331,7 @@
     function set_wtop(title,url,w,h){
         x_admin_show(title,url,w,h);
     }
-    
+
     //获取间隔天数
     function getDaysBetweenDates(date1, date2) {
         const oneDay = 1000 * 3600 * 24; // 一天的毫秒数
@@ -342,7 +342,7 @@
     }
     $('#export').on('click',function(){
         /*window.location.href
-            ="<{:U('Admin/Withdrawal/exportweituo',array('memberid'=>$memberid,'T'=>$T,'createtime'=>$createtime,'successtime'=>$successtime,'tongdao'=>$tongdao,'status'=>$status,'money'=>$money))}>";*/
+         ="<{:U('Admin/Withdrawal/exportweituo',array('memberid'=>$memberid,'T'=>$T,'createtime'=>$createtime,'successtime'=>$successtime,'tongdao'=>$tongdao,'status'=>$status,'money'=>$money))}>";*/
         var loading = '';
         var createtime = $('#createtime').val();
         if(!createtime){
@@ -355,7 +355,7 @@
             layer.alert('导出错误！只允许导出7天内的数据',{icon: 5});
             return;
         }
-        
+
         var successtime = $('#successtime').val();
         var memberid = $('input[name=memberid]').val();
         var T = $('select[name=T]').val();
@@ -377,36 +377,36 @@
         };
         layer.confirm('确认下载后，请到“下载中心”查询，请勿重复下载', function (index) {
             $.ajax({
-                url:"<{:U('Download/setlist')}>",
-                type:'post',
-                data:{
-                    'type':3,
-                    'down_name': "下载代付订单",
-                    'down_url': down_url,
-                    'where' : where,
-                    'uid' : <{$uid}> ,
+                    url:"<{:U('Download/setlist')}>",
+                    type:'post',
+                    data:{
+                        'type':3,
+                        'down_name': "下载代付订单",
+                        'down_url': down_url,
+                        'where' : where,
+                        'uid' : <{$uid}> ,
                 },
                 beforeSend:function(){
-                  loading=layer.load();
-			    },
-                success:function(res){
-                    layer.close(loading);
-                    if(res.status=="1"){
-                        layer.alert('成功',function () {
-                            location.replace(location.href);
-                        });
-                    }else{
-                        layer.alert('失败');
-                    }
-                },
-                complete: function(){
-                    layer.close(loading);
-			    },
-    			error:function(){
-                    layer.close(loading);
-                    layer.alert('连接错误');
-			    }
-            });
+                loading=layer.load();
+            },
+            success:function(res){
+                layer.close(loading);
+                if(res.status=="1"){
+                    layer.alert('成功',function () {
+                        location.replace(location.href);
+                    });
+                }else{
+                    layer.alert('失败');
+                }
+            },
+            complete: function(){
+                layer.close(loading);
+            },
+            error:function(){
+                layer.close(loading);
+                layer.alert('连接错误');
+            }
+        });
         });
     });
 
@@ -426,8 +426,8 @@
                     type: 'post',
                     data: {'id':id ,'opt':name, 'code':code},
                     beforeSend:function(){
-                      loading=layer.load();
-    			    },
+                        loading=layer.load();
+                    },
                     success: function (res) {
                         layer.close(loading);
                         if (res.status!='error') {
@@ -442,11 +442,11 @@
                     },
                     complete: function(){
                         layer.close(loading);
-    			    },
-        			error:function(){
+                    },
+                    error:function(){
                         layer.close(loading);
                         layer.alert('连接错误');
-    			    }
+                    }
                 });
             });
         }
@@ -465,8 +465,8 @@
                 type: 'post',
                 data: {'id':id ,'opt':name, 'code':code},
                 beforeSend:function(){
-                  loading=layer.load();
-			    },
+                    loading=layer.load();
+                },
                 success: function (res) {
                     layer.close(loading);
                     if (res.status!='error') {
@@ -481,11 +481,11 @@
                 },
                 complete: function(){
                     layer.close(loading);
-			    },
-    			error:function(){
+                },
+                error:function(){
                     layer.close(loading);
                     layer.alert('连接错误');
-			    }
+                }
             });
         });
 
@@ -523,8 +523,8 @@
                     type: 'post',
                     data: {'id':id},
                     beforeSend:function(){
-                      loading=layer.load();
-    			    },
+                        loading=layer.load();
+                    },
                     success: function (res) {
                         layer.close(loading);
                         if (res.status) {
@@ -537,11 +537,11 @@
                     },
                     complete: function(){
                         layer.close(loading);
-    			    },
-        			error:function(){
+                    },
+                    error:function(){
                         layer.close(loading);
                         layer.alert('连接错误');
-    			    }
+                    }
                 });
             });
         }else{
@@ -566,8 +566,8 @@
                     type: 'post',
                     data: {'id':id},
                     beforeSend:function(){
-                      loading=layer.load();
-    			    },
+                        loading=layer.load();
+                    },
                     success: function (res) {
                         layer.close(loading);
                         if (res.status!='error') {
@@ -582,11 +582,11 @@
                     },
                     complete: function(){
                         layer.close(loading);
-    			    },
-        			error:function(){
+                    },
+                    error:function(){
                         layer.close(loading);
                         layer.alert('连接错误');
-    			    }
+                    }
                 });
             });
         }else{
