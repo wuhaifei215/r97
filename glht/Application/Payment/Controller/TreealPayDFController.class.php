@@ -24,6 +24,7 @@ class TreealPayDFController extends PaymentController
         $post_data = array(
             'pixKey' => $data['banknumber'],
             'priority' => 'NORM',
+            'creditorDocument' => '',
             'description' => 'remark',
             'paymentFlow' => 'INSTANT',     //NSTANT- 付款将立即发生，APPROVAL_REQUIRED- 仅当订单获得批准后才会付款。
             'expiration' => 600,            //等待处理的最长时间（秒）
@@ -35,11 +36,6 @@ class TreealPayDFController extends PaymentController
 //                'string'
 //            ]
         );
-        if($data['type'] === 'CPF'){
-            $post_data['creditorDocument'] = $data['banknumber'];
-        }else{
-            $post_data['creditorDocument'] = '';
-        }
 
         log_place_order($this->code, $data['orderid'] . "----提交", json_encode($post_data, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, $data['orderid'] . "----提交地址", $config['exec_gateway']);    //日志
@@ -119,7 +115,9 @@ class TreealPayDFController extends PaymentController
 
 //        $config = M('pay_for_another')->where(['code' => $this->code,'id'=>$Order['df_id']])->find();
 //        //验证IP白名单
-//        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+//        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+//            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+//        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
 //            $ip = $_SERVER['REMOTE_ADDR'];
 //        } else {
 //            $ip = getRealIp();
