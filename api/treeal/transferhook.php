@@ -12,7 +12,7 @@
 $_GET['g'] = 'Payment';                // ThinkPHP 3.2.4 使用 $_GET['g'] 来决定模块
 $_GET['c'] = 'TreealPayDF';          // ThinkPHP 3.2.4 使用 $_GET['c'] 来决定控制器
 $_GET['a'] = 'notifyurl';          // ThinkPHP 3.2.4 使用 $_GET['a'] 来决定方法
-define('BIND_MODULE','Pay');       // TP3.2.4 支持 BIND_MODULE
+define('BIND_MODULE','Payment');       // TP3.2.4 支持 BIND_MODULE
 
 /* -------------------------------------------------
    2️⃣ 定义 Application 目录的完整路径
