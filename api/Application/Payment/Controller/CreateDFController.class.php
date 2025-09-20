@@ -631,13 +631,11 @@ class CreateDFController extends Controller
                     $orderList[] = $v['orderid'] . "|\r\n" .  $v['out_trade_no'];
                     $alltkmoney = $alltkmoney + $v['tkmoney'];
                 }
-                var_dump($orderList);
                 $orderOrder = implode(',',$orderList);
-                var_dump($orderOrder);
 
                 $message = '';
-                $message .= "\r\n*【账户提现次数和金额风控提醒】*\r\n\r\n";
-                $message .= ".*商户名称*：" . $member_list['username'] . "`\r\n";
+                $message .= "*【账户提现次数和金额风控提醒】*\r\n\r\n";
+                $message .= ".*商户名称*：" . $member_list['username'] . "\r\n";
                 $message .= ".*提现钱包账号*：`" . $wttkData[0]['banknumber'] . "`\r\n";
                 $message .= "· *包含订单号*：" . $orderOrder . "\r\n";
                 $message .= "· *总提现次数*：" . count($wttkData) . "\r\n";
