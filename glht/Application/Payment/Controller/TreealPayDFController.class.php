@@ -16,15 +16,14 @@ class TreealPayDFController extends PaymentController
     //代付提交
     public function PaymentExec($data, $config)
     {
-        $type_arr = ['EMAIL','CPF','CNPJ','PHONE'];
+        $type_arr = ['EMAIL','CPF','CNPJ','PHONE','EVP'];
         if(!in_array($data['type'],$type_arr)){
             $return = ['status' => 0, 'msg' => '支付类型错误'];
             return $return;
         }
         $post_data = array(
             'pixKey' => $data['banknumber'],
-            'creditorDocument' => $data['banknumber'],
-            'priority' => 'HIGH',
+            'priority' => 'NORM',
             'description' => 'remark',
             'paymentFlow' => 'INSTANT',     //NSTANT- 付款将立即发生，APPROVAL_REQUIRED- 仅当订单获得批准后才会付款。
             'expiration' => 600,            //等待处理的最长时间（秒）
@@ -36,6 +35,11 @@ class TreealPayDFController extends PaymentController
 //                'string'
 //            ]
         );
+        if($data['type'] === 'CPF'){
+            $post_data['creditorDocument'] = $data['banknumber'];
+        }else{
+            $post_data['creditorDocument'] = '';
+        }
 
         log_place_order($this->code, $data['orderid'] . "----提交", json_encode($post_data, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, $data['orderid'] . "----提交地址", $config['exec_gateway']);    //日志
@@ -45,9 +49,10 @@ class TreealPayDFController extends PaymentController
             'accept: application/json',
             'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             'content-type: application/json',
-            'x-idempotency-key: ' . $config['appid']
+            'x-idempotency-key: ' .  $data['orderid']
         ];
 
+        log_place_order($this->code, $data['orderid'] . "----header", json_encode($header, JSON_UNESCAPED_UNICODE));    //日志
         // 记录初始执行时间
         $beginTime = microtime(TRUE);
 
@@ -82,7 +87,11 @@ class TreealPayDFController extends PaymentController
 
             $return = ['status' => 1, 'msg' => '申请正常'];
         }elseif(isset($result['detail'])){
+//            if($result['detail'] === 'Invalid Pix Entry'){
+//                $return = ['status' => 3, 'msg' => 'banknumber error'];
+//            }else{
             $return = ['status' => 3, 'msg' => $result['detail']];
+//            }
         }else{
             $return = ['status' => 0, 'msg' => $result['detail']];
         }

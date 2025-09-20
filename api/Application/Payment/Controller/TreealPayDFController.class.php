@@ -87,7 +87,11 @@ class TreealPayDFController extends PaymentController
 
             $return = ['status' => 1, 'msg' => '申请正常'];
         }elseif(isset($result['detail'])){
-            $return = ['status' => 3, 'msg' => $result['detail']];
+//            if($result['detail'] === 'Invalid Pix Entry'){
+//                $return = ['status' => 3, 'msg' => 'banknumber error'];
+//            }else{
+                $return = ['status' => 3, 'msg' => $result['detail']];
+//            }
         }else{
             $return = ['status' => 0, 'msg' => $result['detail']];
         }
@@ -97,6 +101,7 @@ class TreealPayDFController extends PaymentController
     public function notifyurl()
     {
         $result = json_decode(file_get_contents('php://input'), true);
+        self::log_place_orderNotify($this->code . '_notifyurl', "----异步回调", file_get_contents('php://input'));    //日志
         $re_data = $result['data'];
         $orderid = $re_data['txId'];
         //self::log_place_orderNotify($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
