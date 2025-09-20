@@ -23,7 +23,7 @@ class TreealPayDFController extends PaymentController
         }
         $post_data = array(
             'pixKey' => $data['banknumber'],
-            'priority' => 'HIGH',
+            'priority' => 'NORM',
             'description' => 'remark',
             'paymentFlow' => 'INSTANT',     //NSTANT- 付款将立即发生，APPROVAL_REQUIRED- 仅当订单获得批准后才会付款。
             'expiration' => 600,            //等待处理的最长时间（秒）
