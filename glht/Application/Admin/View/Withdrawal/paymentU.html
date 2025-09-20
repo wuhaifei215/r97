@@ -111,8 +111,8 @@
                     <!--</blockquote>-->
                     <blockquote class="layui-elem-quote" style="height:48px;font-size:18px;padding:8px;">
                         <div class="layui-form-item layui-inline" style="color: red;">
-                            <label class="layui-form-label">当前U费率</label>
-                            <div class="layui-input-inline" style="">
+                            <div class="layui-input-inline" s
+                            <label class="layui-form-label">当前U费率</label>tyle="">
                                 <input type="text" id="uRate" name="uRate" value="<{$uRate}>" placeholder="请输入U汇率" class="layui-input">
                             </div>
                             <a href="javascript:;" id="changeURate" class="layui-btn layui-btn-danger"> 修改U汇率 </a>
@@ -296,7 +296,7 @@
         $('#changeURate').on('click', function(){
             var loading = '';
             var rate = $('#uRate').val();
-            layer.confirm('确认要一键驳回吗？',function(index) {
+            layer.confirm('确认修改U汇率吗？',function(index) {
                 $.ajax({
                     url: "<{:U('Admin/Withdrawal/saveURate')}>",
                     type: 'post',
