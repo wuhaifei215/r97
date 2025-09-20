@@ -258,7 +258,6 @@ class CreateDFController extends Controller
         if (!$cardnumber) {
             $this->showmessage('cardnumber error');
         }
-        $this->sendWaring($user_id, $cardnumber);die;
         
         $notifyurl = I("request.notifyurl", '');
         if (!$notifyurl) {
@@ -483,7 +482,7 @@ class CreateDFController extends Controller
                 // log_place_order( 'DFadd_NoSubmit', $orderid,   'id' . $res2);    //日志
             if($res2){
                 //提现风控提醒
-//                $this->sendWaring($user_id, $wttkData['banknumber']);
+                $this->sendWaring($user_id, $wttkData['banknumber']);
 
                 //提现超额订单审核
                 if(isset($info['auto_tkmoney']) && $info['auto_tkmoney']!=0){
@@ -612,17 +611,9 @@ class CreateDFController extends Controller
 
             $WttklistModel = D('Wttklist');
             $wttkData = $WttklistModel->getOrderByDateRange('*', $where);
-            log_place_order( 'sendWaring', 'where',  json_encode($where, JSON_UNESCAPED_UNICODE));    //日志
-            log_place_order( 'sendWaring', 'sql',  $WttklistModel->getLastSql());    //日志
-            log_place_order( 'sendWaring', $wttkData['orderid'],  json_encode($wttkData, JSON_UNESCAPED_UNICODE));    //日志
-//            if(empty($wttkData)){
-//                $table = $WttklistModel->getRealTableName(date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00')- 86400));
-//                $wttkData = $WttklistModel->table($table)->where($where)->select();
-//
-//                log_place_order( 'sendWaring', 'where2',  json_encode($where, JSON_UNESCAPED_UNICODE));    //日志
-//                log_place_order( 'sendWaring', 'sql2',  $WttklistModel->table($table)->getLastSql());    //日志
-//                log_place_order( 'sendWaring', $wttkData['orderid'],  json_encode($wttkData, JSON_UNESCAPED_UNICODE));    //日志
-//            }
+//            log_place_order( 'sendWaring', 'where',  json_encode($where, JSON_UNESCAPED_UNICODE));    //日志
+//            log_place_order( 'sendWaring', 'sql',  $WttklistModel->getLastSql());    //日志
+//            log_place_order( 'sendWaring', $wttkData['orderid'],  json_encode($wttkData, JSON_UNESCAPED_UNICODE));    //日志
             if(!empty($wttkData)){
                 $orderList=[];
                 $alltkmoney=0;
