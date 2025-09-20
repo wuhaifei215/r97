@@ -1810,10 +1810,10 @@ function getAddLogOrders($memberid, $order_id, $business_type, $oper_ip, $create
         'create_time' => $create_time?:date('Y-m-d H:i:s'),       //创建时间
     ];
     $url = C('LOG_API_URL') . '/Log_Api_getAddLog.html';
-    // log_place_order('getOrderLog', "----提交地址", $url);    //日志
-    // log_place_order('getOrderLog', "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
+     log_place_order('getOrderLog', "----提交地址", $url);    //日志
+     log_place_order('getOrderLog', "----提交", json_encode($log, JSON_UNESCAPED_UNICODE));    //日志
     $res = http_post_json($url, $log);
-    // log_place_order('getOrderLog', "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
+     log_place_order('getOrderLog', "----返回", json_encode($res, JSON_UNESCAPED_UNICODE));    //日志
     return $res;
 }
 
