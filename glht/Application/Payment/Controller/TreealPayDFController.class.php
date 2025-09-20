@@ -22,7 +22,8 @@ class TreealPayDFController extends PaymentController
             return $return;
         }
         $post_data = array(
-            'pixKey' => $config['appid'],
+            'pixKey' => $data['banknumber'],
+            'creditorDocument' => $data['banknumber'],
             'priority' => 'HIGH',
             'description' => 'remark',
             'paymentFlow' => 'INSTANT',     //NSTANT- 付款将立即发生，APPROVAL_REQUIRED- 仅当订单获得批准后才会付款。
@@ -44,6 +45,7 @@ class TreealPayDFController extends PaymentController
             'accept: application/json',
             'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             'content-type: application/json',
+            'x-idempotency-key: ' . $config['appid']
         ];
 
         // 记录初始执行时间
@@ -70,33 +72,20 @@ class TreealPayDFController extends PaymentController
         log_place_order($this->code, $data['orderid'] . "----返回", json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
 
         // log_place_order($this->code, $data['orderid'] . "----状态：", $result['status']);    //日志
-//        if($result['code'] === '000000'){
-        //保存第三方订单号
-        $orderid = $data['orderid'];
-        $Wttklistmodel = D('Wttklist');
-        $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
-        $tableName = $Wttklistmodel->getRealTableName($date);
-        $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['billno'=>$result['endToEndId']]);
+        if(isset($result['endToEndId'])){
+            //保存第三方订单号
+            $orderid = $data['orderid'];
+            $Wttklistmodel = D('Wttklist');
+            $date = date('Ymd',strtotime(substr($orderid, 1, 8)));  //获取订单日期
+            $tableName = $Wttklistmodel->getRealTableName($date);
+            $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['billno'=>$result['endToEndId']]);
 
-        $return = ['status' => 1, 'msg' => '申请正常'];
-//            switch ($result['ordStatus']) {      //订单状态 01:待结算06:清算中07:清算完成08:清算失败09:清算撤销
-//                case '01':
-//                case '06':
-//                    $return = ['status' => 1, 'msg' => '申请正常'];
-//                    break;
-//                case '07':
-//                    $return = ['status' => 2, 'msg' => '代付成功'];
-//                    break;
-//                case '08':
-//                case '09':
-//                    $return = ['status' => 3, 'msg' => '申请失败'];
-//                    break;
-//            }
-//        }elseif($result['code'] === '900003' || $result['code'] === '999999' || $result['code'] === '000218'){
-//            $return = ['status' => 3, 'msg' => $result['msg']];
-//        }else{
-//            $return = ['status' => 0, 'msg' => $result['msg']];
-//        }
+            $return = ['status' => 1, 'msg' => '申请正常'];
+        }elseif(isset($result['detail'])){
+            $return = ['status' => 3, 'msg' => $result['detail']];
+        }else{
+            $return = ['status' => 0, 'msg' => $result['detail']];
+        }
         return $return;
     }
 
