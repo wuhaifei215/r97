@@ -303,7 +303,7 @@
                     },
                     success: function (res) {
                         layer.close(loading);
-                        if (res.status) {
+                        if (res.status===1) {
                             layer.msg(res.msg, {icon: 1, time: 1000},function () {
                                 location.replace(location.href);
                             });
