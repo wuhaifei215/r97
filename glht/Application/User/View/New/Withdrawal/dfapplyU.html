@@ -121,7 +121,7 @@
             var sxfmoney = $('#sxfmoney').val()
             if(!tkmoney || tkmoney==0){
                layer.alert( "请先输入正确的提现金额", {icon: 5});
-               return;
+               return; 
             }
             var money = parseFloat(tkmoney/sxfmoney).toFixed(2);
             $('#money').val(money);
