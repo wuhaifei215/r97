@@ -1812,16 +1812,18 @@ class WithdrawalController extends UserController
                     if ($result) {
                         UserLogService::write(2, 'U代付申请提交成功', '表单提交方式');
                         M()->commit();
-                        
-                        $message = '';
-                        $message .= "\r\n \*【账户USDT下发提交】\*\r\n\r\n";
-                        $message .= "\*商户名称\*：" . $info['username'] . "\r\n";
-                        $message .= "\*下发金额\*：`" . sprintf("%.4f", $v['tkmoney']) . "`\r\n";
-                        $message .= "\*下发汇率\*：`" . sprintf("%.4f", $uRate) . "`\r\n";
-                        $message .= "\*USDT数额\*：`" . sprintf("%.4f", $money) . "`\r\n";
-                        $message .= "\*钱包地址\*：`" . trim($v["cardnumber"]) . "`\r\n";
-                        $message .= "\*【请商户提交人员确认订单信息】\*\r\n";
-                        $result1 = R('Telegram/Api/send', [$info['telegram_id'], $message, '', 'Markdown']);
+
+                        if($info['telegram_id']){
+                            $message = '';
+                            $message .= "\r\n \*【账户USDT下发提交】\*\r\n\r\n";
+                            $message .= "\*商户名称\*：" . $info['username'] . "\r\n";
+                            $message .= "\*下发金额\*：`" . sprintf("%.4f", $v['tkmoney']) . "`\r\n";
+                            $message .= "\*下发汇率\*：`" . sprintf("%.4f", $uRate) . "`\r\n";
+                            $message .= "\*USDT数额\*：`" . sprintf("%.4f", $money) . "`\r\n";
+                            $message .= "\*钱包地址\*：`" . trim($v["cardnumber"]) . "`\r\n";
+                            $message .= "\*【请商户提交人员确认订单信息】\*\r\n";
+                            $result1 = R('Telegram/Api/send', [$info['telegram_id'], $message, '', 'Markdown']);
+                        }
                     
                         $this->success('委托结算提交成功！');
                     }
