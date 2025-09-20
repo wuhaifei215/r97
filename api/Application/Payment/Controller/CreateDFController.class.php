@@ -258,7 +258,7 @@ class CreateDFController extends Controller
         if (!$cardnumber) {
             $this->showmessage('cardnumber error');
         }
-        $this->sendWaring($user_id, $cardnumber);die;
+//        $this->sendWaring($user_id, $cardnumber);die;
         
         $notifyurl = I("request.notifyurl", '');
         if (!$notifyurl) {
@@ -483,7 +483,7 @@ class CreateDFController extends Controller
                 // log_place_order( 'DFadd_NoSubmit', $orderid,   'id' . $res2);    //日志
             if($res2){
                 //提现风控提醒
-                $this->sendWaring($user_id, $wttkData['banknumber']);
+//                $this->sendWaring($user_id, $wttkData['banknumber']);
 
                 //提现超额订单审核
                 if(isset($info['auto_tkmoney']) && $info['auto_tkmoney']!=0){
