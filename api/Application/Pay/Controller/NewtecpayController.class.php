@@ -199,6 +199,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             log_place_order($this->code . '_notifyurl', $orderid . "----验签", '失败');    //日志
             $json_result =  'fail';
         }
+        echo $json_result;
         try{
             logApiAddNotify($orderList['pay_orderid'], 0, $result, $json_result);
         }catch (\Exception $e) {
