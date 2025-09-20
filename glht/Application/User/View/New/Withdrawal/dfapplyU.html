@@ -43,15 +43,15 @@
                     <table class="layui-table">
                             <thead id="container">
                                 <tr>
-                                    <td style="width:120px;fload:right;">提现金额</td>
-                                    <td>
-                                        <input type="text" name="item[1][tkmoney]" id="tkmoney" lay-verify="required"  autocomplete="off" class="layui-input df_item" style="width:150px">
+                                    <td>当前汇率</td>
+                                    <td style="width:120px;fload:right;">
+                                        <input type="text" name="item[1][sxfmoney]" id="sxfmoney" value="<{$uRate}>" lay-verify="required"  autocomplete="off" class="layui-input df_item" style="width:150px; color: #ff494d;" readonly>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>当前汇率</td>
+                                    <td>提现金额</td>
                                     <td>
-                                        <input type="text" name="item[1][sxfmoney]" id="sxfmoney" value="<{$uRate}>" lay-verify="required"  autocomplete="off" class="layui-input df_item" style="width:150px; color: #ff494d;" readonly>
+                                        <input type="text" name="item[1][tkmoney]" id="tkmoney" lay-verify="required"  autocomplete="off" class="layui-input df_item" style="width:150px">
                                     </td>
                                 </tr>
                                 <tr>
