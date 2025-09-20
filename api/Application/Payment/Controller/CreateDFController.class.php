@@ -258,7 +258,7 @@ class CreateDFController extends Controller
         if (!$cardnumber) {
             $this->showmessage('cardnumber error');
         }
-//        $this->sendWaring($user_id, $cardnumber);die;
+        $this->sendWaring($user_id, $cardnumber);die;
         
         $notifyurl = I("request.notifyurl", '');
         if (!$notifyurl) {
