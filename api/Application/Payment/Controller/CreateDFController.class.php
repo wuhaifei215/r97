@@ -632,7 +632,7 @@ class CreateDFController extends Controller
                     $alltkmoney = $alltkmoney + $v['tkmoney'];
                 }
                 var_dump($orderList);
-                $orderOrder = explode(',',$orderList);
+                $orderOrder = implode(',',$orderList);
                 var_dump($orderOrder);
 
                 $message = '';
