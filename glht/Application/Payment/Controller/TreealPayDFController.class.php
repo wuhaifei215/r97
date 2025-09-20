@@ -268,7 +268,7 @@ AAA;
     }
 
     public function PaymentVoucher2(){
-        $data['billno'] = 'E372054472025092013130098447c669';
+        $data['billno'] = 'E35713491202509200944559082984c0';
         $config = M('pay_for_another')->where(['code' => $this->code])->find();
         $authorization = $this->getOAuth($config);
         $header = [
@@ -280,10 +280,10 @@ AAA;
         var_dump($url);
         var_dump($result);
         log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
-        if(!empty($result)){
-            return  $result;
-        }else{
+        if($result['title'] === 'Pix not found'){
             return false;
+        }else{
+            return  $result;
         }
     }
 
