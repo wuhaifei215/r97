@@ -1615,7 +1615,7 @@ class WithdrawalController extends UserController
 
         //可用余额
         $info = M('Member')->where(['id' => $this->fans['uid']])->find();
-        $uRate = M('URate')->getField('rate');
+        $uRate = M('URate')->where(['id' => 1])->getField('rate');
 
         $this->assign('info', $info);
         $this->assign('currency', $currency);
@@ -1732,6 +1732,7 @@ class WithdrawalController extends UserController
 
             $balance    = $info['balance_php'];
             $tkmoneysum = 0;
+            $uRate = M('URate')->where(['id' => 1])->getField('rate');
             foreach ($data as $k => $v) {
                 if (!isset($errorTxt)) {
                     $v['tkmoney'] = trim($v['tkmoney']);
@@ -1747,7 +1748,7 @@ class WithdrawalController extends UserController
                     
                     $tkmoneysum += $v['tkmoney'];
                     //实际提现的金额
-                    $money = $v['tkmoney']/$v['sxfmoney'];
+                    $money = $v['tkmoney']/$uRate;
                     //获取订单号
                     $orderid = $this->getOrderId();
                     $out_trade_no = $v['out_trade_no']?trim($v['out_trade_no']):'';
@@ -1773,7 +1774,7 @@ class WithdrawalController extends UserController
                         "sqdatetime"   => $time,
                         "status"       => 1,
                         'tkmoney'      => $v['tkmoney'],
-                        'sxfmoney'     => $v['sxfmoney'],
+                        'sxfmoney'     => $uRate,
                         "money"        => sprintf("%.4f", $money),
                         "df_type"         => 2,
                     ];
@@ -1816,7 +1817,7 @@ class WithdrawalController extends UserController
                         $message .= "\r\n \*【账户USDT下发提交】\*\r\n\r\n";
                         $message .= "\*商户名称\*：" . $info['username'] . "\r\n";
                         $message .= "\*下发金额\*：`" . sprintf("%.4f", $v['tkmoney']) . "`\r\n";
-                        $message .= "\*下发汇率\*：`" . sprintf("%.4f", $v['sxfmoney']) . "`\r\n";
+                        $message .= "\*下发汇率\*：`" . sprintf("%.4f", $uRate) . "`\r\n";
                         $message .= "\*USDT数额\*：`" . sprintf("%.4f", $money) . "`\r\n";
                         $message .= "\*钱包地址\*：`" . trim($v["cardnumber"]) . "`\r\n";
                         $message .= "\*【请商户提交人员确认订单信息】\*\r\n";
