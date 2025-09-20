@@ -342,9 +342,11 @@ class WithdrawalController extends BaseController
             if($rate>0){
                 $res = M('URate')->where(['id' => 1])->save(['rate'=>$rate]);
                 if($res){
+                    serLogService::HTwrite(5, '保存U汇率', '成功');
                     $this->ajaxReturn(['status' => 1,'msg' => '设置U汇率成功!']);
                 }
             }
+            serLogService::HTwrite(5, '保存U汇率', '失败');
             $this->ajaxReturn(['status' => 0,'msg' => '设置U汇率失败!']);
         }
     }
