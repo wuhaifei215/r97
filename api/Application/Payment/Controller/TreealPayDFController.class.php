@@ -36,7 +36,7 @@ class TreealPayDFController extends PaymentController
 //            ]
         );
         if($data['type'] === 'CPF'){
-            $post_data['creditorDocument'] = $data['banknumber'];
+            $post_data['creditorDocument'] = '';
         }else{
             $post_data['creditorDocument'] = '';
         }
