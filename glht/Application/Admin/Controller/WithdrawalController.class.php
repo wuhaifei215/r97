@@ -484,6 +484,8 @@ class WithdrawalController extends BaseController
         $this->assign("page", $page->show());
         C('TOKEN_ON', false);
         if($type === 2){
+            $uRate = M('URate')->where(['id' => 1])->getField('rate');
+            $this->assign("uRate", $uRate);
             $this->display('paymentU');
         }else{
             $this->display();

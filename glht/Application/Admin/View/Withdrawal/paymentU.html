@@ -100,14 +100,20 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <button type="submit" class="layui-btn"><span
-                                class="glyphicon glyphicon-search"></span> 搜索
-                        </button>
+                        <button type="submit" class="layui-btn"><span class="glyphicon glyphicon-search"></span> 搜索 </button>
                         <a href="javascript:;" id="export" class="layui-btn layui-btn-danger"><span class="glyphicon glyphicon-export"></span> 导出数据</a>
                         <!--<div id="rate_div" style="display: inline;padding-left:10px;"></div>-->
                     </div>
                     <blockquote class="layui-elem-quote" style="height:48px;font-size:18px;padding:8px;">
-                        <a href="javascript:;" class="layui-btn layui-btn-warm" onclick="queryRate('<{:U("Payment/P2pPayDF/queryRate")}>')">查询U汇率</a><span class="stat_success" id="rate_div" style="padding-left:15px;"></span></blockquote>
+                        <!--<a href="javascript:;" class="layui-btn layui-btn-warm" onclick="queryRate('<{:U("Payment/P2pPayDF/queryRate")}>')">查询U汇率</a><span class="stat_success" id="rate_div" style="padding-left:15px;"></span>-->
+                        <div class="layui-form-item layui-inline">
+                            <div class="layui-input-inline">
+                                <input type="text" id="uRate" name="uRate" value="<{$uRate}>" placeholder="请输入U汇率" class="layui-input">
+                            </div>
+                            <a href="javascript:;" id="changeURate" class="layui-btn layui-btn-danger"> 修改U汇率 </a>
+                        </div>
+
+                    </blockquote>
                 </form>
                 <!--交易列表-->
                 <table class="layui-table" lay-skin="line" lay-size="sm" lay-data="{width:'100%',limit:<{$rows}>,id:'userData'}" id="tab">
@@ -284,6 +290,37 @@
             , range: '|'
         });
 
+        $('#changeURate').on('click', function(){
+            var loading = '';
+            var rate = $('#uRate').val($(this).val());
+            layer.confirm('确认要一键驳回吗？',function(index) {
+                $.ajax({
+                    url: "<{:U('Admin/Withdrawal/saveURate')}>",
+                    type: 'post',
+                    data:{'rate':rate},
+                    beforeSend:function(){
+                        loading=layer.load();
+                    },
+                    success: function (res) {
+                        layer.close(loading);
+                        if (res.status) {
+                            layer.msg(res.msg, {icon: 1, time: 1000},function () {
+                                location.replace(location.href);
+                            });
+                        }else{
+                            layer.msg(res.msg, {icon: 2, time: 1000});
+                        }
+                    },
+                    complete: function(){
+                        layer.close(loading);
+                    },
+                    error:function(){
+                        layer.close(loading);
+                        layer.alert('连接错误');
+                    }
+                });
+            });
+        });
     });
     
     document.getElementById("withdrawalform").onsubmit = function(event){
