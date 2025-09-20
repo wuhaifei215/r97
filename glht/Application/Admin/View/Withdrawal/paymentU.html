@@ -108,7 +108,7 @@
                         <!--<a href="javascript:;" class="layui-btn layui-btn-warm" onclick="queryRate('<{:U("Payment/P2pPayDF/queryRate")}>')">查询U汇率</a><span class="stat_success" id="rate_div" style="padding-left:15px;"></span>-->
                         <div class="layui-form-item layui-inline">
                             <div class="layui-input-inline">
-                                <input type="text" id="uRate" name="uRate" value="<{$uRate}>" placeholder="请输入U汇率" class="layui-input">
+                                <input type="text" id="uRate" name="uRate" value="<{$uRate}>" placeholder="请输入U汇率" class="layui-input" style="width:100px;">
                             </div>
                             <a href="javascript:;" id="changeURate" class="layui-btn layui-btn-danger"> 修改U汇率 </a>
                         </div>
@@ -293,7 +293,7 @@
         $('#changeURate').on('click', function(){
             var loading = '';
             var rate = $('#uRate').val($(this).val());
-            layer.confirm('确认要一键驳回吗？',function(index) {
+            layer.confirm('确认要修改U汇率吗？',function(index) {
                 $.ajax({
                     url: "<{:U('Admin/Withdrawal/saveURate')}>",
                     type: 'post',
