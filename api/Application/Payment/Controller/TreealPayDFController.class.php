@@ -138,6 +138,7 @@ class TreealPayDFController extends PaymentController
 //        }
 
         if ($_SERVER['HTTP_SIGN'] == "DF_LTDA6013CURRAIS_NOVOS62070503") {
+            $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['billno'=>$re_data['endToEndId']]);
             if ($re_data['status'] === "LIQUIDATED") {       //成功LIQUIDATED，失败CANCELED
                 //代付成功 更改代付状态 完善代付逻辑
                 $data = [
