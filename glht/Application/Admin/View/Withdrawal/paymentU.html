@@ -133,8 +133,7 @@
                         <th lay-data="{field:'bankname', width:230}">地址</th>
                         <th lay-data="{field:'sqdatetime', width:170}">申请时间/处理时间</th>
                         <th lay-data="{field:'status', width:100}">状态</th>
-                        <th lay-data="{field:'memo', width:100}">备注</th>
-                        <th lay-data="{field:'code', width:150}">代付渠道</th>
+                        <th lay-data="{field:'memo', width:200}">备注</th>
                         <th lay-data="{field:'op',width:'100%'}">操作</th>
                     </tr>
                     </thead>
@@ -163,27 +162,6 @@
                                 </switch>
                             </td>
                             <td><{$vo.memo}></td>
-                            <td >
-                                <if condition="$vo['status'] eq 0">
-                                    <if condition="$vo['df_id'] neq ''">
-                                        <select lay-ignore=''  style="height: 30px;">
-                                            <option>请选择</option>
-                                            <foreach name="pfa_lists" item="v">
-                                                <option value="<{$v.id}>" <if condition="$v[id] eq $vo[df_id]">selected</if> ><{$v.title}></option>
-                                            </foreach>
-                                        </select>
-                                        <else / >
-                                        <select lay-ignore=''  style="height: 30px;">
-                                            <option>请选择</option>
-                                            <foreach name="pfa_lists" item="v">
-                                                <option value="<{$v.id}>" <if condition="$v[is_default] eq 1">selected</if> ><{$v.title}></option>
-                                            </foreach>
-                                        </select>
-                                    </if>
-                                    <else / >
-                                    <{$vo.df_name}>
-                                </if>
-                            </td>
                             <td class="layui-input-inline">
                                 <if condition="$vo['status'] eq 0 or 1">
                                     <a class="layui-btn layui-btn-warm layui-btn-small" onclick="set_wtop('结算商户编号:<{$vo.userid}>','<{:U('Admin/Withdrawal/editwtStatus',['id'=>$vo[id]])}>',510,360)">设置</a>
