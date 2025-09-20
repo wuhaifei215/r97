@@ -49,7 +49,7 @@ class TreealPayDFController extends PaymentController
             'accept: application/json',
             'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             'content-type: application/json',
-            'x-idempotency-key: ' . $config['appid']
+            'x-idempotency-key: ' .  $data['orderid']
         ];
 
         log_place_order($this->code, $data['orderid'] . "----header", json_encode($header, JSON_UNESCAPED_UNICODE));    //日志
