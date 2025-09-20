@@ -42,6 +42,7 @@ class CeShiController extends PayController
         $return_arr = [
             'status' => 'success',
             'H5_url' => $this->_site . '/Pay_CeShi_Success.html',
+            'QRcode' => '00020101021226880014br.gov.bcb.pix2566qrcode.microcashif.com.br%2Fpix%2F58b3b57a-80e3-4996-bf3f-76ac50602dfd5204',
             'pay_orderid' => $orderid,
             'out_trade_id' => $return['orderid'],
             'amount' => $return['amount'],
