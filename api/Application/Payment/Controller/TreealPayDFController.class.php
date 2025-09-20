@@ -16,14 +16,13 @@ class TreealPayDFController extends PaymentController
     //代付提交
     public function PaymentExec($data, $config)
     {
-        $type_arr = ['EMAIL','CPF','CNPJ','PHONE'];
+        $type_arr = ['EMAIL','CPF','CNPJ','PHONE','EVP'];
         if(!in_array($data['type'],$type_arr)){
             $return = ['status' => 0, 'msg' => '支付类型错误'];
             return $return;
         }
         $post_data = array(
-            'pixKey' => $data['type'],
-            'creditorDocument' => $data['banknumber'],
+            'pixKey' => $data['banknumber'],
             'priority' => 'HIGH',
             'description' => 'remark',
             'paymentFlow' => 'INSTANT',     //NSTANT- 付款将立即发生，APPROVAL_REQUIRED- 仅当订单获得批准后才会付款。
@@ -36,6 +35,9 @@ class TreealPayDFController extends PaymentController
 //                'string'
 //            ]
         );
+        if($data['type'] === 'CPF'){
+            $post_data['creditorDocument'] = $data['banknumber'];
+        }
 
         log_place_order($this->code, $data['orderid'] . "----提交", json_encode($post_data, JSON_UNESCAPED_UNICODE));    //日志
         log_place_order($this->code, $data['orderid'] . "----提交地址", $config['exec_gateway']);    //日志
