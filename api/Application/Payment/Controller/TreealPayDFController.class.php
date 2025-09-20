@@ -101,7 +101,6 @@ class TreealPayDFController extends PaymentController
     public function notifyurl()
     {
         $result = json_decode(file_get_contents('php://input'), true);
-        self::log_place_orderNotify($this->code . '_notifyurl', "----异步回调", file_get_contents('php://input'));    //日志
         $re_data = $result['data'];
         $orderid = $re_data['idempotencyKey'];
         //self::log_place_orderNotify($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志

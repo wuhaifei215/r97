@@ -102,7 +102,7 @@ class TreealPayDFController extends PaymentController
     {
         $result = json_decode(file_get_contents('php://input'), true);
         $re_data = $result['data'];
-        $orderid = $re_data['txId'];
+        $orderid = $re_data['idempotencyKey'];
         //self::log_place_orderNotify($this->code . '_notifyserver', $orderid . "----异步回调报文头", json_encode($_SERVER));    //日志
         self::log_place_orderNotify($this->code . '_notifyurl', $orderid . "----异步回调", file_get_contents('php://input'));    //日志
 
@@ -110,7 +110,7 @@ class TreealPayDFController extends PaymentController
         $Wttklistmodel = D('Wttklist');
         $date = date('Ymd',strtotime(substr($re_data['createdAt'], 0, 10)));  //获取订单日期
         $tableName = $Wttklistmodel->getRealTableName($date);
-        $Order = $Wttklistmodel->table($tableName)->where(['three_orderid' => $orderid])->find();
+        $Order = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->find();
 
         if (!$Order) {
             self::log_place_orderNotify($this->code . '_notifyurl', $orderid . '----没有查询到Order！ ', $orderid);
@@ -137,6 +137,7 @@ class TreealPayDFController extends PaymentController
 //        }
 
         if ($_SERVER['HTTP_SIGN'] == "DF_LTDA6013CURRAIS_NOVOS62070503") {
+//            $re_save = $Wttklistmodel->table($tableName)->where(['orderid' => $orderid])->save(['billno'=>$re_data['endToEndId']]);
             if ($re_data['status'] === "LIQUIDATED") {       //成功LIQUIDATED，失败CANCELED
                 //代付成功 更改代付状态 完善代付逻辑
                 $data = [
