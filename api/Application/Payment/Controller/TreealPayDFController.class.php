@@ -52,6 +52,7 @@ class TreealPayDFController extends PaymentController
             'x-idempotency-key: ' . $config['appid']
         ];
 
+        log_place_order($this->code, $data['orderid'] . "----header", json_encode($header, JSON_UNESCAPED_UNICODE));    //日志
         // 记录初始执行时间
         $beginTime = microtime(TRUE);
 
