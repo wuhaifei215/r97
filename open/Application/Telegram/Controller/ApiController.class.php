@@ -347,6 +347,14 @@ class ApiController extends Controller
             return;
         }
 
+        if (strpos($text, '/usdt') !== false) {
+            $uRate = M('URate')->where(['id' => 1])->getField('rate');
+            $message = '';
+            $message .= "当前U汇率：" . $uRate . "\r\n--------------------------------\r\n";
+            $this->sendMessage($chat_id, $message, $message_id);
+            return;
+        }
+
         //查询用户余额
         if (strpos($text, '/balance@' . $this->bot_name) !== false) {
             $uid = $userInfo['info']['id'] + 10000;
