@@ -253,7 +253,7 @@ AAA;
                 'accept: application/json',
                 'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             ];
-            $url = 'https://secureapi.bancodigital.hmg.onz.software/api/v2/pix/payments/'. $data['billno'];
+            $url = 'https://secureapi.treeal-prod.onz.software/api/v2/pix/payments/'. $data['billno'];
             $result = $this->http_get_json($url, $header);
             log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
             if(!empty($result)){
@@ -268,7 +268,7 @@ AAA;
     }
 
     public function PaymentVoucher2(){
-        $data['orderid'] = 'P20250920101300739808474263197';
+        $data['billno'] = 'E372054472025092013130098447c669';
         if(isset($data['orderid'])){
             $config = M('pay_for_another')->where(['code' => $this->code])->find();
             $authorization = $this->getOAuth($config);
@@ -276,7 +276,7 @@ AAA;
                 'accept: application/json',
                 'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             ];
-            $url = 'https://secureapi.treeal-prod.onz.software/api/v2/pix/payments/idempotencyKey/'. $data['orderid'];
+            $url = 'https://secureapi.treeal-prod.onz.software/api/v2/pix/payments/'. $data['billno'];
             $result = $this->http_get_json($url, $header);
             log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
             if(!empty($result)){
