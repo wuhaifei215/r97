@@ -194,9 +194,15 @@ u0W5bbqUf1nOeiqOV9S8Giz0
             } else {
                 log_place_order($this->code . '_notifyurl', $orderid . "----订单状态异常", $result['status']);    //日志
             }
-            echo 'success';
+            $json_result =  'success';
         } else {
             log_place_order($this->code . '_notifyurl', $orderid . "----验签", '失败');    //日志
+            $json_result =  'fail';
+        }
+        try{
+            logApiAddNotify($orderList['pay_orderid'], 0, $result, $json_result);
+        }catch (\Exception $e) {
+//             var_dump($e);
         }
     }
 
