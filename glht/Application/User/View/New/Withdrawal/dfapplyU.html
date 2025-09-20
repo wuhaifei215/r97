@@ -26,11 +26,15 @@
                         <eq name="currency" value="PHP">
                             <span class="text-danger">可提现：<{$info['balance_php']}> </span>
                             <span style="margin:0 30px;" class="text-muted">冻结：<{$info['blockedbalance_php']}> </span>
+                            汇率
                         </eq>
                         <eq name="currency" value="INR">
                             <span class="text-danger">可提现：<{$info['balance_inr']}> </span>
                             <span style="margin:0 30px;" class="text-muted">冻结：<{$info['blockedbalance_inr']}> </span>
                         </eq>
+                    </blockquote>
+                    <blockquote class="layui-elem-quote">
+                        <span class="text-danger">当前汇率：<{$uRate}> </span>
                     </blockquote>
                     <!--<div class="layui-inline">-->
                     <!--    <button type="button" class="layui-btn" onclick="addRow()">-->
@@ -51,7 +55,7 @@
                                 <tr>
                                     <td>汇率</td>
                                     <td>
-                                        <input type="text" name="item[1][sxfmoney]" id="sxfmoney" lay-verify="required"  autocomplete="off" class="layui-input df_item" style="width:150px">
+                                        <input type="text" name="item[1][sxfmoney]" id="sxfmoney" value="<{$uRate}>" lay-verify="required"  autocomplete="off" class="layui-input df_item" style="width:150px" readonly>
                                     </td>
                                 </tr>
                                 <tr>

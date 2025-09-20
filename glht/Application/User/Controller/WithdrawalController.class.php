@@ -1615,9 +1615,11 @@ class WithdrawalController extends UserController
 
         //可用余额
         $info = M('Member')->where(['id' => $this->fans['uid']])->find();
+        $uRate = M('URate')->getField('rate');
 
         $this->assign('info', $info);
         $this->assign('currency', $currency);
+        $this->assign('uRate', $uRate);
         $this->display();
     }
 
