@@ -22,7 +22,7 @@ class TreealPayDFController extends PaymentController
             return $return;
         }
         $post_data = array(
-            'pixKey' => $type_arr,
+            'pixKey' => $data['type'],
             'creditorDocument' => $data['banknumber'],
             'priority' => 'HIGH',
             'description' => 'remark',
