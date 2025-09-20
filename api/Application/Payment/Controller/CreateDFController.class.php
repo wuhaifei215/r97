@@ -611,7 +611,7 @@ class CreateDFController extends Controller
             ];
 
             $WttklistModel = D('Wttklist');
-            $table = $WttklistModel->getRealTableName(date('Y-m-d H:i:s',strtotime($datetime . ' 00:00:00')));
+            $table = $WttklistModel->getRealTableName($where);
             $wttkData = $WttklistModel->table($table)->where($where)->select();
             log_place_order( 'sendWaring', 'where',  json_encode($where, JSON_UNESCAPED_UNICODE));    //日志
             log_place_order( 'sendWaring', 'sql',  $WttklistModel->table($table)->getLastSql());    //日志
@@ -631,7 +631,7 @@ class CreateDFController extends Controller
                     $orderList[] = $v['orderid'] . "|\r\n" .  $v['out_trade_no'];
                     $alltkmoney = $alltkmoney + $v['tkmoney'];
                 }
-                $orderOrder = implode(',',$orderList);
+                $orderOrder = implode(",\r\n",$orderList);
 
                 $message = '';
                 $message .= "*【账户提现次数和金额风控提醒】*\r\n\r\n";
