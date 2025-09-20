@@ -26,7 +26,6 @@
                         <eq name="currency" value="PHP">
                             <span class="text-danger">可提现：<{$info['balance_php']}> </span>
                             <span style="margin:0 30px;" class="text-muted">冻结：<{$info['blockedbalance_php']}> </span>
-                            汇率
                         </eq>
                         <eq name="currency" value="INR">
                             <span class="text-danger">可提现：<{$info['balance_inr']}> </span>
@@ -52,7 +51,7 @@
                                 <tr>
                                     <td>当前汇率</td>
                                     <td>
-                                        <input type="text" name="item[1][sxfmoney]" id="sxfmoney" value="<{$uRate}>" lay-verify="required"  autocomplete="off" class="layui-input df_item" style="width:150px" readonly>
+                                        <input type="text" name="item[1][sxfmoney]" id="sxfmoney" value="<{$uRate}>" lay-verify="required"  autocomplete="off" class="layui-input df_item" style="width:150px; color: #ff494d;" readonly>
                                     </td>
                                 </tr>
                                 <tr>
@@ -121,7 +120,7 @@
             var sxfmoney = $('#sxfmoney').val()
             if(!tkmoney || tkmoney==0){
                layer.alert( "请先输入正确的提现金额", {icon: 5});
-               return; 
+               return;
             }
             var money = parseFloat(tkmoney/sxfmoney).toFixed(2);
             $('#money').val(money);
