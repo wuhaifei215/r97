@@ -143,9 +143,7 @@ u0W5bbqUf1nOeiqOV9S8Giz0
 
         $config = M('pay_for_another')->where(['code' => $this->code,'id'=>$Order['df_id']])->find();
         //验证IP白名单
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
             $ip = $_SERVER['REMOTE_ADDR'];
         } else {
             $ip = getRealIp();
@@ -285,26 +283,15 @@ AAA;
     }
 
     public function PaymentVoucher($data, $config){
-        $returnContent = $this->http_get_json('https://secureapi.treeal-prod.onz.software/api/v2/pix/payments/idempotencyKey/'. $data['orderid']);
-
+        $post_data = [
+            'merchant_order_no' => $data['orderid'],
+        ];
+        log_place_order($this->code . '_PaymentVoucher', $data['orderid'] . "----提交", json_encode($post_data, JSON_UNESCAPED_UNICODE));    //日志
+        $returnContent = $this->http_post_json('https://api.newtecpay.com/merchant-api/v1/single/pay/query', $post_data);
         log_place_order($this->code . '_PaymentVoucher', $data['orderid'] . "----返回", $returnContent);    //日志
         $result = json_decode($returnContent, true);
 
-        log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
-        if($result['return_code'] === "SUCCESS"){
-            return  $result;
-        }else{
-            return false;
-        }
-    }
-
-    public function PaymentVoucher2(){
-        $data['orderid'] = 'P20250920101300739808474263197';
-        $returnContent = $this->http_get_json('https://secureapi.treeal-prod.onz.software/api/v2/pix/payments/idempotencyKey/', $data['orderid']);
-
-        log_place_order($this->code . '_PaymentVoucher', $data['orderid'] . "----返回", $returnContent);    //日志
-        $result = json_decode($returnContent, true);
-
+        // $redata = json_decode(file_get_contents('https://api.winpay.site/payment/br/voucherData.webapp?casOrdNo=' . $data['three_orderid']),true);
         log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
         if($result['return_code'] === "SUCCESS"){
             return  $result;
@@ -314,10 +301,6 @@ AAA;
     }
 
     /*********************************辅助方法*********************************/
-
-    private function http_get_json($url, $params){
-        return $this->send($url, $params);
-    }
 
     private function http_post_json($url, $params){
         return $this->send($url, $params);

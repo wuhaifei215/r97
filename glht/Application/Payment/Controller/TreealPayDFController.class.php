@@ -247,13 +247,36 @@ AAA;
     }
 
     public function PaymentVoucher($data, $config){
-        if(isset($data['three_orderid'])){
+        if(isset($data['orderid'])){
             $authorization = $this->getOAuth($config);
             $header = [
                 'accept: application/json',
                 'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             ];
-            $url = $config['query_gateway'] .  $data['three_orderid'] . '/details';
+            $url = 'https://secureapi.treeal-prod.onz.software/api/v2/pix/payments/idempotencyKey/'. $data['orderid'];
+            $result = $this->http_get_json($url, $header);
+            log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
+            if(!empty($result)){
+                return  $result;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+    }
+
+    public function PaymentVoucher2(){
+        $data['orderid'] = 'P20250920101300739808474263197';
+        if(isset($data['orderid'])){
+            $config = M('pay_for_another')->where(['code' => $this->code])->find();
+            $authorization = $this->getOAuth($config);
+            $header = [
+                'accept: application/json',
+                'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
+            ];
+            $url = 'https://secureapi.treeal-prod.onz.software/api/v2/pix/payments/idempotencyKey/'. $data['orderid'];
             $result = $this->http_get_json($url, $header);
             log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
             if(!empty($result)){
