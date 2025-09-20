@@ -100,7 +100,9 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <button type="submit" class="layui-btn"><span class="glyphicon glyphicon-search"></span> 搜索 </button>
+                        <button type="submit" class="layui-btn"><span
+                                class="glyphicon glyphicon-search"></span> 搜索
+                        </button>
                         <a href="javascript:;" id="export" class="layui-btn layui-btn-danger"><span class="glyphicon glyphicon-export"></span> 导出数据</a>
                         <!--<div id="rate_div" style="display: inline;padding-left:10px;"></div>-->
                     </div>
@@ -112,7 +114,6 @@
                             </div>
                             <a href="javascript:;" id="changeURate" class="layui-btn layui-btn-danger"> 修改U汇率 </a>
                         </div>
-
                     </blockquote>
                 </form>
                 <!--交易列表-->
@@ -289,7 +290,6 @@
             ,theme: 'molv'
             , range: '|'
         });
-
         $('#changeURate').on('click', function(){
             var loading = '';
             var rate = $('#uRate').val($(this).val());
