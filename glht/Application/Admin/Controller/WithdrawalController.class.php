@@ -1616,7 +1616,7 @@ class WithdrawalController extends BaseController
                             }
                         }
                         $orderid = $withdraw['orderid'];
-                        if($withdraw['status']!=0){
+                        if($withdraw['status']>1){
                             UserLogService::HTwrite(3, '批量驳回代付', $iv . '-驳回代付,失败。状态:' . $withdraw['status']);
                             $fail++;
                             continue;
