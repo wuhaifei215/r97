@@ -350,7 +350,7 @@ class ApiController extends Controller
         if (strpos($text, '/usdt') !== false) {
             $uRate = M('URate')->where(['id' => 1])->getField('rate');
             $message = '';
-            $message .= "当前U汇率：" . $uRate . "\r\n--------------------------------\r\n";
+            $message .= "当前U汇率：" . $uRate;
             $this->sendMessage($chat_id, $message, $message_id);
             return;
         }
