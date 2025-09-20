@@ -247,13 +247,13 @@ AAA;
     }
 
     public function PaymentVoucher($data, $config){
-        if(isset($data['orderid'])){
+        if(isset($data['billno'])){
             $authorization = $this->getOAuth($config);
             $header = [
                 'accept: application/json',
                 'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             ];
-            $url = 'https://secureapi.treeal-prod.onz.software/api/v2/pix/payments/idempotencyKey/'. $data['orderid'];
+            $url = 'https://secureapi.bancodigital.hmg.onz.software/api/v2/pix/payments/'. $data['billno'];
             $result = $this->http_get_json($url, $header);
             log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
             if(!empty($result)){
