@@ -33,9 +33,6 @@
                             <span style="margin:0 30px;" class="text-muted">冻结：<{$info['blockedbalance_inr']}> </span>
                         </eq>
                     </blockquote>
-                    <blockquote class="layui-elem-quote">
-                        <span class="text-danger">当前汇率：<{$uRate}> </span>
-                    </blockquote>
                     <!--<div class="layui-inline">-->
                     <!--    <button type="button" class="layui-btn" onclick="addRow()">-->
                     <!--        <span class="glyphicon glyphicon-plus"> 新增</span>-->
@@ -53,7 +50,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>汇率</td>
+                                    <td>当前汇率</td>
                                     <td>
                                         <input type="text" name="item[1][sxfmoney]" id="sxfmoney" value="<{$uRate}>" lay-verify="required"  autocomplete="off" class="layui-input df_item" style="width:150px" readonly>
                                     </td>
@@ -119,7 +116,7 @@
 <include file="Public/footer"/>
 <script>
     $(document).ready(function() {
-        $('#sxfmoney').on('input', function() {
+        $('#tkmoney').on('input', function() {
             var tkmoney = $('#tkmoney').val();
             var sxfmoney = $('#sxfmoney').val()
             if(!tkmoney || tkmoney==0){
