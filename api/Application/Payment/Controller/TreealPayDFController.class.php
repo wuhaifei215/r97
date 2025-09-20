@@ -45,6 +45,7 @@ class TreealPayDFController extends PaymentController
             'accept: application/json',
             'authorization: '.$authorization['token_type'] . ' ' . $authorization['access_token'],
             'content-type: application/json',
+            'x-idempotency-key: ' . $config['appid']
         ];
 
         // 记录初始执行时间
