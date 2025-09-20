@@ -278,6 +278,7 @@ AAA;
             ];
             $url = 'https://secureapi.treeal-prod.onz.software/api/v2/pix/payments/'. $data['billno'];
             $result = $this->http_get_json($url, $header);
+            var_dump($result);
             log_place_order($this->code . '_PaymentVoucher', $data['three_orderid'] . "----返回",  json_encode($result, JSON_UNESCAPED_UNICODE));    //日志
             if(!empty($result)){
                 return  $result;
